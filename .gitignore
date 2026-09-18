@@ -1,0 +1,33 @@
+.DS_Store
+Thumbs.db
+*.log
+
+# Node & dependencies
+node_modules/
+dist/
+dist-ssr/
+
+# Laravel
+thinktank-os/.env
+thinktank-os/.env.backup
+thinktank-os/.env.production
+thinktank-os/vendor/
+thinktank-os/public/build/
+thinktank-os/public/hot/
+thinktank-os/public/storage
+thinktank-os/storage/*.key
+thinktank-os/storage/pail
+thinktank-os/storage/framework/cache/data/*
+thinktank-os/storage/framework/sessions/*
+thinktank-os/storage/framework/testing/*
+thinktank-os/storage/framework/views/*
+thinktank-os/storage/logs/*
+
+# IDEs & Editors
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

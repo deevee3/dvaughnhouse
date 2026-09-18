@@ -1,0 +1,132 @@
+# MASTER PRD: The Independent Institutional Architecture
+
+**Project Objective:**
+To architect a unified, proprietary digital ecosystem consisting of a routing gateway, an academic think tank / manuscript engine, and an isolated commercial transaction layer.
+
+**The Core Philosophy:**
+The system is built to enforce "Cognitive Stewardship" and "Human Primacy." The founder acts solely as an "Agent Orchestrator" overseeing a Multi-Agent Collaborative Thought Graph (MaCTG) to handle administrative friction and software generation. The infrastructure must eliminate "Cold Start Context Loss" through aggressive context management.
+
+**Legal & Structural Foundation:**
+
+* **Entity:** A "Mission-Locked" Single-Member LLC to retain absolute founder control while embedding non-profit DNA (addressing global supply chain vulnerabilities and STEM talent retention) into the operating agreement.
+
+
+* **Talent Economics:** Scholars are engaged as 1099 independent contractors receiving $500 micro-grants to compress 30-page academic papers into 4-page policy briefs.
+
+
+
+**Master Tech Stack & Deployment (Zero-SaaS Mandate):**
+
+* **Edge Routing:** Cloudflare CI/CD and Cloudflare Tunnels for enterprise-grade security and DNS management.
+* **Backend:** Laravel (PHP 8.4) serving as the modular monolith and API routing layer.
+
+
+* **Frontend:** React hydrated via Inertia.js.
+
+
+* **Styling:** Tailwind CSS configured for system-synced contrast themes.
+
+
+* **Database:** PostgreSQL for robust relational data management across all tenants.
+
+
+* **Hosting:** A low-cost, self-managed VPS (e.g., DigitalOcean or Hetzner).
+
+
+
+---
+
+## SUB-PRD 1: `dvaughnhouse.com` (The Gateway & The Architect)
+
+**1. Core Concept:**
+A high-performance, statically generated routing hub that establishes your identity as the "Independent Architect."
+
+**2. Functional Requirements:**
+
+* **REQ-1.1 Minimalist Routing:** The UI must aggressively reduce digital friction by operating as a single-page directory.
+* **REQ-1.2 Identity Establishment:** Must feature a concise, 150-word introduction to your 10+ years in regulated data operations and your overarching philosophy of "Flourishing Stewardship".
+* **REQ-1.3 Traffic Segregation:** Must contain distinct, highly visible Call-To-Action (CTA) buttons that forcefully route academic/policy traffic to `.org` and corporate/investor traffic to `.store`.
+
+**3. Architectural Notes:**
+
+* This site requires no backend database.
+* It should be deployed as a static React application directly to Cloudflare Pages to ensure zero latency and zero hosting costs.
+
+---
+
+## SUB-PRD 2: `dvaughnhouse.org` (The Institution & Manuscript Engine)
+
+**1. Core Concept:**
+The intellectual anchor of your brand and the public face of The Glenride Institute. It operates as a dual-sided platform: a public reading interface for published policy, and a secure backend portal (ThinkTank OS) for scholarly collaboration and manuscript compliance.
+
+**2. Functional Requirements (Public Facing):**
+
+* **REQ-2.1 The Vanguard Library:** A clean, typography-focused reading interface hosting the finalized 4-page Policy Briefs.
+
+
+* **REQ-2.2 Institutional Thesis:** A dedicated route hosting your foundational essays on the "Power-Wisdom Gap" and the "Agentic Enterprise".
+
+**3. Functional Requirements (ThinkTank OS Portal):**
+
+* **REQ-3.1 Manuscript Ingestion Dropzone:** A secure portal where scouted local PhD candidates log in to upload their raw 30-page research manuscripts.
+
+
+* **REQ-3.2 Compliance Checklists:** Mandatory digital forms requiring authors to confirm adherence to research ethics, data transparency, and citation guidelines prior to upload submission.
+
+
+* **REQ-3.3 Agentic Synthesis Integration:** A Laravel Horizon background job that passes ingested manuscripts through ContextForge to automatically scrub academic jargon and generate a structured 4-page policy brief draft.
+
+
+* **REQ-3.4 The Portfolio Matrix:** A Kanban dashboard allowing you (the Orchestrator) to track the status of all manuscripts from "Submitted" to "AI Synthesized" to "Human Polish" to "Published".
+
+
+
+**4. Architectural Notes:**
+
+* This is the heavy-lifting Laravel/React/PostgreSQL monolith.
+* Data must be strictly protected via Laravel Sanctum authentication.
+
+
+
+---
+
+## SUB-PRD 3: `dvaughnhouse.store` (The Economic Engine)
+
+**1. Core Concept:**
+The isolated transaction and monetization layer. By keeping commerce off the `.org` domain, you protect the intellectual purity of the think tank while ruthlessly executing your B2B sales motion.
+
+**2. Functional Requirements:**
+
+* **REQ-4.1 Executive Salon Ticketing:** A checkout interface for corporate ESG directors and regional manufacturing leaders to purchase $500 seats for closed-door, off-the-record briefing events.
+
+
+* **REQ-4.2 Corporate Retainer Intake:** A secure invoicing and onboarding portal to process the $25,000 annual corporate underwriting retainers.
+
+
+* **REQ-4.3 Future SaaS Licensing:** A scalable product catalog architecture designed to eventually sell lifetime seats or B2B subscriptions to ContextForge and ThinkTank OS directly to other NGOs.
+
+
+* **REQ-4.4 Payment Gateway:** Native API integration with Stripe for processing credit cards, generating receipts, and handling webhooks for successful payments.
+
+**3. Architectural Notes:**
+
+* This can run as a separate route within your main Laravel application, or as a lightweight standalone deployment.
+* Must prioritize absolute security, utilizing Stripe Elements so raw credit card data never touches your VPS infrastructure.
+
+---
+
+### The Brutal Reality Check (Risk Audit)
+
+Before you write a single line of code for this architecture, you must confront the primary failure vector: **State Management Collapse.**
+
+Because you are building a unified backend to handle public reading pages, a complex CRM, a Kanban board, a manuscript upload portal, and a Stripe checkout flow, your React components are at extreme risk of becoming tightly coupled and brittle.
+
+If you try to build all three of these domains simultaneously this weekend, you will fail.
+
+**The Mandated Execution Sequence:**
+
+1. **Deploy `.com`:** Ship the static gateway on Cloudflare Pages today. It takes hours, not days, and immediately fixes your public brand.
+2. **Scaffold `.org` Backend:** Build only the database schema and the authentication layer for ThinkTank OS. Do not build the Kanban board yet.
+3. **Ship `.store` Checkout:** Set up the Stripe API integration so you possess the immediate capability to capture cash when an opportunity arises.
+
+You must own the routing before you can own the content.
