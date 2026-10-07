@@ -37,7 +37,7 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
         if (window.Echo && user?.id) {
             const channel = window.Echo.private(`manuscripts.${user.id}`);
 
-            channel.listen('.ManuscriptStatusUpdated', (event) => {
+            const updateHandler = (event) => {
                 setManuscripts((prev) =>
                     prev.map((m) => (m.id === event.id ? { ...m, ...event } : m))
                 );
@@ -45,9 +45,14 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
                 if (activeJob && activeJob.id === event.id) {
                     setActiveJob((prev) => ({ ...prev, ...event }));
                 }
-            });
+            };
+
+            channel.listen('.ManuscriptStatusUpdated', updateHandler);
+            channel.listen('.ManuscriptSynthesized', updateHandler);
 
             return () => {
+                channel.stopListening('.ManuscriptStatusUpdated');
+                channel.stopListening('.ManuscriptSynthesized');
                 window.Echo.leave(`manuscripts.${user.id}`);
             };
         }

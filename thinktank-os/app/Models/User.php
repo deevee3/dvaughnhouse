@@ -13,7 +13,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email', 'password', 'role'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -31,6 +31,22 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Check if user is an institutional Orchestrator.
+     */
+    public function isOrchestrator(): bool
+    {
+        return in_array($this->role, ['orchestrator', 'admin'], true);
+    }
+
+    /**
+     * Check if user can edit/review manuscripts in the Portfolio Matrix.
+     */
+    public function canPolishManuscripts(): bool
+    {
+        return in_array($this->role, ['orchestrator', 'admin', 'editor'], true);
     }
 
     /**

@@ -6,11 +6,11 @@ use App\Models\Manuscript;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ManuscriptStatusUpdated implements ShouldBroadcastNow
+class ManuscriptSynthesized implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -28,7 +28,6 @@ class ManuscriptStatusUpdated implements ShouldBroadcastNow
     {
         return [
             new PrivateChannel('manuscripts.'.$this->manuscript->user_id),
-            new PrivateChannel('portfolio-matrix'),
         ];
     }
 
@@ -37,7 +36,7 @@ class ManuscriptStatusUpdated implements ShouldBroadcastNow
      */
     public function broadcastAs(): string
     {
-        return 'ManuscriptStatusUpdated';
+        return 'ManuscriptSynthesized';
     }
 
     /**
@@ -49,17 +48,7 @@ class ManuscriptStatusUpdated implements ShouldBroadcastNow
     {
         return [
             'id' => $this->manuscript->id,
-            'title' => $this->manuscript->title,
             'status' => $this->manuscript->status,
-            'synthesized_brief_path' => $this->manuscript->synthesized_brief_path,
-            'word_count' => $this->manuscript->word_count,
-            'grant_amount' => (float) $this->manuscript->grant_amount,
-            'published_at' => $this->manuscript->published_at?->toISOString(),
-            'author' => [
-                'name' => $this->manuscript->user?->name ?? 'Institutional Fellow',
-                'email' => $this->manuscript->user?->email,
-            ],
-            'updated_at' => $this->manuscript->updated_at?->toISOString(),
         ];
     }
 }

@@ -1,3 +1,6 @@
+const ORG_URL = import.meta.env.VITE_ORG_URL || (import.meta.env.DEV ? 'http://127.0.0.1:8085' : 'https://dvaughnhouse.org');
+const STORE_URL = import.meta.env.VITE_STORE_URL || (import.meta.env.DEV ? 'http://127.0.0.1:8085/store' : 'https://dvaughnhouse.store');
+
 export default function App() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-50 transition-colors">
@@ -18,7 +21,7 @@ export default function App() {
         {/* Air-Gapped Routing Cards */}
         <section aria-label="Routing Hub" className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
           <a
-            href="https://dvaughnhouse.org"
+            href={ORG_URL}
             className="group block p-8 sm:p-10 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/60 shadow-sm hover:border-slate-400 dark:hover:border-slate-600 transition-all focus:outline-none focus:ring-2 focus:ring-slate-400 dark:focus:ring-slate-600"
           >
             <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
@@ -33,7 +36,7 @@ export default function App() {
           </a>
 
           <a
-            href="https://dvaughnhouse.store"
+            href={STORE_URL}
             className="group block p-8 sm:p-10 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/60 shadow-sm hover:border-slate-400 dark:hover:border-slate-600 transition-all focus:outline-none focus:ring-2 focus:ring-slate-400 dark:focus:ring-slate-600"
           >
             <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">

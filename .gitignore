@@ -1,6 +1,7 @@
 .DS_Store
 Thumbs.db
 *.log
+dump.rdb
 
 # Node & dependencies
 node_modules/

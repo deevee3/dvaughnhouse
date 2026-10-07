@@ -3,8 +3,8 @@
 namespace Tests\Feature;
 
 use App\Events\ManuscriptStatusUpdated;
+use App\Events\ManuscriptSynthesized;
 use App\Jobs\SynthesizeManuscript;
-use App\Models\Manuscript;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -86,7 +86,7 @@ class ManuscriptIntakeTest extends TestCase
     public function test_synthesize_manuscript_job_executes_and_broadcasts_event(): void
     {
         Storage::fake('local');
-        Event::fake([ManuscriptStatusUpdated::class]);
+        Event::fake([ManuscriptStatusUpdated::class, ManuscriptSynthesized::class]);
 
         $user = User::factory()->create();
         $rawPath = 'manuscripts/raw/test_doc.pdf';
@@ -115,6 +115,15 @@ class ManuscriptIntakeTest extends TestCase
         Event::assertDispatched(ManuscriptStatusUpdated::class, function ($event) use ($manuscript) {
             return $event->manuscript->id === $manuscript->id
                 && $event->manuscript->status === 'ai_synthesized';
+        });
+
+        Event::assertDispatched(ManuscriptSynthesized::class, function ($event) use ($manuscript) {
+            return $event->manuscript->id === $manuscript->id
+                && $event->manuscript->status === 'ai_synthesized'
+                && $event->broadcastWith() === [
+                    'id' => $manuscript->id,
+                    'status' => 'ai_synthesized',
+                ];
         });
     }
 }

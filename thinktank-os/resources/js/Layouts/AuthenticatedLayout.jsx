@@ -26,9 +26,9 @@ export default function AuthenticatedLayout({ header, children }) {
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink
                                     href={route('dashboard')}
-                                    active={route().current('dashboard')}
+                                    active={route().current('dashboard') || route().current('matrix.*')}
                                 >
-                                    Dashboard
+                                    Portfolio Matrix
                                 </NavLink>
                                 <NavLink
                                     href={route('manuscripts.create')}
@@ -142,9 +142,21 @@ export default function AuthenticatedLayout({ header, children }) {
                     <div className="space-y-1 pb-3 pt-2">
                         <ResponsiveNavLink
                             href={route('dashboard')}
-                            active={route().current('dashboard')}
+                            active={route().current('dashboard') || route().current('matrix.*')}
                         >
-                            Dashboard
+                            Portfolio Matrix
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('manuscripts.create')}
+                            active={route().current('manuscripts.create')}
+                        >
+                            Manuscript Intake
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('manuscripts.index')}
+                            active={route().current('manuscripts.index')}
+                        >
+                            My Manuscripts
                         </ResponsiveNavLink>
                     </div>
 
