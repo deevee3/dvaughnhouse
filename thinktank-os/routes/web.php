@@ -3,6 +3,7 @@
 use App\Http\Controllers\ManuscriptController;
 use App\Http\Controllers\PortfolioMatrixController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SopController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\VanguardLibraryController;
 use Illuminate\Support\Facades\Route;
@@ -12,6 +13,10 @@ Route::get('/', [VanguardLibraryController::class, 'index'])->name('home');
 Route::get('/library', [VanguardLibraryController::class, 'index'])->name('library.index');
 Route::get('/briefs/{manuscript}', [VanguardLibraryController::class, 'show'])->name('briefs.show');
 Route::get('/thesis', [VanguardLibraryController::class, 'thesis'])->name('thesis.index');
+
+// Public Standard Operating Procedures
+Route::get('/sops', [SopController::class, 'index'])->name('sops.index');
+Route::get('/sops/{slug}', [SopController::class, 'show'])->name('sops.show');
 
 // The Economic Engine (Commercial Monetization & Executive Salons)
 Route::get('/store', [StoreController::class, 'index'])->name('store.index');

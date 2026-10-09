@@ -35,6 +35,12 @@ export default function Thesis({ auth }) {
                         >
                             Institutional Thesis
                         </Link>
+                        <Link
+                            href={route('sops.index')}
+                            className="text-stone-600 hover:text-gray-900 transition"
+                        >
+                            SOPs
+                        </Link>
                         {auth?.user ? (
                             <Link
                                 href={route('dashboard')}
