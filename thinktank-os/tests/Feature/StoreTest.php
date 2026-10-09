@@ -89,7 +89,6 @@ class StoreTest extends TestCase
         $this->assertEquals('succeeded', $order->status);
         $this->assertNotNull($order->paid_at);
     }
-}
 
     public function test_storefront_exposes_all_three_categories(): void
     {
@@ -163,3 +162,4 @@ class StoreTest extends TestCase
         $response->assertStatus(422);
         $this->assertDatabaseMissing('orders', ['customer_email' => 'sam3@example.com']);
     }
+}
