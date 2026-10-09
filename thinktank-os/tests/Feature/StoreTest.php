@@ -90,3 +90,76 @@ class StoreTest extends TestCase
         $this->assertNotNull($order->paid_at);
     }
 }
+
+    public function test_storefront_exposes_all_three_categories(): void
+    {
+        $response = $this->get(route('store.index'));
+        $response->assertOk();
+        // Inertia page receives grouped categories
+        $page = $response->viewData('page');
+        $categories = $page['props']['categories'];
+        $ids = array_column($categories, 'id');
+        $this->assertContains('reynards', $ids);
+        $this->assertContains('glenride', $ids);
+        $this->assertContains('executive', $ids);
+
+        // Reynard's has the Ruck Reset guide; Glenride has 11 apps
+        $byId = array_column($categories, null, 'id');
+        $reynardsIds = array_column($byId['reynards']['products'], 'id');
+        $this->assertContains('ruck_reset_guide', $reynardsIds);
+        $this->assertCount(11, $byId['glenride']['products']);
+    }
+
+    public function test_can_purchase_reynards_guide(): void
+    {
+        $response = $this->postJson(route('store.intent'), [
+            'product_type' => 'ruck_reset_guide',
+            'customer_name' => 'Alex Carter',
+            'customer_email' => 'alex@example.com',
+        ]);
+
+        $response->assertOk();
+        $response->assertJsonPath('order.product_type', 'ruck_reset_guide');
+        $response->assertJsonPath('order.amount', '19.00');
+        $this->assertDatabaseHas('orders', [
+            'customer_email' => 'alex@example.com',
+            'product_type' => 'ruck_reset_guide',
+            'status' => 'pending',
+        ]);
+    }
+
+    public function test_cannot_purchase_coming_soon_product(): void
+    {
+        $response = $this->postJson(route('store.intent'), [
+            'product_type' => 'app_job_digest',
+            'customer_name' => 'Sam Lee',
+            'customer_email' => 'sam@example.com',
+        ]);
+
+        $response->assertStatus(422);
+        $this->assertDatabaseMissing('orders', ['customer_email' => 'sam@example.com']);
+    }
+
+    public function test_cannot_purchase_external_product(): void
+    {
+        $response = $this->postJson(route('store.intent'), [
+            'product_type' => 'app_spinwave',
+            'customer_name' => 'Sam Lee',
+            'customer_email' => 'sam2@example.com',
+        ]);
+
+        $response->assertStatus(422);
+        $this->assertDatabaseMissing('orders', ['customer_email' => 'sam2@example.com']);
+    }
+
+    public function test_cannot_purchase_custom_setup_product(): void
+    {
+        $response = $this->postJson(route('store.intent'), [
+            'product_type' => 'app_vapor_wire_bot',
+            'customer_name' => 'Sam Lee',
+            'customer_email' => 'sam3@example.com',
+        ]);
+
+        $response->assertStatus(422);
+        $this->assertDatabaseMissing('orders', ['customer_email' => 'sam3@example.com']);
+    }
