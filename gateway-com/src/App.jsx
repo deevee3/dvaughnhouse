@@ -101,6 +101,25 @@ function Hero() {
         them: local-first AI systems, research that answers to evidence, and
         tools that keep people from being left behind.
       </p>
+      <div className="mt-8 max-w-3xl rounded-2xl border border-slate-200 bg-white p-6 sm:p-7 dark:border-slate-800 dark:bg-slate-800/60">
+        <p className="font-mono text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">
+          What this means for you
+        </p>
+        <ul className="mt-4 space-y-3 text-base leading-relaxed text-slate-600 dark:text-slate-300">
+          <li>
+            <strong className="font-semibold text-slate-900 dark:text-slate-100">Drowning in process?</strong>{" "}
+            I build the systems that cut it — without cutting corners.
+          </li>
+          <li>
+            <strong className="font-semibold text-slate-900 dark:text-slate-100">Want the evidence?</strong>{" "}
+            Drug shortages, supply chains, the data behind the headlines — published here in plain language, free to read.
+          </li>
+          <li>
+            <strong className="font-semibold text-slate-900 dark:text-slate-100">Trying not to get left behind by AI?</strong>{" "}
+            I translate the shift into moves you can actually make.
+          </li>
+        </ul>
+      </div>
       <div className="mt-10 flex flex-wrap gap-4">
         <a
           href="#work"
@@ -257,7 +276,7 @@ function Work() {
   const cards = [
     {
       title: "Glenride",
-      body: "An independent think tank with a venture studio — built to combat systems that seek to harm you. Research on supply-chain resilience, pharmaceutical data, and applied AI. Understand. Build. Compel.",
+      body: "An independent think tank with a venture studio — built to combat systems that seek to harm you. Research on supply-chain resilience, pharmaceutical data, and applied AI, published free in plain language so you can act on it. Understand. Build. Compel.",
       link: ORG_URL,
       cta: "Visit Glenride",
     },
@@ -496,6 +515,10 @@ function DonatePage() {
       <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl dark:text-slate-50">
         Fuel the mission.
       </h1>
+      <p className="mt-4 text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+        Fund independent investigation into the systems that touch your health,
+        your work, and your future — and keep the findings free for everyone.
+      </p>
 
       <div className="mt-8 rounded-2xl border border-amber-300 bg-amber-50 p-6 dark:border-amber-800 dark:bg-amber-950/40">
         <p className="text-base leading-relaxed text-slate-800 dark:text-slate-200">
@@ -509,15 +532,26 @@ function DonatePage() {
       <div className="mt-10 space-y-8 text-base leading-relaxed text-slate-600 dark:text-slate-300">
         <section>
           <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
-            What your support does
+            What you get
           </h2>
-          <p className="mt-3">
-            It keeps Glenride&rsquo;s investigations independent — no sponsors,
-            no grants with strings attached, no institution deciding which
-            questions are allowed. It pays for the unglamorous costs of doing
-            this work in public: research, publishing, and the infrastructure
-            that keeps it all running outside anyone else&rsquo;s walls.
-          </p>
+          <ul className="mt-3 space-y-4">
+            <li>
+              <strong className="font-semibold text-slate-900 dark:text-slate-100">Evidence nobody bought.</strong>{" "}
+              Every investigation is funded by people, not sponsors — so when
+              Glenride publishes on drug shortages, you know the conclusion
+              wasn&rsquo;t purchased.
+            </li>
+            <li>
+              <strong className="font-semibold text-slate-900 dark:text-slate-100">Research that stays public.</strong>{" "}
+              Findings go out in plain language, free to read. Your support is
+              what keeps it that way — no paywall, no gatekeeper.
+            </li>
+            <li>
+              <strong className="font-semibold text-slate-900 dark:text-slate-100">Eyes on your own medicine cabinet.</strong>{" "}
+              227 drugs are in shortage in the U.S. right now. Independent
+              investigation into why is a public good you personally benefit from.
+            </li>
+          </ul>
         </section>
 
         <section>
