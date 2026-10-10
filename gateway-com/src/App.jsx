@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const ORG_URL = import.meta.env.VITE_ORG_URL || (import.meta.env.DEV ? 'http://127.0.0.1:8085' : 'https://dvaughnhouse.org');
 const STORE_URL = import.meta.env.VITE_STORE_URL || (import.meta.env.DEV ? 'http://127.0.0.1:8085/store' : 'https://dvaughnhouse.store');
+
+// Donation destination. Empty until D'Vaughn designates an address —
+// the donate page shows a "coming soon" state rather than a wrong address.
+const DONATION_ADDRESS = "";
+const DONATION_NETWORK = "Base";
 
 const NAV = [
   { label: "About", href: "#about" },
@@ -10,24 +15,31 @@ const NAV = [
   { label: "Contact", href: "#contact" },
 ];
 
-function Header() {
+function Header({ base = "" }) {
   const [open, setOpen] = useState(false);
+  const homeHref = base === "/" ? "/" : "#top";
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/70 bg-slate-50/90 backdrop-blur dark:border-slate-800 dark:bg-slate-900/90">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6 lg:px-8">
-        <a href="#top" className="text-lg font-extrabold tracking-tight text-slate-900 dark:text-slate-50">
+        <a href={homeHref} className="text-lg font-extrabold tracking-tight text-slate-900 dark:text-slate-50">
           D&rsquo;Vaughn House
         </a>
         <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
           {NAV.map((item) => (
             <a
               key={item.href}
-              href={item.href}
+              href={`${base}${item.href}`}
               className="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-50 transition-colors"
             >
               {item.label}
             </a>
           ))}
+          <a
+            href="/donate"
+            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700 transition-colors dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
+          >
+            Donate
+          </a>
         </nav>
         <button
           className="md:hidden rounded-md p-2 text-slate-700 dark:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800"
@@ -46,7 +58,7 @@ function Header() {
             {NAV.map((item) => (
               <li key={item.href}>
                 <a
-                  href={item.href}
+                  href={`${base}${item.href}`}
                   onClick={() => setOpen(false)}
                   className="block text-base font-medium text-slate-700 dark:text-slate-200"
                 >
@@ -54,6 +66,15 @@ function Header() {
                 </a>
               </li>
             ))}
+            <li>
+              <a
+                href="/donate"
+                onClick={() => setOpen(false)}
+                className="inline-block rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white dark:bg-slate-100 dark:text-slate-900"
+              >
+                Donate
+              </a>
+            </li>
           </ul>
         </nav>
       )}
@@ -449,7 +470,119 @@ function Contact() {
   );
 }
 
-function Footer() {
+function DonatePage() {
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    document.title = "Donate — D'Vaughn House";
+    window.scrollTo(0, 0);
+  }, []);
+
+  async function copyAddress() {
+    try {
+      await navigator.clipboard.writeText(DONATION_ADDRESS);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  }
+
+  return (
+    <div className="mx-auto max-w-3xl px-6 py-16 sm:py-20 lg:px-8">
+      <p className="font-mono text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">
+        Support
+      </p>
+      <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl dark:text-slate-50">
+        Fuel the mission.
+      </h1>
+
+      <div className="mt-8 rounded-2xl border border-amber-300 bg-amber-50 p-6 dark:border-amber-800 dark:bg-amber-950/40">
+        <p className="text-base leading-relaxed text-slate-800 dark:text-slate-200">
+          <strong className="font-bold">Plain talk first:</strong> I am not a
+          nonprofit and I do not have tax-exempt status. Nothing you send here
+          is tax-deductible. This is personal support for independent work —
+          not a charitable contribution, not an investment, and not a purchase.
+        </p>
+      </div>
+
+      <div className="mt-10 space-y-8 text-base leading-relaxed text-slate-600 dark:text-slate-300">
+        <section>
+          <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+            What your support does
+          </h2>
+          <p className="mt-3">
+            It keeps Glenride&rsquo;s investigations independent — no sponsors,
+            no grants with strings attached, no institution deciding which
+            questions are allowed. It pays for the unglamorous costs of doing
+            this work in public: research, publishing, and the infrastructure
+            that keeps it all running outside anyone else&rsquo;s walls.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+            What it never does
+          </h2>
+          <ul className="mt-3 list-disc space-y-2 pl-6">
+            <li>It doesn&rsquo;t buy equity, tokens, or a share of anything.</li>
+            <li>It doesn&rsquo;t buy influence over the research — findings get published as they&rsquo;re found, whether they&rsquo;re convenient or not.</li>
+            <li>It doesn&rsquo;t come with promises about returns. Ever.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+            Where to send it
+          </h2>
+          {DONATION_ADDRESS ? (
+            <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-800/60">
+              <p className="font-mono text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                {DONATION_NETWORK} address
+              </p>
+              <p className="mt-3 break-all font-mono text-sm text-slate-900 dark:text-slate-100">
+                {DONATION_ADDRESS}
+              </p>
+              <button
+                type="button"
+                onClick={copyAddress}
+                className="mt-4 inline-flex items-center rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-700 transition-colors dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
+              >
+                {copied ? "Copied ✓" : "Copy address"}
+              </button>
+              <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
+                Send only assets on {DONATION_NETWORK} to this address. Anything
+                sent on another network may be unrecoverable.
+              </p>
+            </div>
+          ) : (
+            <p className="mt-3">
+              The donation address is being set up — check back soon. Nothing
+              here will ever ask you to send funds to an address posted
+              anywhere else.
+            </p>
+          )}
+        </section>
+
+        <section>
+          <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+            Another way to support
+          </h2>
+          <p className="mt-3">
+            If you&rsquo;d rather support the work commercially, the store is
+            open:{" "}
+            <a href={STORE_URL} className="font-semibold text-slate-900 underline underline-offset-4 dark:text-slate-100">
+              {STORE_URL.replace("https://", "")}
+            </a>
+            .
+          </p>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+function Footer({ base = "" }) {
   return (
     <footer className="border-t border-slate-200 dark:border-slate-800">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10 sm:flex-row sm:items-center sm:justify-between lg:px-8">
@@ -460,12 +593,18 @@ function Footer() {
           {NAV.map((item) => (
             <a
               key={item.href}
-              href={item.href}
+              href={`${base}${item.href}`}
               className="text-sm text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-50 transition-colors"
             >
               {item.label}
             </a>
           ))}
+          <a
+            href="/donate"
+            className="text-sm font-semibold text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-50 transition-colors"
+          >
+            Donate
+          </a>
         </nav>
         <p className="text-sm text-slate-500 dark:text-slate-400">
           © 2026 · Built independent
@@ -476,6 +615,18 @@ function Footer() {
 }
 
 export default function App() {
+  const isDonate = window.location.pathname.startsWith("/donate");
+  if (isDonate) {
+    return (
+      <div className="min-h-screen bg-slate-50 text-slate-900 antialiased transition-colors dark:bg-slate-900 dark:text-slate-50">
+        <Header base="/" />
+        <main>
+          <DonatePage />
+        </main>
+        <Footer base="/" />
+      </div>
+    );
+  }
   return (
     <div id="top" className="min-h-screen bg-slate-50 text-slate-900 antialiased transition-colors dark:bg-slate-900 dark:text-slate-50">
       <Header />

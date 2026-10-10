@@ -10,6 +10,8 @@
 
 const TOPICS = ["partnership", "research", "press", "speaking", "other"];
 const RATE_LIMIT_MAX = 5; // submissions per IP per hour
+const NOTIFY_TO = "dvaughn@dvaughnhouse.com";
+const NOTIFY_FROM = "contact@dvaughnhouse.com";
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -87,6 +89,33 @@ export async function onRequestPost({ request, env }) {
   await env.DB.prepare(
     "INSERT INTO contacts (name, email, topic, message, ip, user_agent) VALUES (?, ?, ?, ?, ?, ?)"
   ).bind(name, email, topic, message, ip, ua).run();
+
+  // Email ping: best-effort. The D1 record above is the source of truth;
+  // a failed send never fails the submission.
+  if (env.RESEND_API_KEY) {
+    try {
+      await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${env.RESEND_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from: NOTIFY_FROM,
+          to: NOTIFY_TO,
+          subject: `New contact: ${topic} — ${name}`,
+          text:
+            `Name: ${name}\n` +
+            `Email: ${email}\n` +
+            `Topic: ${topic}\n` +
+            `IP: ${ip}\n\n` +
+            `${message}`,
+        }),
+      });
+    } catch {
+      // Swallowed on purpose — the submission is already stored.
+    }
+  }
 
   return json({ ok: true });
 }
