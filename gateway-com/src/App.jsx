@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import heroBanner from "./assets/hero-collab.jpg";
+import heroSupply from "./assets/hero-supply-network.webp";
 import workResearch from "./assets/work-research.webp";
 import workAi from "./assets/work-ai-systems.webp";
 import workAdvisory from "./assets/work-advisory.webp";
@@ -579,19 +580,39 @@ function DonatePage() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-16 sm:py-20 lg:px-8">
-      <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">
-        Support
-      </p>
-      <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl dark:text-slate-50">
-        Fuel the mission.
-      </h1>
-      <p className="mt-4 text-lg leading-relaxed text-slate-600 dark:text-slate-300">
-        Fund independent investigation into the systems that touch your health,
-        your work, and your future — and keep the findings free for everyone.
-      </p>
+    <div>
+      <section className="relative overflow-hidden" aria-label="Support the mission">
+        <img
+          src={heroSupply}
+          alt="Global supply networks traced in amber light across a dark world map"
+          className="absolute inset-0 h-full w-full object-cover"
+          loading="eager"
+        />
+        <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-slate-950/75 via-slate-950/60 to-slate-950/80" />
+        <div className="relative mx-auto max-w-6xl px-6 pt-16 pb-14 sm:pt-20 sm:pb-16 lg:px-8">
+          <p className="inline-flex items-center rounded-full border border-white/30 px-4 py-1.5 font-mono text-xs uppercase tracking-widest text-white/85">
+            Support
+          </p>
+          <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
+            Fuel the mission.
+          </h1>
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/80 sm:text-lg">
+            Fund independent investigation into the systems that touch your health,
+            your work, and your future — and keep the findings free for everyone.
+          </p>
+          <div className="mt-8">
+            <a
+              href="#send"
+              className="inline-flex items-center rounded-xl bg-gradient-to-r from-amber-500 to-red-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/20 transition-transform hover:scale-[1.02]"
+            >
+              Get the address
+            </a>
+          </div>
+        </div>
+      </section>
 
-      <div className="mt-8 rounded-2xl border border-amber-300 bg-amber-50 p-6 dark:border-amber-800 dark:bg-amber-950/40">
+      <div className="mx-auto max-w-3xl px-6 py-14 sm:py-16 lg:px-8">
+      <div className="rounded-2xl border border-amber-300 bg-amber-50 p-6 dark:border-amber-800 dark:bg-amber-950/40">
         <p className="text-base leading-relaxed text-slate-800 dark:text-slate-200">
           <strong className="font-bold">Plain talk first:</strong> I am not a
           nonprofit and I do not have tax-exempt status. Nothing you send here
@@ -600,29 +621,37 @@ function DonatePage() {
         </p>
       </div>
 
-      <div className="mt-10 space-y-8 text-base leading-relaxed text-slate-600 dark:text-slate-300">
+      <div className="mt-10 space-y-12 text-base leading-relaxed text-slate-600 dark:text-slate-300">
         <section>
-          <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
-            What you get
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-slate-50">
+            Sponsor the findings. Never the conclusions.
           </h2>
-          <ul className="mt-3 space-y-4">
-            <li>
-              <strong className="font-semibold text-slate-900 dark:text-slate-100">Evidence nobody bought.</strong>{" "}
-              Every investigation is funded by people, not sponsors — so when
-              Glenride publishes on drug shortages, you know the conclusion
-              wasn&rsquo;t purchased.
-            </li>
-            <li>
-              <strong className="font-semibold text-slate-900 dark:text-slate-100">Research that stays public.</strong>{" "}
-              Findings go out in plain language, free to read. Your support is
-              what keeps it that way — no paywall, no gatekeeper.
-            </li>
-            <li>
-              <strong className="font-semibold text-slate-900 dark:text-slate-100">Eyes on your own medicine cabinet.</strong>{" "}
-              227 drugs are in shortage in the U.S. right now. Independent
-              investigation into why is a public good you personally benefit from.
-            </li>
-          </ul>
+          <div className="mt-8 grid gap-8 md:grid-cols-[1fr_260px] md:items-start">
+            <ul className="space-y-6">
+              <li>
+                <strong className="font-semibold text-slate-900 dark:text-slate-100">Evidence nobody bought.</strong>{" "}
+                Every investigation is funded by people, not sponsors — so when
+                Glenride publishes on drug shortages, you know the conclusion
+                wasn&rsquo;t purchased.
+              </li>
+              <li>
+                <strong className="font-semibold text-slate-900 dark:text-slate-100">Research that stays public.</strong>{" "}
+                Findings go out in plain language, free to read. Your support is
+                what keeps it that way — no paywall, no gatekeeper.
+              </li>
+              <li>
+                <strong className="font-semibold text-slate-900 dark:text-slate-100">Eyes on your own medicine cabinet.</strong>{" "}
+                227 drugs are in shortage in the U.S. right now. Independent
+                investigation into why is a public good you personally benefit from.
+              </li>
+            </ul>
+            <img
+              src={workResearch}
+              alt="Glowing laboratory flask dissolving into data points — independent research, verified before asserted"
+              className="w-full rounded-2xl border border-slate-200 object-cover shadow-sm dark:border-slate-800"
+              loading="lazy"
+            />
+          </div>
         </section>
 
         <section>
@@ -636,7 +665,7 @@ function DonatePage() {
           </ul>
         </section>
 
-        <section>
+        <section id="send" className="scroll-mt-24">
           <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
             Where to send it
           </h2>
@@ -701,6 +730,7 @@ function DonatePage() {
             .
           </p>
         </section>
+      </div>
       </div>
     </div>
   );
