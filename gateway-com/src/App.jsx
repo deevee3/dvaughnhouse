@@ -115,7 +115,15 @@ function Hero() {
         <div className="absolute -top-40 left-1/2 h-[28rem] w-[52rem] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(245,158,11,0.20),rgba(239,68,68,0.08),transparent)] blur-2xl dark:bg-[radial-gradient(closest-side,rgba(245,158,11,0.10),rgba(239,68,68,0.05),transparent)]" />
       </div>
       <div className="relative mx-auto max-w-6xl px-6 pt-20 pb-16 sm:pt-28 sm:pb-24 lg:px-8">
-        <p className="inline-flex items-center rounded-full border border-slate-300 px-4 py-1.5 font-mono text-xs uppercase tracking-widest text-slate-600 dark:border-slate-700 dark:text-slate-300">
+        <div className="overflow-hidden rounded-2xl border border-slate-200 shadow-lg dark:border-slate-800">
+          <img
+            src={heroBanner}
+            alt="A diverse group of professionals collaborating around a table in a bright, grand conservatory"
+            className="aspect-[21/9] w-full object-cover"
+            loading="eager"
+          />
+        </div>
+        <p className="mt-12 inline-flex items-center rounded-full border border-slate-300 px-4 py-1.5 font-mono text-xs uppercase tracking-widest text-slate-600 dark:border-slate-700 dark:text-slate-300">
           Less bureaucracy. More breakthroughs.
         </p>
         <h1 className="mt-8 text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">
@@ -162,14 +170,6 @@ function Hero() {
           >
             Start a conversation
           </a>
-        </div>
-        <div className="mt-14 overflow-hidden rounded-2xl border border-slate-200 shadow-lg dark:border-slate-800">
-          <img
-            src={heroBanner}
-            alt="A diverse group of professionals collaborating around a table in a bright, grand conservatory"
-            className="aspect-[21/9] w-full object-cover"
-            loading="eager"
-          />
         </div>
       </div>
     </section>
