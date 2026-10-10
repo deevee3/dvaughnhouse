@@ -98,7 +98,78 @@ function Hero() {
   );
 }
 
+function Stats() {
+  const stats = [
+    {
+      value: "227",
+      label: "active U.S. drug shortages — the third straight quarterly increase",
+      source: "ASHP, Q2 2026",
+    },
+    {
+      value: "48%",
+      label: "of new 2026 shortages involve a drug made by a single manufacturer",
+      source: "ASHP, 2026",
+    },
+    {
+      value: "$2.6B",
+      label: "average cost to bring one new drug to market, over 10+ years of development",
+      source: "Tufts CSDD",
+    },
+    {
+      value: "~12%",
+      label: "of drug candidates that enter clinical trials ever reach approval",
+      source: "Tufts CSDD",
+    },
+  ];
+  return (
+    <section aria-label="By the numbers" className="border-y border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-800/40">
+      <div className="mx-auto max-w-6xl px-6 py-14 lg:px-8">
+        <p className="font-mono text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">
+          Why this work exists
+        </p>
+        <div className="mt-8 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+          {stats.map((s) => (
+            <div key={s.value + s.label}>
+              <p className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">
+                {s.value}
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                {s.label}
+              </p>
+              <p className="mt-2 font-mono text-[11px] uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                Source: {s.source}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function About() {
+  const pillars = [
+    {
+      title: "The Independent Architect",
+      body: "The craft of building — systems design, runbooks, near-zero-cost infrastructure. No theory without a working artifact.",
+    },
+    {
+      title: "The Power–Wisdom Gap",
+      body: "This is not another dot-com. Plain-language work on what \u201cif you don\u2019t move, you lose\u201d means in practice.",
+    },
+    {
+      title: "Cognitive Stewardship",
+      body: "Human primacy. Free will and the machine. Words as load-bearing spells. The thinking that keeps the building honest.",
+    },
+    {
+      title: "Glenride Investigations",
+      body: "Supply-chain vulnerabilities, pharmaceutical data, the systems that seek to harm — investigated in plain language. Verified before asserted.",
+    },
+    {
+      title: "The Independent Economy",
+      body: "The ventures, built in public. Real numbers, real lessons, never a profit promise.",
+    },
+  ];
   return (
     <section id="about" aria-label="About" className="border-t border-slate-200 dark:border-slate-800">
       <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:px-8">
@@ -121,6 +192,40 @@ function About() {
             receipts are visible. Human judgment stays at the top of every
             system I ship — the machine proposes, the person decides.
           </p>
+        </div>
+
+        <div className="mt-14 rounded-2xl border border-slate-200 bg-white p-8 sm:p-10 dark:border-slate-800 dark:bg-slate-800/60">
+          <p className="font-mono text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">
+            Mission statement
+          </p>
+          <p className="mt-4 text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+            Combat systems that seek to harm you.
+          </p>
+          <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
+            Three motions: <strong className="font-semibold text-slate-900 dark:text-slate-100">understand</strong> the
+            system, <strong className="font-semibold text-slate-900 dark:text-slate-100">build</strong> the
+            alternative, <strong className="font-semibold text-slate-900 dark:text-slate-100">compel</strong> the
+            change. Less bureaucracy. More breakthroughs.
+          </p>
+        </div>
+
+        <h3 className="mt-14 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+          The five pillars
+        </h3>
+        <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {pillars.map((p) => (
+            <div
+              key={p.title}
+              className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm dark:border-slate-800 dark:bg-slate-800/60"
+            >
+              <h4 className="text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100">
+                {p.title}
+              </h4>
+              <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                {p.body}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -286,6 +391,7 @@ export default function App() {
       <Header />
       <main>
         <Hero />
+        <Stats />
         <About />
         <Work />
         <Gateway />
