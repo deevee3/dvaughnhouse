@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import heroBanner from "./assets/hero-collab.jpg";
-import heroSupply from "./assets/hero-supply-network.webp";
+import heroDonate from "./assets/hero-donate.jpg";
 import workResearch from "./assets/work-research.webp";
 import workAi from "./assets/work-ai-systems.webp";
 import workAdvisory from "./assets/work-advisory.webp";
@@ -583,8 +583,8 @@ function DonatePage() {
     <div>
       <section className="relative overflow-hidden" aria-label="Support the mission">
         <img
-          src={heroSupply}
-          alt="Global supply networks traced in amber light across a dark world map"
+          src={heroDonate}
+          alt="A speaker on stage before a packed grand hall — carrying the mission to the people"
           className="absolute inset-0 h-full w-full object-cover"
           loading="eager"
         />
