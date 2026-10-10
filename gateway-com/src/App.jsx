@@ -20,8 +20,13 @@ function Header({ base = "" }) {
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/70 bg-slate-50/90 backdrop-blur dark:border-slate-800 dark:bg-slate-900/90">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6 lg:px-8">
-        <a href={homeHref} className="text-lg font-extrabold tracking-tight text-slate-900 dark:text-slate-50">
-          D&rsquo;Vaughn House
+        <a href={homeHref} className="leading-none">
+          <span className="block text-lg font-extrabold tracking-tight text-slate-900 dark:text-slate-50">
+            D&rsquo;Vaughn House
+          </span>
+          <span className="mt-1 hidden text-[11px] font-medium tracking-wide text-slate-500 sm:block dark:text-slate-400">
+            Less bureaucracy. More breakthroughs.
+          </span>
         </a>
         <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
           {NAV.map((item) => (
@@ -109,10 +114,10 @@ function Hero() {
           D&rsquo;Vaughn House — Independent AI Orchestrator
         </p>
         <h1 className="mt-8 text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">
-          Less bureaucracy.
+          Understand the system.
           <br />
           <span className="bg-gradient-to-r from-amber-600 to-red-600 bg-clip-text text-transparent dark:from-amber-400 dark:to-red-500">
-            More breakthroughs.
+            Build your way out.
           </span>
         </h1>
         <p className="mt-8 max-w-3xl text-base sm:text-lg leading-relaxed text-slate-600 dark:text-slate-300">
