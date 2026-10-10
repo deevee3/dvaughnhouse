@@ -182,6 +182,11 @@
 - Basis: ICH E6(R3), E8(R1), E9; CDISC standards; FAIR principles.
 - Owner: Department Director (Research).
 
+**SOP-010 — The Nuremberg Code**
+- Purpose: the origin point of modern research ethics — the Doctors' Trial, the ten points in operational form, and the lineage (Helsinki → Belmont → Common Rule → ICH-GCP). History is why the rules are non-negotiable.
+- Basis: United States v. Karl Brandt et al. (1947); Declaration of Helsinki; the Belmont Report.
+- Owner: Department Director (Research).
+
 ---
 
 ## Writing order (suggested)
