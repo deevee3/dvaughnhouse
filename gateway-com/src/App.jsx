@@ -111,29 +111,25 @@ function Hero() {
   ];
   return (
     <section className="relative overflow-hidden" aria-label="Introduction">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-40 left-1/2 h-[28rem] w-[52rem] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(245,158,11,0.20),rgba(239,68,68,0.08),transparent)] blur-2xl dark:bg-[radial-gradient(closest-side,rgba(245,158,11,0.10),rgba(239,68,68,0.05),transparent)]" />
-      </div>
+      <img
+        src={heroBanner}
+        alt="A diverse group of professionals collaborating around a table in a bright, grand conservatory"
+        className="absolute inset-0 h-full w-full object-cover"
+        loading="eager"
+      />
+      <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-slate-950/75 via-slate-950/60 to-slate-950/80" />
       <div className="relative mx-auto max-w-6xl px-6 pt-20 pb-16 sm:pt-28 sm:pb-24 lg:px-8">
-        <div className="overflow-hidden rounded-2xl border border-slate-200 shadow-lg dark:border-slate-800">
-          <img
-            src={heroBanner}
-            alt="A diverse group of professionals collaborating around a table in a bright, grand conservatory"
-            className="aspect-[21/9] w-full object-cover"
-            loading="eager"
-          />
-        </div>
-        <p className="mt-12 inline-flex items-center rounded-full border border-slate-300 px-4 py-1.5 font-mono text-xs uppercase tracking-widest text-slate-600 dark:border-slate-700 dark:text-slate-300">
+        <p className="inline-flex items-center rounded-full border border-white/30 px-4 py-1.5 font-mono text-xs uppercase tracking-widest text-white/85">
           Less bureaucracy. More breakthroughs.
         </p>
-        <h1 className="mt-8 text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">
+        <h1 className="mt-8 text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white">
           Understand the system.
           <br />
-          <span className="bg-gradient-to-r from-amber-600 to-red-600 bg-clip-text text-transparent dark:from-amber-400 dark:to-red-500">
+          <span className="bg-gradient-to-r from-amber-400 to-red-400 bg-clip-text text-transparent">
             Build your way out.
           </span>
         </h1>
-        <p className="mt-8 max-w-3xl text-base sm:text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+        <p className="mt-8 max-w-3xl text-base sm:text-lg leading-relaxed text-white/80">
           You don&rsquo;t need another lecture about AI. You need less
           busywork, straight facts on drug shortages, and plain talk on where
           things are headed — from someone who spent fifteen years inside
@@ -143,15 +139,15 @@ function Hero() {
           {benefits.map((b) => (
             <div
               key={b.n}
-              className="rounded-2xl border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur dark:border-slate-800 dark:bg-slate-800/60"
+              className="rounded-2xl border border-white/20 bg-white/95 p-6 shadow-lg backdrop-blur"
             >
-              <p className="font-mono text-xs font-bold tracking-widest text-amber-600 dark:text-amber-400">
+              <p className="font-mono text-xs font-bold tracking-widest text-amber-700">
                 {b.n}
               </p>
-              <h2 className="mt-3 text-lg font-bold tracking-tight text-slate-900 dark:text-slate-50">
+              <h2 className="mt-3 text-lg font-bold tracking-tight text-slate-900">
                 {b.title}
               </h2>
-              <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">
                 {b.body}
               </p>
             </div>
@@ -160,13 +156,13 @@ function Hero() {
         <div className="mt-10 flex flex-wrap gap-4">
           <a
             href="#work"
-            className="inline-flex items-center rounded-xl bg-gradient-to-r from-amber-600 to-red-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/20 transition-transform hover:scale-[1.02] dark:from-amber-500 dark:to-red-500"
+            className="inline-flex items-center rounded-xl bg-gradient-to-r from-amber-500 to-red-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/20 transition-transform hover:scale-[1.02]"
           >
             See the work
           </a>
           <a
             href="#contact"
-            className="inline-flex items-center rounded-xl border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-900 hover:border-slate-500 transition-colors dark:border-slate-700 dark:text-slate-100 dark:hover:border-slate-500"
+            className="inline-flex items-center rounded-xl border border-white/40 px-6 py-3 text-sm font-semibold text-white hover:border-white transition-colors"
           >
             Start a conversation
           </a>
