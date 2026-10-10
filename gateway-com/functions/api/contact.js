@@ -10,7 +10,7 @@
 
 const TOPICS = ["partnership", "research", "press", "speaking", "other"];
 const RATE_LIMIT_MAX = 5; // submissions per IP per hour
-const NOTIFY_TO = "dvaughn@gmail.com";
+const NOTIFY_TO = "dvaughnhouse@gmail.com";
 const NOTIFY_FROM = "contact@dvaughnhouse.com";
 
 function json(data, status = 200) {
