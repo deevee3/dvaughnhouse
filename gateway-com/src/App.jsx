@@ -3,9 +3,8 @@ import { useEffect, useState } from "react";
 const ORG_URL = import.meta.env.VITE_ORG_URL || (import.meta.env.DEV ? 'http://127.0.0.1:8085' : 'https://dvaughnhouse.org');
 const STORE_URL = import.meta.env.VITE_STORE_URL || (import.meta.env.DEV ? 'http://127.0.0.1:8085/store' : 'https://dvaughnhouse.store');
 
-// Donation destination. Empty until D'Vaughn designates an address —
-// the donate page shows a "coming soon" state rather than a wrong address.
-const DONATION_ADDRESS = "";
+// Donation destination: the House Donation Treasury Safe on Base (1-of-1, his wallet).
+const DONATION_ADDRESS = "0xa6eab535043EB98De32e5791b0E83ab47f88C430";
 const DONATION_NETWORK = "Base";
 
 const NAV = [
