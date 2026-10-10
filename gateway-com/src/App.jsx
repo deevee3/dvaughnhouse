@@ -106,17 +106,15 @@ function Hero() {
       </div>
       <div className="relative mx-auto max-w-6xl px-6 pt-20 pb-16 sm:pt-28 sm:pb-24 lg:px-8">
         <p className="inline-flex items-center rounded-full border border-slate-300 px-4 py-1.5 font-mono text-xs uppercase tracking-widest text-slate-600 dark:border-slate-700 dark:text-slate-300">
-          Independent AI Orchestrator
+          D&rsquo;Vaughn House — Independent AI Orchestrator
         </p>
         <h1 className="mt-8 text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">
-          D&rsquo;Vaughn House
-        </h1>
-        <p className="mt-6 text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-slate-800 dark:text-slate-100">
-          Less bureaucracy.{" "}
+          Less bureaucracy.
+          <br />
           <span className="bg-gradient-to-r from-amber-600 to-red-600 bg-clip-text text-transparent dark:from-amber-400 dark:to-red-500">
             More breakthroughs.
           </span>
-        </p>
+        </h1>
         <p className="mt-8 max-w-3xl text-base sm:text-lg leading-relaxed text-slate-600 dark:text-slate-300">
           You don&rsquo;t need another voice telling you AI matters. You need
           the systems that cut your busywork, the evidence behind the
