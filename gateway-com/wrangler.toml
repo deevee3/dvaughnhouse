@@ -1,3 +1,8 @@
 name = "dvaughnhouse-gateway"
 compatibility_date = "2026-09-18"
 pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "dvaughnhouse-contacts"
+database_id = "956da9fd-e7c3-4e9c-8d11-5c9aa98433d8"
