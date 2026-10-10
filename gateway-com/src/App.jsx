@@ -583,10 +583,29 @@ function DonatePage() {
               >
                 {copied ? "Copied ✓" : "Copy address"}
               </button>
-              <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
-                Send only assets on {DONATION_NETWORK} to this address. Anything
-                sent on another network may be unrecoverable.
-              </p>
+              <div
+                role="alert"
+                className="mt-6 flex gap-3 rounded-2xl border-2 border-red-400 bg-red-50 p-5 dark:border-red-700 dark:bg-red-950/50"
+              >
+                <svg
+                  className="h-6 w-6 shrink-0 text-red-600 dark:text-red-400"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" />
+                  <line x1="12" y1="9" x2="12" y2="13" />
+                  <line x1="12" y1="17" x2="12.01" y2="17" />
+                </svg>
+                <p className="text-base font-semibold leading-relaxed text-red-800 dark:text-red-200">
+                  {DONATION_NETWORK} network only. Assets sent on any other
+                  network may be permanently unrecoverable.
+                </p>
+              </div>
             </div>
           ) : (
             <p className="mt-3">
