@@ -155,6 +155,35 @@
 
 ---
 
+## H. Research fundamentals
+
+**SOP-005 — Data integrity: ALCOA+ principles**
+- Purpose: the minimum bar for trustworthy data — attributable, legible, contemporaneous, original, accurate, complete, consistent, enduring, available. Corrections never obscure the original.
+- Basis: FDA data-integrity guidance; ICH E6(R3).
+- Owner: every team member; Managers verify.
+
+**SOP-006 — Human subjects protections**
+- Purpose: participant rights, safety, and well-being before every other interest. External IRB approval mandatory — Glenride holds no IRB of its own. Informed consent as a process, not a signature.
+- Basis: the Belmont Report; the Common Rule (45 CFR 46); the Declaration of Helsinki; ICH E6(R3).
+- Owner: Lead Director; external ethics board contracted for review.
+
+**SOP-007 — Clinical trial phases & fundamentals**
+- Purpose: one shared language for trial stages (Phase 0–IV), regulatory gates (IND/NDA/BLA), and design vocabulary (randomization, blinding, control, endpoints).
+- Basis: FDA investigational-drug regulations (21 CFR Part 312); ICH E6(R3); ICH E8(R1).
+- Owner: Department Director (Research).
+
+**SOP-008 — Research training requirements**
+- Purpose: nobody touches regulated work untrained. CITI (human subjects) and GCP (ICH E6(R3)) with three-year refreshers; training log with 60-day expiry flags.
+- Basis: CITI Program curriculum structure; ICH E6(R3) training expectations.
+- Owner: Managers.
+
+**SOP-009 — International standards for data harmonization**
+- Purpose: datasets built to ICH and CDISC standards (CDASH → SDTM → ADaM) from design stage, with MedDRA/WHODrug coding — interoperable, auditable, submission-grade.
+- Basis: ICH E6(R3), E8(R1), E9; CDISC standards; FAIR principles.
+- Owner: Department Director (Research).
+
+---
+
 ## Writing order (suggested)
 
 Start where the risk is: **SOP-01, SOP-09, SOP-12, SOP-19** — how studies get approved, how records are kept, how conflicts are disclosed, how money is tracked. Then data management (SOP-04 through SOP-08), then the rest. Four strong SOPs beat twenty-three drafts.
