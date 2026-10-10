@@ -328,6 +328,39 @@ function Gateway() {
 }
 
 function Contact() {
+  const [form, setForm] = useState({ name: "", email: "", topic: "partnership", message: "", company: "" });
+  const [status, setStatus] = useState({ state: "idle", message: "" });
+
+  const set = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
+
+  async function submit(e) {
+    e.preventDefault();
+    setStatus({ state: "sending", message: "" });
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.ok) {
+        setStatus({ state: "success", message: "Received. I'll read it personally — thank you." });
+        setForm({ name: "", email: "", topic: "partnership", message: "", company: "" });
+      } else if (data.error === "storage_not_configured") {
+        setStatus({ state: "error", message: "The contact form isn't online yet — check back soon." });
+      } else if (data.error === "rate_limited") {
+        setStatus({ state: "error", message: "Too many messages in a short time — try again in an hour." });
+      } else {
+        setStatus({ state: "error", message: "Something didn't validate — check the fields and try again." });
+      }
+    } catch {
+      setStatus({ state: "error", message: "Couldn't send — check your connection and try again." });
+    }
+  }
+
+  const inputCls =
+    "w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-slate-500 dark:focus:ring-slate-700";
+
   return (
     <section id="contact" aria-label="Contact" className="border-t border-slate-200 dark:border-slate-800">
       <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:px-8">
@@ -337,23 +370,80 @@ function Contact() {
         </h2>
         <p className="mt-6 max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
           Partnerships, research collaboration, press, or just a sharp question
-          about independent AI infrastructure — the institution door is the
-          right one. For commercial inquiries, use the store.
+          about independent AI infrastructure. Your message goes directly to me —
+          I read everything myself. No list, no resale, no sharing.
         </p>
-        <div className="mt-10 flex flex-wrap gap-4">
-          <a
-            href={ORG_URL}
-            className="inline-flex items-center rounded-xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-700 transition-colors dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
-          >
-            Reach the institution
-          </a>
-          <a
-            href={STORE_URL}
-            className="inline-flex items-center rounded-xl border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-900 hover:border-slate-500 transition-colors dark:border-slate-700 dark:text-slate-100 dark:hover:border-slate-500"
-          >
-            Commercial inquiries
-          </a>
-        </div>
+        <form onSubmit={submit} className="mt-10 max-w-2xl space-y-5">
+          <div className="grid gap-5 sm:grid-cols-2">
+            <div>
+              <label htmlFor="contact-name" className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
+                Name
+              </label>
+              <input
+                id="contact-name" type="text" required maxLength={100}
+                value={form.name} onChange={set("name")} className={inputCls}
+                placeholder="Your name" autoComplete="name"
+              />
+            </div>
+            <div>
+              <label htmlFor="contact-email" className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
+                Email
+              </label>
+              <input
+                id="contact-email" type="email" required maxLength={254}
+                value={form.email} onChange={set("email")} className={inputCls}
+                placeholder="you@example.com" autoComplete="email"
+              />
+            </div>
+          </div>
+          <div>
+            <label htmlFor="contact-topic" className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
+              Topic
+            </label>
+            <select id="contact-topic" value={form.topic} onChange={set("topic")} className={inputCls}>
+              <option value="partnership">Partnership</option>
+              <option value="research">Research collaboration</option>
+              <option value="press">Press</option>
+              <option value="speaking">Speaking</option>
+              <option value="other">Something else</option>
+            </select>
+          </div>
+          <div>
+            <label htmlFor="contact-message" className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
+              Message
+            </label>
+            <textarea
+              id="contact-message" required maxLength={2000} rows={5}
+              value={form.message} onChange={set("message")} className={inputCls}
+              placeholder="What's on your mind?"
+            />
+          </div>
+          {/* Honeypot: invisible to humans, irresistible to bots */}
+          <input
+            type="text" name="company" value={form.company} onChange={set("company")}
+            tabIndex={-1} autoComplete="off" aria-hidden="true"
+            style={{ position: "absolute", left: "-9999px", opacity: 0, height: 0 }}
+          />
+          <div>
+            <button
+              type="submit"
+              disabled={status.state === "sending"}
+              className="inline-flex items-center rounded-xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-slate-700 disabled:opacity-60 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
+            >
+              {status.state === "sending" ? "Sending…" : "Send message"}
+            </button>
+          </div>
+          {status.state === "success" && (
+            <p role="status" className="text-sm font-medium text-emerald-700 dark:text-emerald-400">
+              {status.message}
+            </p>
+          )}
+          {status.state === "error" && (
+            <p role="alert" className="text-sm font-medium text-red-700 dark:text-red-400">
+              {status.message}
+            </p>
+          )}
+        </form>
       </div>
     </section>
   );
