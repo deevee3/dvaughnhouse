@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import heroBanner from "./assets/hero-supply-network.webp";
+import heroBanner from "./assets/hero-collab.jpg";
 import workResearch from "./assets/work-research.webp";
 import workAi from "./assets/work-ai-systems.webp";
 import workAdvisory from "./assets/work-advisory.webp";
@@ -166,7 +166,7 @@ function Hero() {
         <div className="mt-14 overflow-hidden rounded-2xl border border-slate-200 shadow-lg dark:border-slate-800">
           <img
             src={heroBanner}
-            alt="World map at night with glowing amber trade routes connecting global supply chain hubs"
+            alt="A diverse group of professionals collaborating around a table in a bright, grand conservatory"
             className="aspect-[21/9] w-full object-cover"
             loading="eager"
           />
