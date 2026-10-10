@@ -86,17 +86,17 @@ function Hero() {
     {
       n: "01",
       title: "Cut the busywork",
-      body: "Local-first AI systems that take process off your plate — without cutting corners.",
+      body: "AI tools that handle the tedious work for you — built right, no shortcuts.",
     },
     {
       n: "02",
       title: "Get the evidence",
-      body: "Drug shortages, supply chains, the data behind the headlines — published free, in plain language.",
+      body: "What's really behind drug shortages, in plain English. Free to read.",
     },
     {
       n: "03",
       title: "Don't get left behind",
-      body: "A straight read on the AI shift, translated into moves you can actually make.",
+      body: "Plain talk on the AI shift — and what you can actually do about it.",
     },
   ];
   return (
@@ -116,10 +116,10 @@ function Hero() {
           </span>
         </h1>
         <p className="mt-8 max-w-3xl text-base sm:text-lg leading-relaxed text-slate-600 dark:text-slate-300">
-          You don&rsquo;t need another voice telling you AI matters. You need
-          the systems that cut your busywork, the evidence behind the
-          drug-shortage headlines, and a straight read on the shift — from
-          someone who spent fifteen years inside the machine.
+          You don&rsquo;t need another lecture about AI. You need less
+          busywork, straight facts on drug shortages, and plain talk on where
+          things are headed — from someone who spent fifteen years inside
+          the system.
         </p>
         <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-3">
           {benefits.map((b) => (
@@ -162,22 +162,32 @@ function Stats() {
   const stats = [
     {
       value: "227",
-      label: "active U.S. drug shortages — the third straight quarterly increase",
+      label: "U.S. drugs in shortage right now — rising for the third straight quarter",
       source: "ASHP, Q2 2026",
     },
     {
-      value: "48%",
-      label: "of new 2026 shortages involve a drug made by a single manufacturer",
-      source: "ASHP, 2026",
+      value: "78%",
+      label: "of drug-ingredient factories are outside the U.S.",
+      source: "FDA",
+    },
+    {
+      value: "40%",
+      label: "of generic drug markets rely on a single supplier",
+      source: "FDA",
+    },
+    {
+      value: "5+ yrs",
+      label: "how long the average drug shortage lasts",
+      source: "USP",
     },
     {
       value: "$2.6B",
-      label: "average cost to bring one new drug to market, over 10+ years of development",
+      label: "average cost to develop one new drug",
       source: "Tufts CSDD",
     },
     {
       value: "~12%",
-      label: "of drug candidates that enter clinical trials ever reach approval",
+      label: "of drugs that enter trials ever get approved",
       source: "Tufts CSDD",
     },
   ];
@@ -185,9 +195,9 @@ function Stats() {
     <section aria-label="By the numbers" className="border-y border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-800/40">
       <div className="mx-auto max-w-6xl px-6 py-14 lg:px-8">
         <p className="font-mono text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">
-          Why this work exists
+          The problem, in numbers
         </p>
-        <div className="mt-8 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-8 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
           {stats.map((s) => (
             <div key={s.value + s.label}>
               <p className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">
