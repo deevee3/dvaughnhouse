@@ -1,4 +1,9 @@
 import { useEffect, useState } from "react";
+import heroBanner from "./assets/hero-supply-network.webp";
+import workResearch from "./assets/work-research.webp";
+import workAi from "./assets/work-ai-systems.webp";
+import workAdvisory from "./assets/work-advisory.webp";
+import glenrideLogo from "./assets/glenride-logo.png";
 
 const ORG_URL = import.meta.env.VITE_ORG_URL || (import.meta.env.DEV ? 'http://127.0.0.1:8085' : 'https://dvaughnhouse.org');
 const STORE_URL = import.meta.env.VITE_STORE_URL || (import.meta.env.DEV ? 'http://127.0.0.1:8085/store' : 'https://dvaughnhouse.store');
@@ -40,7 +45,7 @@ function Header({ base = "" }) {
           ))}
           <a
             href="/donate"
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700 transition-colors dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
+            className="rounded-lg bg-gradient-to-r from-amber-600 to-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:from-amber-500 hover:to-red-500 transition-colors"
           >
             Donate
           </a>
@@ -74,7 +79,7 @@ function Header({ base = "" }) {
               <a
                 href="/donate"
                 onClick={() => setOpen(false)}
-                className="inline-block rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white dark:bg-slate-100 dark:text-slate-900"
+                className="inline-block rounded-lg bg-gradient-to-r from-amber-600 to-red-600 px-4 py-2 text-sm font-semibold text-white"
               >
                 Donate
               </a>
@@ -158,6 +163,14 @@ function Hero() {
             Start a conversation
           </a>
         </div>
+        <div className="mt-14 overflow-hidden rounded-2xl border border-slate-200 shadow-lg dark:border-slate-800">
+          <img
+            src={heroBanner}
+            alt="World map at night with glowing amber trade routes connecting global supply chain hubs"
+            className="aspect-[21/9] w-full object-cover"
+            loading="eager"
+          />
+        </div>
       </div>
     </section>
   );
@@ -176,14 +189,14 @@ function Stats() {
       source: "FDA",
     },
     {
-      value: "40%",
-      label: "of generic drug markets rely on a single supplier",
-      source: "FDA",
+      value: "~90%",
+      label: "of the world's most advanced chips are made in Taiwan",
+      source: "Industry analyses, 2026",
     },
     {
-      value: "5+ yrs",
-      label: "how long the average drug shortage lasts",
-      source: "USP",
+      value: "85%",
+      label: "of rare-earth refining happens in China",
+      source: "IEA, 2025",
     },
     {
       value: "$2.6B",
@@ -199,13 +212,13 @@ function Stats() {
   return (
     <section aria-label="By the numbers" className="border-y border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-800/40">
       <div className="mx-auto max-w-6xl px-6 py-14 lg:px-8">
-        <p className="font-mono text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">
+        <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">
           The problem, in numbers
         </p>
         <div className="mt-8 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
           {stats.map((s) => (
             <div key={s.value + s.label}>
-              <p className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">
+              <p className="text-4xl font-extrabold tracking-tight text-amber-700 dark:text-amber-400">
                 {s.value}
               </p>
               <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
@@ -248,7 +261,7 @@ function About() {
   return (
     <section id="about" aria-label="About" className="border-t border-slate-200 dark:border-slate-800">
       <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:px-8">
-        <p className="font-mono text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">About</p>
+        <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">About</p>
         <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
           Built in regulated rooms. Building outside them now.
         </h2>
@@ -269,19 +282,26 @@ function About() {
           </p>
         </div>
 
-        <div className="mt-14 rounded-2xl border border-slate-200 bg-white p-8 sm:p-10 dark:border-slate-800 dark:bg-slate-800/60">
-          <p className="font-mono text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">
-            Mission statement
-          </p>
-          <p className="mt-4 text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
-            Combat systems that seek to harm you.
-          </p>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
-            Three motions: <strong className="font-semibold text-slate-900 dark:text-slate-100">understand</strong> the
-            system, <strong className="font-semibold text-slate-900 dark:text-slate-100">build</strong> the
-            alternative, <strong className="font-semibold text-slate-900 dark:text-slate-100">compel</strong> the
-            change. Less bureaucracy. More breakthroughs.
-          </p>
+        <div className="mt-14 flex flex-col gap-8 rounded-2xl border border-slate-200 bg-white p-8 sm:p-10 sm:flex-row sm:items-center dark:border-slate-800 dark:bg-slate-800/60">
+          <img
+            src={glenrideLogo}
+            alt="Glenride think tank logo"
+            className="h-28 w-28 shrink-0 rounded-2xl"
+          />
+          <div>
+            <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">
+              Mission statement
+            </p>
+            <p className="mt-4 text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+              Combat systems that seek to harm you.
+            </p>
+            <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
+              Three motions: <strong className="font-semibold text-slate-900 dark:text-slate-100">understand</strong> the
+              system, <strong className="font-semibold text-slate-900 dark:text-slate-100">build</strong> the
+              alternative, <strong className="font-semibold text-slate-900 dark:text-slate-100">compel</strong> the
+              change. Less bureaucracy. More breakthroughs.
+            </p>
+          </div>
         </div>
 
         <h3 className="mt-14 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
@@ -311,12 +331,16 @@ function Work() {
   const cards = [
     {
       title: "Glenride",
+      img: workResearch,
+      imgAlt: "Glowing laboratory flask dissolving into data points",
       body: "An independent think tank with a venture studio — built to combat systems that seek to harm you. Research on supply-chain resilience, pharmaceutical data, and applied AI, published free in plain language so you can act on it. Understand. Build. Compel.",
       link: ORG_URL,
       cta: "Visit Glenride",
     },
     {
       title: "SpinWave",
+      img: workAi,
+      imgAlt: "Interlocking AI circuit nodes with flowing amber data pathways",
       body: "A utility token for the scholarly commons — scholars earn for manuscripts and datasets, readers pay to browse and license. On Base. No hype, no profit promises; the trust center carries the receipts.",
       link: "https://spinwave.pages.dev",
       cta: "See SpinWave",
@@ -325,7 +349,7 @@ function Work() {
   return (
     <section id="work" aria-label="Work" className="border-t border-slate-200 dark:border-slate-800">
       <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:px-8">
-        <p className="font-mono text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">Work</p>
+        <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">Work</p>
         <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
           What I&rsquo;m building
         </h2>
@@ -334,17 +358,25 @@ function Work() {
             <a
               key={card.title}
               href={card.link}
-              className="group block rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition-all hover:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 sm:p-10 dark:border-slate-800 dark:bg-slate-800/60 dark:hover:border-slate-600 dark:focus:ring-slate-600"
+              className="group block overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 dark:border-slate-800 dark:bg-slate-800/60 dark:hover:border-slate-600 dark:focus:ring-slate-600"
             >
-              <h3 className="text-2xl font-bold tracking-tight text-slate-900 transition-colors group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400">
-                {card.title}
-              </h3>
-              <p className="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300">
-                {card.body}
-              </p>
-              <span className="mt-8 inline-flex items-center text-sm font-semibold tracking-wide text-slate-900 transition-colors group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400">
-                {card.cta} <span className="ml-2 transition-transform group-hover:translate-x-1">→</span>
-              </span>
+              <img
+                src={card.img}
+                alt={card.imgAlt}
+                className="h-48 w-full object-cover"
+                loading="lazy"
+              />
+              <div className="p-8 sm:p-10">
+                <h3 className="text-2xl font-bold tracking-tight text-slate-900 transition-colors group-hover:text-amber-600 dark:text-slate-100 dark:group-hover:text-amber-400">
+                  {card.title}
+                </h3>
+                <p className="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300">
+                  {card.body}
+                </p>
+                <span className="mt-8 inline-flex items-center text-sm font-semibold tracking-wide text-slate-900 transition-colors group-hover:text-amber-600 dark:text-slate-100 dark:group-hover:text-amber-400">
+                  {card.cta} <span className="ml-2 transition-transform group-hover:translate-x-1">→</span>
+                </span>
+              </div>
             </a>
           ))}
         </div>
@@ -357,7 +389,7 @@ function Gateway() {
   return (
     <section id="gateway" aria-label="Gateway" className="border-t border-slate-200 dark:border-slate-800">
       <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:px-8">
-        <p className="font-mono text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">Gateway</p>
+        <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">Gateway</p>
         <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
           Two doors
         </h2>
@@ -370,14 +402,14 @@ function Gateway() {
             href={ORG_URL}
             className="group block rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition-all hover:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 sm:p-10 dark:border-slate-800 dark:bg-slate-800/60 dark:hover:border-slate-600 dark:focus:ring-slate-600"
           >
-            <h3 className="text-2xl font-bold tracking-tight text-slate-900 transition-colors group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400">
+            <h3 className="text-2xl font-bold tracking-tight text-slate-900 transition-colors group-hover:text-amber-600 dark:text-slate-100 dark:group-hover:text-amber-400">
               The Institution &amp; Engine
             </h3>
             <p className="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300">
               The public home of Glenride — research, standard operating
               procedures, and the ThinkTank OS portal.
             </p>
-            <span className="mt-8 inline-flex items-center text-sm font-semibold tracking-wide text-slate-900 transition-colors group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400">
+            <span className="mt-8 inline-flex items-center text-sm font-semibold tracking-wide text-slate-900 transition-colors group-hover:text-amber-600 dark:text-slate-100 dark:group-hover:text-amber-400">
               Enter dvaughnhouse.org <span className="ml-2 transition-transform group-hover:translate-x-1">→</span>
             </span>
           </a>
@@ -385,14 +417,14 @@ function Gateway() {
             href={STORE_URL}
             className="group block rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition-all hover:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 sm:p-10 dark:border-slate-800 dark:bg-slate-800/60 dark:hover:border-slate-600 dark:focus:ring-slate-600"
           >
-            <h3 className="text-2xl font-bold tracking-tight text-slate-900 transition-colors group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400">
+            <h3 className="text-2xl font-bold tracking-tight text-slate-900 transition-colors group-hover:text-amber-600 dark:text-slate-100 dark:group-hover:text-amber-400">
               The Economic Engine
             </h3>
             <p className="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300">
               The isolated transaction layer — offerings, procurement, and
               commercial engagements.
             </p>
-            <span className="mt-8 inline-flex items-center text-sm font-semibold tracking-wide text-slate-900 transition-colors group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400">
+            <span className="mt-8 inline-flex items-center text-sm font-semibold tracking-wide text-slate-900 transition-colors group-hover:text-amber-600 dark:text-slate-100 dark:group-hover:text-amber-400">
               Enter dvaughnhouse.store <span className="ml-2 transition-transform group-hover:translate-x-1">→</span>
             </span>
           </a>
@@ -439,7 +471,7 @@ function Contact() {
   return (
     <section id="contact" aria-label="Contact" className="border-t border-slate-200 dark:border-slate-800">
       <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:px-8">
-        <p className="font-mono text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">Contact</p>
+        <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">Contact</p>
         <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
           Start a conversation
         </h2>
@@ -448,7 +480,8 @@ function Contact() {
           about independent AI infrastructure. Your message goes directly to me —
           I read everything myself. No list, no resale, no sharing.
         </p>
-        <form onSubmit={submit} className="mt-10 max-w-2xl space-y-5">
+        <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_360px] lg:items-start">
+          <form onSubmit={submit} className="max-w-2xl space-y-5">
           <div className="grid gap-5 sm:grid-cols-2">
             <div>
               <label htmlFor="contact-name" className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
@@ -503,7 +536,7 @@ function Contact() {
             <button
               type="submit"
               disabled={status.state === "sending"}
-              className="inline-flex items-center rounded-xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-slate-700 disabled:opacity-60 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
+              className="inline-flex items-center rounded-xl bg-gradient-to-r from-amber-600 to-red-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:from-amber-500 hover:to-red-500 disabled:opacity-60"
             >
               {status.state === "sending" ? "Sending…" : "Send message"}
             </button>
@@ -519,6 +552,13 @@ function Contact() {
             </p>
           )}
         </form>
+          <img
+            src={workAdvisory}
+            alt="Glowing compass over architectural blueprints — finding direction through complex systems"
+            className="hidden w-full rounded-2xl border border-slate-200 object-cover shadow-sm lg:block dark:border-slate-800"
+            loading="lazy"
+          />
+        </div>
       </div>
     </section>
   );
@@ -544,7 +584,7 @@ function DonatePage() {
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-16 sm:py-20 lg:px-8">
-      <p className="font-mono text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">
+      <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">
         Support
       </p>
       <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl dark:text-slate-50">
@@ -615,7 +655,7 @@ function DonatePage() {
               <button
                 type="button"
                 onClick={copyAddress}
-                className="mt-4 inline-flex items-center rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-700 transition-colors dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
+                className="mt-4 inline-flex items-center rounded-xl bg-gradient-to-r from-amber-600 to-red-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:from-amber-500 hover:to-red-500 transition-colors"
               >
                 {copied ? "Copied ✓" : "Copy address"}
               </button>
