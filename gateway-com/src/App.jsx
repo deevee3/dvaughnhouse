@@ -25,7 +25,7 @@ function Header({ base = "" }) {
             D&rsquo;Vaughn House
           </span>
           <span className="mt-1 hidden text-[11px] font-medium tracking-wide text-slate-500 sm:block dark:text-slate-400">
-            Less bureaucracy. More breakthroughs.
+            Independent AI Orchestrator
           </span>
         </a>
         <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
