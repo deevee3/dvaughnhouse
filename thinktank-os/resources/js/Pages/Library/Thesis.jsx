@@ -178,7 +178,7 @@ export default function Thesis({ auth }) {
                             D'Vaughn House is an Agent Orchestrator and Founder of The Glenride Institute. For over a decade, he engineered regulatory data pipelines and managed compliance architectures for high-stakes clinical research trials. Today, he designs sovereign, local-first technological infrastructure uniting autonomous artificial intelligence with decisive human judgment.
                         </p>
                         <div className="mt-4 flex items-center space-x-4 text-xs font-mono text-indigo-600">
-                            <a href="http://localhost:5173" className="hover:underline">
+                            <a href="https://dvaughnhouse.com" className="hover:underline">
                                 dvaughnhouse.com Routing Hub →
                             </a>
                             <Link href={route('library.index')} className="hover:underline">

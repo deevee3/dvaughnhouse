@@ -99,7 +99,7 @@ export default function Index({ briefs = [], auth }) {
                             SOPs
                         </Link>
                         <a
-                            href="http://localhost:5173"
+                            href="https://dvaughnhouse.com"
                             className="text-stone-600 hover:text-gray-900 transition"
                         >
                             Routing Hub
