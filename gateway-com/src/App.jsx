@@ -4,6 +4,7 @@ import heroDonate from "./assets/hero-donate.jpg";
 import workResearch from "./assets/work-research.webp";
 import workAi from "./assets/work-ai-systems.webp";
 import workAdvisory from "./assets/work-advisory.webp";
+import workStore from "./assets/work-store.webp";
 import glenrideLogo from "./assets/glenride-logo.png";
 
 const ORG_URL = import.meta.env.VITE_ORG_URL || (import.meta.env.DEV ? 'http://127.0.0.1:8085' : 'https://dvaughnhouse.org');
@@ -16,7 +17,6 @@ const DONATION_NETWORK = "Base";
 const NAV = [
   { label: "About", href: "#about" },
   { label: "Work", href: "#work" },
-  { label: "Gateway", href: "#gateway" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -342,6 +342,14 @@ function Work() {
       link: "https://spinwave.pages.dev",
       cta: "See SpinWave",
     },
+    {
+      title: "Store",
+      img: workStore,
+      imgAlt: "Dark storefront with a glowing amber doorway and circuit pathways leading in",
+      body: "The isolated transaction layer — offerings, procurement, and commercial engagements. The institution lives at one address, the commerce at another. Separate on purpose.",
+      link: STORE_URL,
+      cta: "Visit the store",
+    },
   ];
   return (
     <section id="work" aria-label="Work" className="border-t border-slate-200 dark:border-slate-800">
@@ -350,7 +358,7 @@ function Work() {
         <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
           What I&rsquo;m building
         </h2>
-        <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
+        <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3 lg:gap-8">
           {cards.map((card) => (
             <a
               key={card.title}
@@ -375,56 +383,6 @@ function Work() {
                 </span>
               </div>
             </a>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Gateway() {
-  const doors = [
-    {
-      title: "The Institution & Engine",
-      body: "The public home of Glenride — research, standard operating procedures, and the ThinkTank OS portal.",
-      domain: "dvaughnhouse.org",
-    },
-    {
-      title: "The Economic Engine",
-      body: "The isolated transaction layer — offerings, procurement, and commercial engagements.",
-      domain: "dvaughnhouse.store",
-    },
-  ];
-  return (
-    <section id="gateway" aria-label="Gateway" className="border-t border-slate-200 dark:border-slate-800">
-      <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:px-8">
-        <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">Gateway</p>
-        <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
-          Two doors
-        </h2>
-        <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
-          This site is the front door. The institution will live at one address,
-          the commerce at another — separate on purpose. Both doors open soon.
-        </p>
-        <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
-          {doors.map((d) => (
-            <div
-              key={d.domain}
-              className="block rounded-2xl border border-slate-200 bg-white p-8 shadow-sm sm:p-10 dark:border-slate-800 dark:bg-slate-800/60"
-            >
-              <span className="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 font-mono text-[11px] uppercase tracking-widest text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
-                Coming soon
-              </span>
-              <h3 className="mt-5 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-                {d.title}
-              </h3>
-              <p className="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300">
-                {d.body}
-              </p>
-              <p className="mt-8 font-mono text-sm tracking-wide text-slate-400 dark:text-slate-500">
-                {d.domain}
-              </p>
-            </div>
           ))}
         </div>
       </div>
@@ -790,7 +748,6 @@ export default function App() {
         <Stats />
         <About />
         <Work />
-        <Gateway />
         <Contact />
       </main>
       <Footer />
