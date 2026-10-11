@@ -303,6 +303,15 @@ export default function Index({ briefs = [], auth }) {
                         <Link href={route('login')} className="hover:text-gray-900 transition">
                             ThinkTank OS Portal
                         </Link>
+                        <a href="https://dvaughnhouse.com/terms" className="hover:text-gray-900 transition">
+                            Terms
+                        </a>
+                        <a href="https://dvaughnhouse.com/privacy" className="hover:text-gray-900 transition">
+                            Privacy
+                        </a>
+                        <a href="https://dvaughnhouse.com/#contact" className="hover:text-gray-900 transition">
+                            Contact
+                        </a>
                     </div>
                 </div>
             </footer>

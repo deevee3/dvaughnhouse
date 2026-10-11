@@ -1,6 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
+import SiteFooter from '@/Components/SiteFooter';
 
-export default function Welcome({ auth, laravelVersion, phpVersion }) {
+export default function Welcome({ auth }) {
     const handleImageError = () => {
         document
             .getElementById('screenshot-container')
@@ -350,9 +351,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                             </div>
                         </main>
 
-                        <footer className="py-16 text-center text-sm text-black dark:text-white/70">
-                            Laravel v{laravelVersion} (PHP v{phpVersion})
-                        </footer>
+                        <SiteFooter />
                     </div>
                 </div>
             </div>

@@ -1,5 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
 import { useState } from 'react';
+import SiteFooter from '@/Components/SiteFooter';
 
 const STATUS_STYLES = {
     available: 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300',
@@ -410,6 +411,8 @@ export default function Index({ categories = [], stripeKey = '' }) {
                     </div>
                 </div>
             )}
+
+            <SiteFooter />
         </div>
     );
 }

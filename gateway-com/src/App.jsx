@@ -695,32 +695,155 @@ function DonatePage() {
   );
 }
 
+const LEGAL_DOCS = {
+  terms: {
+    title: "Terms of Service",
+    updated: "October 11, 2026",
+    intro:
+      "These terms are a working placeholder while formal terms are prepared with counsel. By using this site, you agree to these plain-language terms.",
+    sections: [
+      {
+        heading: "Use of the site",
+        body: "You may read, share, and link to the public content here. You may not scrape the site at abusive volume, misrepresent the content as your own, or use the site to break the law.",
+      },
+      {
+        heading: "Intellectual property",
+        body: "Essays, research, artwork, and brand marks on this site belong to D'Vaughn House unless credited otherwise. You may quote brief passages with attribution; any other reproduction needs written permission.",
+      },
+      {
+        heading: "Purchases",
+        body: "Products sold through the store are covered by the terms shown at checkout: what you get, the license scope, and the refund terms are stated before any payment is accepted. No product takes payment before its price and terms are published.",
+      },
+      {
+        heading: "No professional advice",
+        body: "Nothing on this site is financial, legal, investment, or medical advice. Token and market content is educational. You are responsible for your own decisions.",
+      },
+      {
+        heading: "Limitation of liability",
+        body: "The site is provided as-is. To the extent the law allows, D'Vaughn House is not liable for damages arising from your use of the site.",
+      },
+      {
+        heading: "Changes",
+        body: "These terms may be updated as the work grows. The current version always lives at this address, with its last-updated date shown above.",
+      },
+    ],
+  },
+  privacy: {
+    title: "Privacy Policy",
+    updated: "October 11, 2026",
+    intro:
+      "This policy is a working placeholder while a formal policy is prepared. In plain language, here is how your information is handled.",
+    sections: [
+      {
+        heading: "What is collected",
+        body: "If you use the contact form: your name, email address, and message. The site does not run third-party advertising trackers. Standard server logs (used for security and reliability) may record visits in anonymized or aggregate form.",
+      },
+      {
+        heading: "How it is used",
+        body: "Contact details are used only to reply to you. They are never sold, rented, or shared with marketers.",
+      },
+      {
+        heading: "Cookies",
+        body: "The site does not set advertising cookies. Basic functional storage in your browser may be used for preferences like display theme.",
+      },
+      {
+        heading: "Data retention",
+        body: "Messages sent through the contact form are kept as long as needed to respond and for legitimate record-keeping, then removed on request.",
+      },
+      {
+        heading: "Your rights",
+        body: "You may ask what information is held about you, ask for a correction, or ask for deletion, through the contact page. Requests are answered personally.",
+      },
+      {
+        heading: "Changes",
+        body: "This policy may be updated as the work grows. The current version always lives at this address, with its last-updated date shown above.",
+      },
+    ],
+  },
+};
+
+function LegalPage({ doc }) {
+  useEffect(() => {
+    document.title = `${doc.title} — D'Vaughn House`;
+    window.scrollTo(0, 0);
+  }, [doc.title]);
+
+  return (
+    <div className="mx-auto max-w-3xl px-6 py-16 lg:px-8">
+      <p className="font-mono text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">
+        Legal
+      </p>
+      <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">
+        {doc.title}
+      </h1>
+      <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+        Last updated: {doc.updated}
+      </p>
+      <p className="mt-6 leading-relaxed text-slate-600 dark:text-slate-300">{doc.intro}</p>
+      <div className="mt-10 space-y-8">
+        {doc.sections.map((s) => (
+          <section key={s.heading}>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">
+              {s.heading}
+            </h2>
+            <p className="mt-2 leading-relaxed text-slate-600 dark:text-slate-300">
+              {s.body}
+            </p>
+          </section>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function Footer({ base = "" }) {
   return (
     <footer className="border-t border-slate-200 dark:border-slate-800">
-      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10 sm:flex-row sm:items-center sm:justify-between lg:px-8">
-        <p className="text-sm font-bold tracking-tight text-slate-900 dark:text-slate-50">
-          D&rsquo;Vaughn House
-        </p>
-        <nav className="flex flex-wrap gap-6" aria-label="Footer">
-          {NAV.map((item) => (
+      <div className="mx-auto max-w-6xl px-6 py-10 lg:px-8">
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm font-bold tracking-tight text-slate-900 dark:text-slate-50">
+            D&rsquo;Vaughn House
+          </p>
+          <nav className="flex flex-wrap gap-x-6 gap-y-2" aria-label="Footer">
+            {NAV.map((item) => (
+              <a
+                key={item.href}
+                href={`${base}${item.href}`}
+                className="text-sm text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-50 transition-colors"
+              >
+                {item.label}
+              </a>
+            ))}
             <a
-              key={item.href}
-              href={`${base}${item.href}`}
-              className="text-sm text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-50 transition-colors"
+              href="/donate"
+              className="text-sm font-semibold text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-50 transition-colors"
             >
-              {item.label}
+              Donate
             </a>
-          ))}
-          <a
-            href="/donate"
-            className="text-sm font-semibold text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-50 transition-colors"
-          >
-            Donate
-          </a>
-        </nav>
-        <p className="text-sm text-slate-500 dark:text-slate-400">
-          © 2026 · Built independent
+          </nav>
+        </div>
+        <div className="mt-6 flex flex-col gap-4 border-t border-slate-200 pt-6 dark:border-slate-800 sm:flex-row sm:items-center sm:justify-between">
+          <nav className="flex flex-wrap gap-x-6 gap-y-2" aria-label="Legal">
+            <a
+              href="/terms"
+              className="text-xs text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-50 transition-colors"
+            >
+              Terms of Service
+            </a>
+            <a
+              href="/privacy"
+              className="text-xs text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-50 transition-colors"
+            >
+              Privacy Policy
+            </a>
+          </nav>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            © 2026 D&rsquo;Vaughn House. All rights reserved.
+          </p>
+        </div>
+        <p className="mt-4 text-[11px] leading-relaxed text-slate-400 dark:text-slate-500">
+          Nothing on this site is financial, legal, investment, or medical advice.
+          Token and market content is educational only.
         </p>
       </div>
     </footer>
@@ -728,13 +851,27 @@ function Footer({ base = "" }) {
 }
 
 export default function App() {
-  const isDonate = window.location.pathname.startsWith("/donate");
+  const path = window.location.pathname;
+  const isDonate = path.startsWith("/donate");
+  const isTerms = path.startsWith("/terms");
+  const isPrivacy = path.startsWith("/privacy");
   if (isDonate) {
     return (
       <div className="min-h-screen bg-slate-50 text-slate-900 antialiased transition-colors dark:bg-slate-900 dark:text-slate-50">
         <Header base="/" />
         <main>
           <DonatePage />
+        </main>
+        <Footer base="/" />
+      </div>
+    );
+  }
+  if (isTerms || isPrivacy) {
+    return (
+      <div className="min-h-screen bg-slate-50 text-slate-900 antialiased transition-colors dark:bg-slate-900 dark:text-slate-50">
+        <Header base="/" />
+        <main>
+          <LegalPage doc={isTerms ? LEGAL_DOCS.terms : LEGAL_DOCS.privacy} />
         </main>
         <Footer base="/" />
       </div>
