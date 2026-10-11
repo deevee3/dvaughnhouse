@@ -53,6 +53,9 @@ export default function Show({ document, auth }) {
                         <Link href={route('sops.index')} className="text-indigo-600 font-semibold">
                             SOPs
                         </Link>
+                        <Link href={route('essays.index')} className="text-stone-600 hover:text-gray-900 transition">
+                            Essays
+                        </Link>
                     </nav>
                     <Link
                         href={route('sops.index')}

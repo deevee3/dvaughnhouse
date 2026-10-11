@@ -98,6 +98,12 @@ export default function Index({ briefs = [], auth }) {
                         >
                             SOPs
                         </Link>
+                        <Link
+                            href={route('essays.index')}
+                            className="text-stone-600 hover:text-gray-900 transition"
+                        >
+                            Essays
+                        </Link>
                         <a
                             href="https://dvaughnhouse.com"
                             className="text-stone-600 hover:text-gray-900 transition"

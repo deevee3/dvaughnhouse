@@ -34,6 +34,9 @@ function InstitutionalHeader({ auth, active }) {
                     <Link href={route('sops.index')} className={linkCls(active === 'sops')}>
                         SOPs
                     </Link>
+                    <Link href={route('essays.index')} className={linkCls(active === 'essays')}>
+                        Essays
+                    </Link>
                 </nav>
 
                 <div className="flex items-center space-x-4">

@@ -41,6 +41,12 @@ export default function Thesis({ auth }) {
                         >
                             SOPs
                         </Link>
+                        <Link
+                            href={route('essays.index')}
+                            className="text-stone-600 hover:text-gray-900 transition"
+                        >
+                            Essays
+                        </Link>
                         {auth?.user ? (
                             <Link
                                 href={route('dashboard')}
