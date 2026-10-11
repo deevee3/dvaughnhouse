@@ -268,6 +268,10 @@ class StoreController extends Controller
                 'id' => 'glenride',
                 'name' => 'Glenride Apps',
                 'tagline' => 'Tools, publications, and licensed systems',
+                // Standalone space: the full Glenride App Store lives here too.
+                // This unified storefront aggregates the listings for convenience.
+                'url' => 'https://glenride-app-store.pages.dev',
+                'url_label' => 'Visit the standalone Glenride App Store',
             ],
             'executive' => [
                 'id' => 'executive',

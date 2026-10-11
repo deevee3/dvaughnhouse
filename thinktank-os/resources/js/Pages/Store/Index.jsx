@@ -233,6 +233,16 @@ export default function Index({ categories = [], stripeKey = '' }) {
                         <div className="mb-8">
                             <h2 className="text-2xl font-bold text-white">{category.name}</h2>
                             <p className="mt-1 text-sm font-mono text-slate-400">{category.tagline}</p>
+                            {category.url && (
+                                <a
+                                    href={category.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="mt-2 inline-flex items-center text-xs font-mono text-indigo-300 hover:text-indigo-200 transition"
+                                >
+                                    {category.url_label || 'Visit the standalone store'} →
+                                </a>
+                            )}
                         </div>
                         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                             {category.products.map((product) => (
