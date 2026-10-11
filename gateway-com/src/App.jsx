@@ -383,6 +383,18 @@ function Work() {
 }
 
 function Gateway() {
+  const doors = [
+    {
+      title: "The Institution & Engine",
+      body: "The public home of Glenride — research, standard operating procedures, and the ThinkTank OS portal.",
+      domain: "dvaughnhouse.org",
+    },
+    {
+      title: "The Economic Engine",
+      body: "The isolated transaction layer — offerings, procurement, and commercial engagements.",
+      domain: "dvaughnhouse.store",
+    },
+  ];
   return (
     <section id="gateway" aria-label="Gateway" className="border-t border-slate-200 dark:border-slate-800">
       <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:px-8">
@@ -391,40 +403,29 @@ function Gateway() {
           Two doors
         </h2>
         <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
-          This site is the front door. The institution lives at one address,
-          the commerce at another — separate on purpose.
+          This site is the front door. The institution will live at one address,
+          the commerce at another — separate on purpose. Both doors open soon.
         </p>
         <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
-          <a
-            href={ORG_URL}
-            className="group block rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition-all hover:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 sm:p-10 dark:border-slate-800 dark:bg-slate-800/60 dark:hover:border-slate-600 dark:focus:ring-slate-600"
-          >
-            <h3 className="text-2xl font-bold tracking-tight text-slate-900 transition-colors group-hover:text-amber-600 dark:text-slate-100 dark:group-hover:text-amber-400">
-              The Institution &amp; Engine
-            </h3>
-            <p className="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300">
-              The public home of Glenride — research, standard operating
-              procedures, and the ThinkTank OS portal.
-            </p>
-            <span className="mt-8 inline-flex items-center text-sm font-semibold tracking-wide text-slate-900 transition-colors group-hover:text-amber-600 dark:text-slate-100 dark:group-hover:text-amber-400">
-              Enter dvaughnhouse.org <span className="ml-2 transition-transform group-hover:translate-x-1">→</span>
-            </span>
-          </a>
-          <a
-            href={STORE_URL}
-            className="group block rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition-all hover:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 sm:p-10 dark:border-slate-800 dark:bg-slate-800/60 dark:hover:border-slate-600 dark:focus:ring-slate-600"
-          >
-            <h3 className="text-2xl font-bold tracking-tight text-slate-900 transition-colors group-hover:text-amber-600 dark:text-slate-100 dark:group-hover:text-amber-400">
-              The Economic Engine
-            </h3>
-            <p className="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300">
-              The isolated transaction layer — offerings, procurement, and
-              commercial engagements.
-            </p>
-            <span className="mt-8 inline-flex items-center text-sm font-semibold tracking-wide text-slate-900 transition-colors group-hover:text-amber-600 dark:text-slate-100 dark:group-hover:text-amber-400">
-              Enter dvaughnhouse.store <span className="ml-2 transition-transform group-hover:translate-x-1">→</span>
-            </span>
-          </a>
+          {doors.map((d) => (
+            <div
+              key={d.domain}
+              className="block rounded-2xl border border-slate-200 bg-white p-8 shadow-sm sm:p-10 dark:border-slate-800 dark:bg-slate-800/60"
+            >
+              <span className="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 font-mono text-[11px] uppercase tracking-widest text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
+                Coming soon
+              </span>
+              <h3 className="mt-5 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+                {d.title}
+              </h3>
+              <p className="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300">
+                {d.body}
+              </p>
+              <p className="mt-8 font-mono text-sm tracking-wide text-slate-400 dark:text-slate-500">
+                {d.domain}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
