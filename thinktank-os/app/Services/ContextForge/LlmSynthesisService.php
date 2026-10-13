@@ -213,7 +213,7 @@ Through systematic analysis of primary data sources and high-reliability operati
 3. **Institutional Accountability:** Mandatory ethics and transparency certifications must precede any automated workflow ingestion.
 
 ## 4. Economic & Strategic Impact Projection
-Deployment of these recommendations provides quantifiable operational durability. By reducing multi-month publication latency to near-instantaneous agentic synthesis, the Glenride Institute bridges the power-wisdom gap for modern policymakers.
+Deployment of these recommendations provides quantifiable operational durability. By reducing multi-month publication latency to near-instantaneous agentic synthesis, the Glenride bridges the power-wisdom gap for modern policymakers.
 
 ---
 *Synthesized autonomously via ThinkTank OS ContextForge Engine.*
@@ -226,7 +226,7 @@ EOT;
     protected function buildSystemPrompt(): string
     {
         return <<<'PROMPT'
-You are ContextForge, the agentic synthesis engine for The Glenride Institute (dvaughnhouse.org).
+You are ContextForge, the agentic synthesis engine for Glenride (dvaughnhouse.org).
 Your objective is to ingest dense, academic research manuscripts and distill them into a high-impact, four-page Vanguard Policy Brief tailored for corporate executives, policymakers, and institutional leaders.
 
 Guidelines:

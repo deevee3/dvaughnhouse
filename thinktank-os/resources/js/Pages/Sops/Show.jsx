@@ -2,8 +2,8 @@ import { Head, Link } from '@inertiajs/react';
 
 export default function Show({ document, auth }) {
     return (
-        <div className="min-h-screen bg-[#fafaf9] text-gray-900 font-sans selection:bg-indigo-600 selection:text-white">
-            <Head title={`${document.id} — ${document.title} - The Glenride Institute`} />
+        <div className="min-h-screen bg-[#fafaf9] text-gray-900 font-sans selection:bg-[#E97451] selection:text-white">
+            <Head title={`${document.id} — ${document.title} - Glenride`} />
 
             <style>{`
                 .sop-content { color: #292524; line-height: 1.75; }
@@ -31,12 +31,12 @@ export default function Show({ document, auth }) {
             <header className="sticky top-0 z-40 border-b border-stone-200 bg-[#fafaf9]/90 backdrop-blur-md">
                 <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
                     <Link href="/" className="group flex items-center space-x-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-900 text-white font-serif font-bold text-lg shadow-sm group-hover:bg-indigo-600 transition">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-900 text-white font-serif font-bold text-lg shadow-sm group-hover:bg-[#E97451] transition">
                             G
                         </div>
                         <div>
-                            <span className="block font-serif text-lg font-bold tracking-tight text-gray-900 group-hover:text-indigo-600 transition">
-                                The Glenride Institute
+                            <span className="block font-serif text-lg font-bold tracking-tight text-gray-900 group-hover:text-[#E97451] transition">
+                                Glenride
                             </span>
                             <span className="block font-mono text-[10px] uppercase tracking-widest text-stone-500">
                                 Standard Operating Procedures
@@ -50,7 +50,7 @@ export default function Show({ document, auth }) {
                         <Link href={route('thesis.index')} className="text-stone-600 hover:text-gray-900 transition">
                             Institutional Thesis
                         </Link>
-                        <Link href={route('sops.index')} className="text-indigo-600 font-semibold">
+                        <Link href={route('sops.index')} className="text-[#E97451] font-semibold">
                             SOPs
                         </Link>
                         <Link href={route('essays.index')} className="text-stone-600 hover:text-gray-900 transition">
@@ -68,7 +68,7 @@ export default function Show({ document, auth }) {
 
             <main className="mx-auto max-w-4xl px-6 lg:px-8 py-12">
                 <div className="flex flex-wrap items-center gap-3">
-                    <span className="font-mono text-xs font-bold uppercase tracking-widest text-indigo-600">
+                    <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#E97451]">
                         {document.id}
                     </span>
                     <span className="rounded-full bg-stone-100 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-stone-600">
@@ -89,7 +89,7 @@ export default function Show({ document, auth }) {
                 <div className="mt-10 flex justify-between border-t border-stone-200 pt-6">
                     <Link
                         href={route('sops.index')}
-                        className="text-sm font-medium text-indigo-600 hover:text-indigo-800 transition"
+                        className="text-sm font-medium text-[#E97451] hover:text-[#9c4a28] transition"
                     >
                         ← Back to all procedures
                     </Link>
@@ -101,7 +101,7 @@ export default function Show({ document, auth }) {
 
             <footer className="border-t border-stone-200 py-8">
                 <p className="text-center font-mono text-[11px] uppercase tracking-widest text-stone-400">
-                    The Glenride Institute · Procedures are versioned; numbers are permanent
+                    Glenride · Procedures are versioned; numbers are permanent
                 </p>
             </footer>
         </div>

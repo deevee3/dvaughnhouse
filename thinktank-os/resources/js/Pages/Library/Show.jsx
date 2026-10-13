@@ -24,7 +24,7 @@ export default function Show({ manuscript = {}, content = '', related = [], isPr
     }, [manuscript.word_count, content]);
 
     return (
-        <div className="min-h-screen bg-[#fcfbf9] text-stone-900 font-sans selection:bg-indigo-600 selection:text-white">
+        <div className="min-h-screen bg-[#fcfbf9] text-stone-900 font-sans selection:bg-[#E97451] selection:text-white">
             <Head title={`${manuscript.title} - The Vanguard Library`} />
 
             {/* Navigation Masthead */}
@@ -48,7 +48,7 @@ export default function Show({ manuscript = {}, content = '', related = [], isPr
                         <button
                             type="button"
                             onClick={() => window.print()}
-                            className="inline-flex items-center rounded-lg bg-gray-900 px-3 py-1.5 text-xs font-mono font-semibold text-white hover:bg-indigo-600 shadow-sm transition"
+                            className="inline-flex items-center rounded-lg bg-gray-900 px-3 py-1.5 text-xs font-mono font-semibold text-white hover:bg-[#E97451] shadow-sm transition"
                         >
                             Print / PDF
                         </button>
@@ -67,7 +67,7 @@ export default function Show({ manuscript = {}, content = '', related = [], isPr
             <main className="mx-auto max-w-3xl px-6 py-16 sm:py-24">
                 {/* Monograph Document Header */}
                 <div className="border-b border-stone-200 pb-10 mb-12">
-                    <div className="flex items-center space-x-2 text-xs font-mono text-indigo-600 uppercase tracking-wider mb-4">
+                    <div className="flex items-center space-x-2 text-xs font-mono text-[#E97451] uppercase tracking-wider mb-4">
                         <span>Glenride Institutional Monographs</span>
                         <span>•</span>
                         <span>Doc ID: {manuscript.id?.slice(0, 8) || 'Vanguard'}</span>
@@ -83,7 +83,7 @@ export default function Show({ manuscript = {}, content = '', related = [], isPr
                                 {manuscript.user?.name || 'Institutional Fellow'}
                             </span>
                             <span className="text-stone-400">
-                                The Glenride Institute // Policy Fellow
+                                Glenride // Policy Fellow
                             </span>
                         </div>
 
@@ -114,8 +114,8 @@ export default function Show({ manuscript = {}, content = '', related = [], isPr
 
                 {/* Abstract Callout */}
                 {manuscript.abstract && (
-                    <div className="rounded-2xl border-l-4 border-indigo-600 bg-stone-100/70 p-6 mb-12 font-serif text-base text-stone-700 leading-relaxed italic">
-                        <div className="font-mono text-xs not-italic font-bold uppercase tracking-wider text-indigo-700 mb-2">
+                    <div className="rounded-2xl border-l-4 border-[#E97451] bg-stone-100/70 p-6 mb-12 font-serif text-base text-stone-700 leading-relaxed italic">
+                        <div className="font-mono text-xs not-italic font-bold uppercase tracking-wider text-[#b5532c] mb-2">
                             Executive Abstract
                         </div>
                         {manuscript.abstract}
@@ -149,7 +149,7 @@ export default function Show({ manuscript = {}, content = '', related = [], isPr
                                 <ul className="list-disc pl-6 space-y-2 text-stone-700 mt-3">
                                     <li><strong>Velocity Without Fragility:</strong> Algorithmic orchestration delivers real-time analytical power only when combined with strict human ethical verification gates.</li>
                                     <li><strong>Supply Chain Redundancy:</strong> Decentralized localized production nodes minimize exposure to single-point maritime or political failure vectors.</li>
-                                    <li><strong>Air-Gapped IP Isolation:</strong> Core institutional intellectual capital must remain sequestered from public cloud training sets to prevent competitive degradation.</li>
+                                    <li><strong>Local-First IP Isolation:</strong> Core institutional intellectual capital must remain sequestered from public cloud training sets to prevent competitive degradation.</li>
                                 </ul>
                             </section>
 
@@ -178,7 +178,7 @@ export default function Show({ manuscript = {}, content = '', related = [], isPr
                                     4. Economic & Strategic Impact Projection
                                 </h2>
                                 <p className="text-stone-700 leading-relaxed">
-                                    Adopting these strategic interventions insulates the enterprise against technological disruption while maintaining high-assurance regulatory compliance. The Glenride Institute provides ongoing executive advisory retainers to assist enterprise transitions.
+                                    Adopting these strategic interventions insulates the enterprise against technological disruption while maintaining high-assurance regulatory compliance. Glenride provides ongoing executive advisory retainers to assist enterprise transitions.
                                 </p>
                             </section>
                         </div>
@@ -188,7 +188,7 @@ export default function Show({ manuscript = {}, content = '', related = [], isPr
                 {/* Official Monograph End Note */}
                 <div className="mt-16 pt-8 border-t border-stone-300 font-mono text-xs text-stone-500 space-y-2">
                     <p>
-                        <strong>Publication Notice:</strong> This monograph was prepared under the auspices of The Glenride Institute. Autonomous distillation executed via ThinkTank OS ContextForge. Human verification certified by institutional fellows.
+                        <strong>Publication Notice:</strong> This monograph was prepared under the auspices of Glenride. Autonomous distillation executed via ThinkTank OS ContextForge. Human verification certified by institutional fellows.
                     </p>
                     <p>
                         <strong>Permanent Citation:</strong> {citation}
@@ -199,7 +199,7 @@ export default function Show({ manuscript = {}, content = '', related = [], isPr
             {/* Footer */}
             <footer className="border-t border-stone-200 bg-white py-12 text-xs text-stone-500 font-mono">
                 <div className="mx-auto max-w-5xl px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div>© {new Date().getFullYear()} The Glenride Institute.</div>
+                    <div>© {new Date().getFullYear()} Glenride.</div>
                     <div className="flex items-center space-x-6">
                         <Link href={route('library.index')} className="hover:text-gray-900 transition">
                             Vanguard Library

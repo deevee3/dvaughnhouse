@@ -57,20 +57,20 @@ export default function Index({ briefs = [], auth }) {
     }, [allBriefs, searchQuery]);
 
     return (
-        <div className="min-h-screen bg-[#fafaf9] text-gray-900 font-sans selection:bg-indigo-600 selection:text-white">
-            <Head title="The Vanguard Library - The Glenride Institute" />
+        <div className="min-h-screen bg-[#fafaf9] text-gray-900 font-sans selection:bg-[#E97451] selection:text-white">
+            <Head title="The Vanguard Library - Glenride" />
 
             {/* Institutional Header */}
             <header className="sticky top-0 z-40 border-b border-stone-200 bg-[#fafaf9]/90 backdrop-blur-md">
                 <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
                     <div className="flex items-center space-x-4">
                         <Link href="/" className="group flex items-center space-x-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-900 text-white font-serif font-bold text-lg shadow-sm group-hover:bg-indigo-600 transition">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-900 text-white font-serif font-bold text-lg shadow-sm group-hover:bg-[#E97451] transition">
                                 G
                             </div>
                             <div>
-                                <span className="block font-serif text-lg font-bold tracking-tight text-gray-900 group-hover:text-indigo-600 transition">
-                                    The Glenride Institute
+                                <span className="block font-serif text-lg font-bold tracking-tight text-gray-900 group-hover:text-[#E97451] transition">
+                                    Glenride
                                 </span>
                                 <span className="block font-mono text-[10px] uppercase tracking-widest text-stone-500">
                                     Vanguard Policy Monographs
@@ -82,7 +82,7 @@ export default function Index({ briefs = [], auth }) {
                     <nav className="hidden md:flex items-center space-x-8 text-sm font-medium">
                         <Link
                             href={route('library.index')}
-                            className="text-indigo-600 font-semibold"
+                            className="text-[#E97451] font-semibold"
                         >
                             Vanguard Library
                         </Link>
@@ -116,7 +116,7 @@ export default function Index({ briefs = [], auth }) {
                         {auth?.user ? (
                             <Link
                                 href={route('dashboard')}
-                                className="inline-flex items-center rounded-lg bg-gray-900 px-4 py-2 text-xs font-mono font-semibold uppercase tracking-wider text-white shadow-sm hover:bg-indigo-600 transition"
+                                className="inline-flex items-center rounded-lg bg-gray-900 px-4 py-2 text-xs font-mono font-semibold uppercase tracking-wider text-white shadow-sm hover:bg-[#E97451] transition"
                             >
                                 ThinkTank OS Portal →
                             </Link>
@@ -130,7 +130,7 @@ export default function Index({ briefs = [], auth }) {
                                 </Link>
                                 <Link
                                     href={route('login')}
-                                    className="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-xs font-mono font-semibold uppercase tracking-wider text-white shadow-sm hover:bg-indigo-500 transition"
+                                    className="inline-flex items-center rounded-lg bg-[#E97451] px-4 py-2 text-xs font-mono font-semibold uppercase tracking-wider text-white shadow-sm hover:bg-[#cf6238] transition"
                                 >
                                     ThinkTank OS
                                 </Link>
@@ -164,7 +164,7 @@ export default function Index({ briefs = [], auth }) {
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 placeholder="Search policy briefs by keyword, topic, or author..."
-                                className="w-full rounded-xl border-stone-300 bg-stone-50/50 pl-11 pr-4 py-3 text-sm focus:border-indigo-500 focus:bg-white focus:ring-indigo-500 transition shadow-sm"
+                                className="w-full rounded-xl border-stone-300 bg-stone-50/50 pl-11 pr-4 py-3 text-sm focus:border-[#cf6238] focus:bg-white focus:ring-[#cf6238] transition shadow-sm"
                             />
                             <svg
                                 className="absolute left-3.5 top-3.5 h-5 w-5 text-stone-400"
@@ -201,7 +201,7 @@ export default function Index({ briefs = [], auth }) {
                             <button
                                 type="button"
                                 onClick={() => setSearchQuery('')}
-                                className="mt-4 inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500"
+                                className="mt-4 inline-flex items-center rounded-lg bg-[#E97451] px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-[#cf6238]"
                             >
                                 Clear Search
                             </button>
@@ -211,12 +211,12 @@ export default function Index({ briefs = [], auth }) {
                             {filteredBriefs.map((brief) => (
                                 <article
                                     key={brief.id}
-                                    className="group flex flex-col justify-between rounded-2xl border border-stone-200 bg-white p-7 shadow-sm hover:shadow-md hover:border-indigo-200 transition duration-200"
+                                    className="group flex flex-col justify-between rounded-2xl border border-stone-200 bg-white p-7 shadow-sm hover:shadow-md hover:border-[#f2c9b8] transition duration-200"
                                 >
                                     <div>
                                         {/* Meta Pill */}
                                         <div className="flex items-center justify-between text-xs font-mono text-stone-400 mb-4">
-                                            <span className="text-indigo-600 font-medium">
+                                            <span className="text-[#E97451] font-medium">
                                                 {brief.series || 'Glenride Institutional Monograph'}
                                             </span>
                                             <span>
@@ -230,7 +230,7 @@ export default function Index({ briefs = [], auth }) {
                                         </div>
 
                                         {/* Title */}
-                                        <h2 className="font-serif text-xl font-bold text-gray-900 group-hover:text-indigo-600 transition leading-snug">
+                                        <h2 className="font-serif text-xl font-bold text-gray-900 group-hover:text-[#E97451] transition leading-snug">
                                             <Link href={route('briefs.show', brief.id)}>
                                                 {brief.title}
                                             </Link>
@@ -256,7 +256,7 @@ export default function Index({ briefs = [], auth }) {
 
                                         <Link
                                             href={route('briefs.show', brief.id)}
-                                            className="inline-flex items-center text-xs font-mono font-semibold text-indigo-600 group-hover:text-indigo-800 transition"
+                                            className="inline-flex items-center text-xs font-mono font-semibold text-[#E97451] group-hover:text-[#9c4a28] transition"
                                         >
                                             Read Brief →
                                         </Link>
@@ -273,19 +273,19 @@ export default function Index({ briefs = [], auth }) {
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     <div className="rounded-3xl border border-stone-200 bg-white p-8 sm:p-12 shadow-sm flex flex-col md:flex-row items-center justify-between gap-8">
                         <div className="max-w-2xl">
-                            <span className="font-mono text-xs uppercase tracking-widest text-indigo-600 font-semibold">
+                            <span className="font-mono text-xs uppercase tracking-widest text-[#E97451] font-semibold">
                                 Foundational Essays
                             </span>
                             <h2 className="mt-2 font-serif text-2xl sm:text-3xl font-bold text-gray-900">
                                 The Power-Wisdom Gap & The Agentic Enterprise
                             </h2>
                             <p className="mt-3 text-sm text-stone-600 font-serif leading-relaxed">
-                                Read the philosophical architecture underpinning The Glenride Institute. An exploration of why our technological leverage has outpaced institutional judgment—and how human moral primacy must direct autonomous cognition.
+                                Read the philosophical architecture underpinning Glenride. An exploration of why our technological leverage has outpaced institutional judgment—and how human moral primacy must direct autonomous cognition.
                             </p>
                         </div>
                         <Link
                             href={route('thesis.index')}
-                            className="inline-flex items-center shrink-0 rounded-xl bg-gray-900 px-6 py-3.5 text-xs font-mono font-semibold uppercase tracking-wider text-white shadow-sm hover:bg-indigo-600 transition"
+                            className="inline-flex items-center shrink-0 rounded-xl bg-gray-900 px-6 py-3.5 text-xs font-mono font-semibold uppercase tracking-wider text-white shadow-sm hover:bg-[#E97451] transition"
                         >
                             Explore Institutional Thesis →
                         </Link>
@@ -297,7 +297,7 @@ export default function Index({ briefs = [], auth }) {
             <footer className="border-t border-stone-200 bg-white py-12 text-xs text-stone-500 font-mono">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div>
-                        © {new Date().getFullYear()} The Glenride Institute. dvaughnhouse.org. All rights reserved.
+                        © {new Date().getFullYear()} Glenride. dvaughnhouse.org. All rights reserved.
                     </div>
                     <div className="flex items-center space-x-6">
                         <Link href={route('library.index')} className="hover:text-gray-900 transition">

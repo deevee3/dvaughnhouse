@@ -354,7 +354,7 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
                                                 <strong className="font-semibold text-gray-900">
                                                     Attribution &amp; Originality:
                                                 </strong>{' '}
-                                                I confirm this manuscript is original scholarship, rigorously cited, and complies with Glenride Institute synthesis guidelines.
+                                                I confirm this manuscript is original scholarship, rigorously cited, and complies with Glenride synthesis guidelines.
                                             </span>
                                         </label>
                                         <InputError
