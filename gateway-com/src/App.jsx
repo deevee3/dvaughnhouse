@@ -695,6 +695,243 @@ function DonatePage() {
   );
 }
 
+const PATRON_TIERS = [
+  {
+    id: "insider",
+    name: "Insider",
+    price: "Free",
+    tagline: "Follow the work.",
+    perks: [
+      "The Dispatch — the weekly newsletter, every issue",
+      "Early access to every video before it goes public",
+      "First to hear about the AI chief-of-staff class",
+    ],
+    cta: "You're in the room. Watch what's being built, week by week.",
+  },
+  {
+    id: "patron",
+    name: "Patron",
+    price: "$10/mo",
+    tagline: "Fund the work.",
+    perks: [
+      "Everything in Insider",
+      "Behind-the-scenes build notes — the stuff that doesn't make the videos",
+      "Monthly live Q&A — ask anything, get a straight answer",
+      "Your name in the credits of every video",
+    ],
+    cta: "Ten dollars a month keeps the cameras on and the research free.",
+  },
+  {
+    id: "founding",
+    name: "Founding Patron",
+    price: "$500+",
+    tagline: "Steer the work.",
+    perks: [
+      "Everything in Patron, for life",
+      "Your name on the founding wall — permanent",
+      "A direct line: help decide what gets built and researched next",
+      "First invitation to every live event and gathering",
+    ],
+    cta: "Founders don't just fund the mission. They shape it.",
+  },
+];
+
+function PatronPage() {
+  const [form, setForm] = useState({ name: "", email: "", tier: "insider", message: "", company: "" });
+  const [status, setStatus] = useState({ state: "idle", message: "" });
+
+  useEffect(() => {
+    document.title = "Become a Patron — D'Vaughn House";
+    window.scrollTo(0, 0);
+  }, []);
+
+  const set = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
+
+  async function submit(e) {
+    e.preventDefault();
+    setStatus({ state: "sending", message: "" });
+    try {
+      const res = await fetch("/api/patron", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.ok) {
+        setStatus({
+          state: "success",
+          message:
+            form.tier === "insider"
+              ? "You're in. Watch your inbox — the next Dispatch is on its way."
+              : "Received. I'll personally follow up within 48 hours to arrange your patronage — thank you.",
+        });
+        setForm({ name: "", email: "", tier: "insider", message: "", company: "" });
+      } else if (data.error === "storage_not_configured") {
+        setStatus({ state: "error", message: "Signup isn't online yet — check back soon." });
+      } else if (data.error === "rate_limited") {
+        setStatus({ state: "error", message: "Too many signups in a short time — try again in an hour." });
+      } else {
+        setStatus({ state: "error", message: "Something didn't validate — check the fields and try again." });
+      }
+    } catch {
+      setStatus({ state: "error", message: "Couldn't send — check your connection and try again." });
+    }
+  }
+
+  const inputCls =
+    "w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-slate-500 dark:focus:ring-slate-700";
+
+  return (
+    <div>
+      <section className="relative overflow-hidden" aria-label="Become a patron">
+        <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950" />
+        <div className="relative mx-auto max-w-6xl px-6 pt-16 pb-14 sm:pt-20 sm:pb-16 lg:px-8">
+          <p className="inline-flex items-center rounded-full border border-white/30 px-4 py-1.5 font-mono text-xs uppercase tracking-widest text-white/85">
+            Patrons
+          </p>
+          <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
+            Become a patron of the work.
+          </h1>
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/80 sm:text-lg">
+            Independent work needs independent funding. Patrons keep the
+            research free, the videos honest, and the mission pointed at people —
+            not sponsors.
+          </p>
+          <div className="mt-8">
+            <a
+              href="#join"
+              className="inline-flex items-center rounded-xl bg-gradient-to-r from-amber-500 to-red-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/20 transition-transform hover:scale-[1.02]"
+            >
+              Choose your tier
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <div className="mx-auto max-w-6xl px-6 py-14 sm:py-16 lg:px-8">
+        <div className="grid gap-6 md:grid-cols-3">
+          {PATRON_TIERS.map((tier) => (
+            <div
+              key={tier.id}
+              className="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-800/60"
+            >
+              <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">
+                {tier.tagline}
+              </p>
+              <h2 className="mt-3 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+                {tier.name}
+              </h2>
+              <p className="mt-1 text-lg font-semibold text-slate-700 dark:text-slate-200">{tier.price}</p>
+              <ul className="mt-6 flex-1 space-y-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                {tier.perks.map((perk) => (
+                  <li key={perk} className="flex gap-2">
+                    <span aria-hidden="true" className="text-amber-600 dark:text-amber-500">✓</span>
+                    <span>{perk}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-6 text-sm italic text-slate-500 dark:text-slate-400">{tier.cta}</p>
+            </div>
+          ))}
+        </div>
+
+        <div id="join" className="mx-auto mt-16 max-w-2xl scroll-mt-8">
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-slate-50">
+            Join as a patron
+          </h2>
+          <p className="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300">
+            Tell me who you are and which tier fits. For paid tiers, I follow up
+            personally within 48 hours to arrange everything — no automated
+            billing, no surprises.
+          </p>
+          <form onSubmit={submit} className="mt-8 space-y-5">
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label htmlFor="patron-name" className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
+                  Name
+                </label>
+                <input
+                  id="patron-name" type="text" required maxLength={100}
+                  value={form.name} onChange={set("name")} className={inputCls}
+                  placeholder="Your name" autoComplete="name"
+                />
+              </div>
+              <div>
+                <label htmlFor="patron-email" className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
+                  Email
+                </label>
+                <input
+                  id="patron-email" type="email" required maxLength={254}
+                  value={form.email} onChange={set("email")} className={inputCls}
+                  placeholder="you@example.com" autoComplete="email"
+                />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="patron-tier" className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
+                Tier
+              </label>
+              <select id="patron-tier" value={form.tier} onChange={set("tier")} className={inputCls}>
+                {PATRON_TIERS.map((tier) => (
+                  <option key={tier.id} value={tier.id}>
+                    {tier.name} — {tier.price}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="patron-message" className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
+                Anything you want me to know? <span className="font-normal text-slate-400">(optional)</span>
+              </label>
+              <textarea
+                id="patron-message" maxLength={2000} rows={3}
+                value={form.message} onChange={set("message")} className={inputCls}
+                placeholder="Why this work matters to you, what you'd like to see built…"
+              />
+            </div>
+            {/* Honeypot: invisible to humans, irresistible to bots */}
+            <input
+              type="text" name="company" value={form.company} onChange={set("company")}
+              tabIndex={-1} autoComplete="off" aria-hidden="true"
+              style={{ position: "absolute", left: "-9999px", opacity: 0, height: 0 }}
+            />
+            <div>
+              <button
+                type="submit"
+                disabled={status.state === "sending"}
+                className="inline-flex items-center rounded-xl bg-gradient-to-r from-amber-600 to-red-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:from-amber-500 hover:to-red-500 disabled:opacity-60"
+              >
+                {status.state === "sending" ? "Sending…" : "Become a patron"}
+              </button>
+            </div>
+            {status.state === "success" && (
+              <p role="status" className="text-sm font-medium text-emerald-700 dark:text-emerald-400">
+                {status.message}
+              </p>
+            )}
+            {status.state === "error" && (
+              <p role="alert" className="text-sm font-medium text-red-700 dark:text-red-400">
+                {status.message}
+              </p>
+            )}
+          </form>
+
+          <div className="mt-10 rounded-2xl border border-amber-300 bg-amber-50 p-6 dark:border-amber-800 dark:bg-amber-950/40">
+            <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+              <strong className="font-bold">Plain talk:</strong> I am not a
+              nonprofit and I do not have tax-exempt status. Patronage is
+              personal support for independent work — not a charitable
+              contribution, not tax-deductible, not an investment, and not a
+              purchase. Paid tiers are arranged personally, by me, after you
+              sign up.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const LEGAL_DOCS = {
   terms: {
     title: "Terms of Service",
@@ -853,6 +1090,7 @@ function Footer({ base = "" }) {
 export default function App() {
   const path = window.location.pathname;
   const isDonate = path.startsWith("/donate");
+  const isPatron = path.startsWith("/patron");
   const isTerms = path.startsWith("/terms");
   const isPrivacy = path.startsWith("/privacy");
   if (isDonate) {
@@ -861,6 +1099,17 @@ export default function App() {
         <Header base="/" />
         <main>
           <DonatePage />
+        </main>
+        <Footer base="/" />
+      </div>
+    );
+  }
+  if (isPatron) {
+    return (
+      <div className="min-h-screen bg-slate-50 text-slate-900 antialiased transition-colors dark:bg-slate-900 dark:text-slate-50">
+        <Header base="/" />
+        <main>
+          <PatronPage />
         </main>
         <Footer base="/" />
       </div>
