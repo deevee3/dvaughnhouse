@@ -5,6 +5,7 @@ use App\Http\Controllers\PortfolioMatrixController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EssayController;
 use App\Http\Controllers\SopController;
+use App\Http\Controllers\StandardsController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\VanguardLibraryController;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,9 @@ Route::get('/thesis', [VanguardLibraryController::class, 'thesis'])->name('thesi
 // Public Standard Operating Procedures
 Route::get('/sops', [SopController::class, 'index'])->name('sops.index');
 Route::get('/sops/{slug}', [SopController::class, 'show'])->name('sops.show');
+
+// Public Glenride standards
+Route::get('/standards', [StandardsController::class, 'show'])->name('standards.show');
 
 // Public Essays
 Route::get('/essays', [EssayController::class, 'index'])->name('essays.index');

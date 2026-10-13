@@ -15,16 +15,16 @@ export default function Show({ document, auth }) {
                 .sop-content ul { list-style: disc; }
                 .sop-content ol { list-style: decimal; }
                 .sop-content li { margin: 0.35rem 0; }
-                .sop-content li::marker { color: #4f46e5; }
+                .sop-content li::marker { color: #E97451; }
                 .sop-content strong { color: #111827; }
                 .sop-content hr { border: 0; border-top: 1px solid #e7e5e4; margin: 2rem 0; }
                 .sop-content table { width: 100%; border-collapse: collapse; margin: 1.25rem 0; font-size: 0.9rem; }
                 .sop-content th { text-align: left; font-family: ui-monospace, monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: #57534e; padding: 0.6rem 0.75rem; border-bottom: 2px solid #d6d3d1; }
                 .sop-content td { padding: 0.6rem 0.75rem; border-bottom: 1px solid #e7e5e4; vertical-align: top; }
                 .sop-content tr:hover td { background: #fafaf9; }
-                .sop-content blockquote { border-left: 3px solid #c7d2fe; padding-left: 1rem; margin: 1rem 0; color: #57534e; font-style: italic; }
+                .sop-content blockquote { border-left: 3px solid #f2c4ad; padding-left: 1rem; margin: 1rem 0; color: #57534e; font-style: italic; }
                 .sop-content code { font-family: ui-monospace, monospace; font-size: 0.85em; background: #f5f5f4; padding: 0.15em 0.35em; border-radius: 0.25rem; }
-                .sop-content a { color: #4f46e5; text-decoration: underline; }
+                .sop-content a { color: #E97451; text-decoration: underline; }
             `}</style>
 
             {/* Institutional Header */}
