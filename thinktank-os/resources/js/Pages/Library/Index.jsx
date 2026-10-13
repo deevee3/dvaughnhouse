@@ -12,26 +12,6 @@ const FEATURED_FALLBACKS = [
         series: 'Glenride Policy Monograph Series No. 1',
         is_curated: true,
     },
-    {
-        id: 'featured-monograph-2',
-        title: 'Supply Chain Vulnerabilities in Global STEM Pipelines',
-        abstract: 'An empirical survey quantifying single-point failure vectors in advanced manufacturing research and domestic semiconductor workforce cultivation.',
-        word_count: 820,
-        published_at: '2026-09-12',
-        user: { name: 'Dr. Elena Rostova' },
-        series: 'Glenride Policy Monograph Series No. 2',
-        is_curated: true,
-    },
-    {
-        id: 'featured-monograph-3',
-        title: 'Decentralized Microgrid Architectures for Regional Manufacturing',
-        abstract: 'Actionable policy protocols establishing localized energy resilience and micro-distribution nodes to insulate industrial hubs during macro-grid failures.',
-        word_count: 890,
-        published_at: '2026-09-08',
-        user: { name: 'Sarah Sterling' },
-        series: 'Glenride Policy Monograph Series No. 3',
-        is_curated: true,
-    },
 ];
 
 export default function Index({ briefs = [], auth }) {
