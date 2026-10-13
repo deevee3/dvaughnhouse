@@ -15,13 +15,13 @@ export default function Show({ document, auth }) {
                 .essay-content ul { list-style: disc; }
                 .essay-content ol { list-style: decimal; }
                 .essay-content li { margin: 0.35rem 0; }
-                .essay-content li::marker { color: #4f46e5; }
+                .essay-content li::marker { color: #E97451; }
                 .essay-content strong { color: #111827; }
                 .essay-content em { color: #44403c; }
                 .essay-content hr { border: 0; border-top: 1px solid #e7e5e4; margin: 2rem 0; }
-                .essay-content blockquote { border-left: 3px solid #c7d2fe; padding-left: 1rem; margin: 1rem 0; color: #57534e; font-style: italic; }
+                .essay-content blockquote { border-left: 3px solid #f2c9b8; padding-left: 1rem; margin: 1rem 0; color: #57534e; font-style: italic; }
                 .essay-content code { font-family: ui-monospace, monospace; font-size: 0.85em; background: #f5f5f4; padding: 0.15em 0.35em; border-radius: 0.25rem; }
-                .essay-content a { color: #4f46e5; text-decoration: underline; }
+                .essay-content a { color: #E97451; text-decoration: underline; }
             `}</style>
 
             {/* Institutional Header */}

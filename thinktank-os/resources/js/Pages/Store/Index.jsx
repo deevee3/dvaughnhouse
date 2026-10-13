@@ -29,7 +29,7 @@ function ProductCard({ product, onBuy }) {
         <div className="relative flex flex-col justify-between rounded-3xl p-8 border border-slate-800 bg-slate-950/60 shadow-lg transition duration-200 hover:border-slate-700">
             <div>
                 <div className="flex items-center justify-between mb-2">
-                    <div className="text-xs font-mono uppercase tracking-widest text-indigo-400 font-semibold">
+                    <div className="text-xs font-mono uppercase tracking-widest text-[#f2c9b8] font-semibold">
                         {product.tier}
                     </div>
                     <span
@@ -62,7 +62,7 @@ function ProductCard({ product, onBuy }) {
                             {product.features.map((feat, idx) => (
                                 <li key={idx} className="flex items-start">
                                     <svg
-                                        className="h-4 w-4 text-indigo-400 mr-2 shrink-0 mt-0.5"
+                                        className="h-4 w-4 text-[#f2c9b8] mr-2 shrink-0 mt-0.5"
                                         fill="currentColor"
                                         viewBox="0 0 20 20"
                                     >
@@ -85,7 +85,7 @@ function ProductCard({ product, onBuy }) {
                     <button
                         type="button"
                         onClick={() => onBuy(product)}
-                        className="w-full rounded-xl py-3.5 px-4 text-xs font-mono font-bold uppercase tracking-wider shadow-sm transition bg-indigo-600 text-white hover:bg-indigo-500 shadow-indigo-600/30"
+                        className="w-full rounded-xl py-3.5 px-4 text-xs font-mono font-bold uppercase tracking-wider shadow-sm transition bg-[#E97451] text-white hover:bg-[#cf6238] shadow-[#E97451]/30"
                     >
                         Buy now →
                     </button>
@@ -173,14 +173,14 @@ export default function Index({ categories = [], stripeKey = '' }) {
     };
 
     return (
-        <div className="min-h-screen bg-slate-900 text-slate-100 font-sans selection:bg-indigo-500 selection:text-white">
+        <div className="min-h-screen bg-slate-900 text-slate-100 font-sans selection:bg-[#cf6238] selection:text-white">
             <Head title="The Store - dvaughnhouse.store" />
 
             {/* Header */}
             <header className="sticky top-0 z-40 border-b border-slate-800 bg-slate-900/90 backdrop-blur-md">
                 <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
                     <div className="flex items-center space-x-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-600 text-white font-mono font-bold text-lg shadow-sm">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#E97451] text-white font-mono font-bold text-lg shadow-sm">
                             $
                         </div>
                         <div>
@@ -210,8 +210,8 @@ export default function Index({ categories = [], stripeKey = '' }) {
             {/* Hero Section */}
             <section className="relative border-b border-slate-800 py-20 bg-gradient-to-b from-slate-900 to-slate-950">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8 text-center">
-                    <div className="inline-flex items-center space-x-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3.5 py-1 text-xs font-mono text-indigo-300 mb-6">
-                        <span className="h-1.5 w-1.5 rounded-full bg-indigo-400"></span>
+                    <div className="inline-flex items-center space-x-2 rounded-full border border-[#E97451]/30 bg-[#cf6238]/10 px-3.5 py-1 text-xs font-mono text-[#f2c9b8] mb-6">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#f2c9b8]"></span>
                         <span>Secure checkout · Stripe PCI Level 1</span>
                     </div>
 
@@ -239,7 +239,7 @@ export default function Index({ categories = [], stripeKey = '' }) {
                                     href={category.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="mt-2 inline-flex items-center text-xs font-mono text-indigo-300 hover:text-indigo-200 transition"
+                                    className="mt-2 inline-flex items-center text-xs font-mono text-[#f2c9b8] hover:text-[#f2c9b8] transition"
                                 >
                                     {category.url_label || 'Visit the standalone store'} →
                                 </a>
@@ -289,7 +289,7 @@ export default function Index({ categories = [], stripeKey = '' }) {
                                 <div className="rounded-2xl border border-slate-800 bg-slate-950 p-5 text-left text-xs space-y-2 font-mono">
                                     <div className="flex justify-between">
                                         <span className="text-slate-500">Order Number:</span>
-                                        <span className="font-bold text-indigo-400">{orderReceipt.order_number}</span>
+                                        <span className="font-bold text-[#f2c9b8]">{orderReceipt.order_number}</span>
                                     </div>
                                     <div className="flex justify-between">
                                         <span className="text-slate-500">Item:</span>
@@ -312,7 +312,7 @@ export default function Index({ categories = [], stripeKey = '' }) {
                                 <button
                                     type="button"
                                     onClick={closeCheckout}
-                                    className="w-full rounded-xl bg-indigo-600 py-3 text-xs font-mono font-bold uppercase tracking-wider text-white hover:bg-indigo-500 transition"
+                                    className="w-full rounded-xl bg-[#E97451] py-3 text-xs font-mono font-bold uppercase tracking-wider text-white hover:bg-[#cf6238] transition"
                                 >
                                     Close & Return to Store
                                 </button>
@@ -320,7 +320,7 @@ export default function Index({ categories = [], stripeKey = '' }) {
                         ) : (
                             <form onSubmit={handleCheckoutSubmit} className="space-y-6">
                                 <div>
-                                    <div className="flex items-center space-x-2 text-xs font-mono text-indigo-400 uppercase tracking-wider mb-1">
+                                    <div className="flex items-center space-x-2 text-xs font-mono text-[#f2c9b8] uppercase tracking-wider mb-1">
                                         <span>Stripe Secure Gateway</span>
                                         <span>•</span>
                                         <span>PCI Level 1</span>
@@ -352,7 +352,7 @@ export default function Index({ categories = [], stripeKey = '' }) {
                                             value={customerName}
                                             onChange={(e) => setCustomerName(e.target.value)}
                                             placeholder="e.g. Jordan Ellis"
-                                            className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-2.5 text-xs text-white placeholder-slate-600 focus:border-indigo-500 focus:ring-indigo-500"
+                                            className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-2.5 text-xs text-white placeholder-slate-600 focus:border-[#E97451] focus:ring-[#E97451]"
                                         />
                                     </div>
 
@@ -366,7 +366,7 @@ export default function Index({ categories = [], stripeKey = '' }) {
                                             value={customerEmail}
                                             onChange={(e) => setCustomerEmail(e.target.value)}
                                             placeholder="e.g. you@example.com"
-                                            className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-2.5 text-xs text-white placeholder-slate-600 focus:border-indigo-500 focus:ring-indigo-500"
+                                            className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-2.5 text-xs text-white placeholder-slate-600 focus:border-[#E97451] focus:ring-[#E97451]"
                                         />
                                     </div>
 
@@ -379,7 +379,7 @@ export default function Index({ categories = [], stripeKey = '' }) {
                                             value={customerCompany}
                                             onChange={(e) => setCustomerCompany(e.target.value)}
                                             placeholder="Optional"
-                                            className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-2.5 text-xs text-white placeholder-slate-600 focus:border-indigo-500 focus:ring-indigo-500"
+                                            className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-2.5 text-xs text-white placeholder-slate-600 focus:border-[#E97451] focus:ring-[#E97451]"
                                         />
                                     </div>
 
@@ -401,7 +401,7 @@ export default function Index({ categories = [], stripeKey = '' }) {
                                     <button
                                         type="submit"
                                         disabled={isSubmitting}
-                                        className="w-full rounded-xl bg-indigo-600 py-3.5 text-xs font-mono font-bold uppercase tracking-wider text-white shadow-lg shadow-indigo-600/30 hover:bg-indigo-500 disabled:opacity-50 transition"
+                                        className="w-full rounded-xl bg-[#E97451] py-3.5 text-xs font-mono font-bold uppercase tracking-wider text-white shadow-lg shadow-[#E97451]/30 hover:bg-[#cf6238] disabled:opacity-50 transition"
                                     >
                                         {isSubmitting ? 'Authorizing Payment...' : `Authorize $${parseFloat(selectedProduct.amount).toLocaleString('en-US', { minimumFractionDigits: 2 })} →`}
                                     </button>

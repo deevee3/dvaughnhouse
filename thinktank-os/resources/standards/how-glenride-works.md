@@ -1,6 +1,6 @@
 # How Glenride Works
 
-Glenride is an independent think tank. We research supply chain vulnerabilities, pharmaceutical data, and enterprise software systems — and we publish what we find.
+Glenride is an independent, AI-native think tank. We research supply chain vulnerabilities, pharmaceutical data, and enterprise software systems — and we publish what we find.
 
 This page exists because manufactured credibility is now cheap. Fake journalists, fake think tanks, AI-written papers with nobody behind them. So here's exactly how we operate, in plain language. Hold us to it.
 
