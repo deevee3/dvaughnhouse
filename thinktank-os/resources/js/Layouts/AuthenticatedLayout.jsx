@@ -42,6 +42,12 @@ export default function AuthenticatedLayout({ header, children }) {
                                 >
                                     My Manuscripts
                                 </NavLink>
+                                <NavLink
+                                    href={route('sops.index')}
+                                    active={route().current('sops.*')}
+                                >
+                                    SOPs
+                                </NavLink>
                             </div>
                         </div>
 
@@ -157,6 +163,12 @@ export default function AuthenticatedLayout({ header, children }) {
                             active={route().current('manuscripts.index')}
                         >
                             My Manuscripts
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('sops.index')}
+                            active={route().current('sops.*')}
+                        >
+                            SOPs
                         </ResponsiveNavLink>
                     </div>
 

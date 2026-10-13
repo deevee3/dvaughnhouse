@@ -1,3 +1,4 @@
+import InstitutionalHeader from '@/Components/InstitutionalHeader';
 import { Head, Link } from '@inertiajs/react';
 import { useState, useMemo } from 'react';
 
@@ -40,85 +41,7 @@ export default function Index({ briefs = [], auth }) {
         <div className="min-h-screen bg-[#fafaf9] text-gray-900 font-sans selection:bg-[#E97451] selection:text-white">
             <Head title="The Vanguard Library - Glenride" />
 
-            {/* Institutional Header */}
-            <header className="sticky top-0 z-40 border-b border-stone-200 bg-[#fafaf9]/90 backdrop-blur-md">
-                <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
-                    <div className="flex items-center space-x-4">
-                        <Link href="/" className="group flex items-center space-x-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-900 text-white font-serif font-bold text-lg shadow-sm group-hover:bg-[#E97451] transition">
-                                G
-                            </div>
-                            <div>
-                                <span className="block font-serif text-lg font-bold tracking-tight text-gray-900 group-hover:text-[#E97451] transition">
-                                    Glenride
-                                </span>
-                                <span className="block font-mono text-[10px] uppercase tracking-widest text-stone-500">
-                                    Vanguard Policy Monographs
-                                </span>
-                            </div>
-                        </Link>
-                    </div>
-
-                    <nav className="hidden md:flex items-center space-x-8 text-sm font-medium">
-                        <Link
-                            href={route('library.index')}
-                            className="text-[#E97451] font-semibold"
-                        >
-                            Vanguard Library
-                        </Link>
-                        <Link
-                            href={route('thesis.index')}
-                            className="text-stone-600 hover:text-gray-900 transition"
-                        >
-                            Institutional Thesis
-                        </Link>
-                        <Link
-                            href={route('sops.index')}
-                            className="text-stone-600 hover:text-gray-900 transition"
-                        >
-                            SOPs
-                        </Link>
-                        <Link
-                            href={route('essays.index')}
-                            className="text-stone-600 hover:text-gray-900 transition"
-                        >
-                            Essays
-                        </Link>
-                        <a
-                            href="https://dvaughnhouse.com"
-                            className="text-stone-600 hover:text-gray-900 transition"
-                        >
-                            Routing Hub
-                        </a>
-                    </nav>
-
-                    <div className="flex items-center space-x-4">
-                        {auth?.user ? (
-                            <Link
-                                href={route('dashboard')}
-                                className="inline-flex items-center rounded-lg bg-gray-900 px-4 py-2 text-xs font-mono font-semibold uppercase tracking-wider text-white shadow-sm hover:bg-[#E97451] transition"
-                            >
-                                ThinkTank OS Portal →
-                            </Link>
-                        ) : (
-                            <div className="flex items-center space-x-3">
-                                <Link
-                                    href={route('login')}
-                                    className="text-xs font-mono font-medium text-stone-600 hover:text-gray-900 px-3 py-1.5 transition"
-                                >
-                                    Fellow Sign In
-                                </Link>
-                                <Link
-                                    href={route('login')}
-                                    className="inline-flex items-center rounded-lg bg-[#E97451] px-4 py-2 text-xs font-mono font-semibold uppercase tracking-wider text-white shadow-sm hover:bg-[#cf6238] transition"
-                                >
-                                    ThinkTank OS
-                                </Link>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </header>
+            <InstitutionalHeader auth={auth} active="library" />
 
             {/* Hero Section */}
             <section className="relative border-b border-stone-200 bg-white py-20">

@@ -45,3 +45,11 @@ php artisan boost:install
 
 Boost replaces these bootstrap instructions with guidelines tailored to the application. After installation, read `AGENTS.md` again and continue with the user's original request using the generated guidelines.
 </laravel-boost-guidelines>
+
+## Mandatory Pre-Commit Language Check
+Before committing any copy or branding changes, **ALWAYS** run:
+```bash
+bash check-language.sh
+```
+from the `thinktank-os/` directory (or `bash thinktank-os/check-language.sh` from the repository root). Do not commit if any banned terms are detected.
+

@@ -1,3 +1,4 @@
+import InstitutionalHeader from '@/Components/InstitutionalHeader';
 import { Head, Link } from '@inertiajs/react';
 
 export default function Show({ document, auth }) {
@@ -21,38 +22,7 @@ export default function Show({ document, auth }) {
                 .standards-content a { color: #E97451; text-decoration: underline; }
             `}</style>
 
-            {/* Institutional Header */}
-            <header className="sticky top-0 z-40 border-b border-stone-200 bg-[#fafaf9]/90 backdrop-blur-md">
-                <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
-                    <Link href="/" className="group flex items-center space-x-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-900 text-white font-serif font-bold text-lg shadow-sm group-hover:bg-[#E97451] transition">
-                            G
-                        </div>
-                        <div>
-                            <span className="block font-serif text-lg font-bold tracking-tight text-gray-900 group-hover:text-[#E97451] transition">
-                                Glenride
-                            </span>
-                            <span className="block font-mono text-[10px] uppercase tracking-widest text-stone-500">
-                                Our Standards
-                            </span>
-                        </div>
-                    </Link>
-                    <nav className="hidden md:flex items-center space-x-8 text-sm font-medium">
-                        <Link href={route('library.index')} className="text-stone-600 hover:text-gray-900 transition">
-                            Vanguard Library
-                        </Link>
-                        <Link href={route('thesis.index')} className="text-stone-600 hover:text-gray-900 transition">
-                            Institutional Thesis
-                        </Link>
-                        <Link href={route('sops.index')} className="text-stone-600 hover:text-gray-900 transition">
-                            SOPs
-                        </Link>
-                        <Link href={route('essays.index')} className="text-stone-600 hover:text-gray-900 transition">
-                            Essays
-                        </Link>
-                    </nav>
-                </div>
-            </header>
+            <InstitutionalHeader auth={auth} active="standards" subtitle="Our Standards" />
 
             <main className="mx-auto max-w-4xl px-6 lg:px-8 py-12">
                 <div className="flex flex-wrap items-center gap-3">

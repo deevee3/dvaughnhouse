@@ -10,6 +10,11 @@ use App\Http\Controllers\StoreController;
 use App\Http\Controllers\VanguardLibraryController;
 use Illuminate\Support\Facades\Route;
 
+// store.dvaughnhouse.com lands on the storefront, not the library
+Route::domain('store.dvaughnhouse.com')->group(function () {
+    Route::get('/', fn () => redirect()->route('store.index'));
+});
+
 // Public Institutional Vanguard Library & Foundational Thesis
 Route::get('/', [VanguardLibraryController::class, 'index'])->name('home');
 Route::get('/library', [VanguardLibraryController::class, 'index'])->name('library.index');

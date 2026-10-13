@@ -28,6 +28,7 @@ BANNED=(
 # Public-facing copy paths (relative to thinktank-os/).
 PATHS=(
   "resources/js/Pages"
+  "resources/js/Components/InstitutionalHeader.jsx"
   "resources/standards"
   "resources/sops"
   "resources/essays"
