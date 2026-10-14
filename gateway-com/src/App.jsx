@@ -134,7 +134,8 @@ function Hero() {
           You don&rsquo;t need another lecture about AI. You need less
           busywork, straight facts on drug shortages, and plain talk on where
           things are headed — from someone who spent fifteen years inside
-          the system.
+          the system. And everything here runs on one principle: proof,
+          not promises.
         </p>
         <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-3">
           {benefits.map((b) => (
@@ -324,13 +325,97 @@ function About() {
   );
 }
 
+function System() {
+  const steps = [
+    {
+      n: "01",
+      title: "The Factory",
+      sub: "AI chief-of-staff OS",
+      body: "The way I run AI: persistent memory, an audit log of every action, standing protocols. The work gets done here \u2014 and the trail it leaves is the evidence.",
+    },
+    {
+      n: "02",
+      title: "The Issuer",
+      sub: "Glenride",
+      body: "The think tank doesn't just publish research \u2014 it stamps it. Claim, evidence, verifier, timestamp. Other institutions sell reputation. Glenride sells receipts.",
+    },
+    {
+      n: "03",
+      title: "The Proven Library",
+      sub: "SpinWave",
+      body: "Scholars earn for verified manuscripts and datasets; readers license knowledge they can trust. Set knowledge free \u2014 then prove it.",
+    },
+  ];
+  const areas = [
+    {
+      title: "Supply-chain resilience",
+      body: "Where the systems that move medicine and goods break \u2014 and who gets hurt when they do.",
+    },
+    {
+      title: "Pharmaceutical data",
+      body: "Drug shortages in plain English: what's really behind them, and what you can do about it.",
+    },
+    {
+      title: "Applied AI",
+      body: "How AI actually gets directed and verified in real operations \u2014 the proof layer, built in the open.",
+    },
+  ];
+  return (
+    <>
+      <section id="system" aria-label="The system" className="border-t border-slate-200 dark:border-slate-800">
+        <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:px-8">
+          <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">The system</p>
+          <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+            Three steps, one loop.
+          </h2>
+          <p className="mt-6 max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
+            Three ventures, one loop. The AI chief-of-staff OS does the work \u2014 directed, logged, verified. Glenride attests it \u2014 signed proof that it happened as claimed. SpinWave publishes the best of it \u2014 a library where knowledge isn\u2019t just free, it\u2019s proven. Every attestation makes the next one stronger.
+          </p>
+          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
+            {steps.map((s) => (
+              <div key={s.n} className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm dark:border-slate-800 dark:bg-slate-800/60">
+                <p className="font-mono text-xs font-bold tracking-widest text-amber-700 dark:text-amber-500">{s.n}</p>
+                <h3 className="mt-3 text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100">{s.title}</h3>
+                <p className="mt-1 text-sm font-semibold text-amber-700 dark:text-amber-500">{s.sub}</p>
+                <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{s.body}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-10 max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
+            In a world where every agent claims and nobody verifies, this is the proof layer. Witnessed by Glenride.
+          </p>
+        </div>
+      </section>
+      <section id="research" aria-label="Research areas" className="border-t border-slate-200 dark:border-slate-800">
+        <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:px-8">
+          <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">Research</p>
+          <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+            What Glenride&rsquo;s working on now.
+          </h2>
+          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
+            {areas.map((a) => (
+              <div key={a.title} className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm dark:border-slate-800 dark:bg-slate-800/60">
+                <h3 className="text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100">{a.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{a.body}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-10 text-base leading-relaxed text-slate-600 dark:text-slate-300">
+            All published free, in plain language.
+          </p>
+        </div>
+      </section>
+    </>
+  );
+}
+
 function Work() {
   const cards = [
     {
       title: "Glenride",
       img: workResearch,
       imgAlt: "Glowing laboratory flask dissolving into data points",
-      body: "An independent think tank with a venture studio — built to combat systems that seek to harm you. Research on supply-chain resilience, pharmaceutical data, and applied AI, published free in plain language so you can act on it. Understand. Build. Compel.",
+      body: "An independent think tank built to combat systems that seek to harm you. Now the attestation authority: signed proof that work happened as claimed. Understand. Build. Compel. Prove.",
       link: ORG_URL,
       cta: "Visit Glenride",
     },
@@ -338,7 +423,7 @@ function Work() {
       title: "SpinWave",
       img: workAi,
       imgAlt: "Interlocking AI circuit nodes with flowing amber data pathways",
-      body: "A utility token for the scholarly commons — scholars earn for manuscripts and datasets, readers pay to browse and license. On Base. No hype, no profit promises; the trust center carries the receipts.",
+      body: "A utility token for the scholarly commons — scholars earn for verified manuscripts and datasets, readers license knowledge they can trust. On Base. No hype, no profit promises; the trust center carries the receipts, and Glenride attestation carries the proof.",
       link: "https://spinwave.pages.dev",
       cta: "See SpinWave",
     },
@@ -1133,6 +1218,7 @@ export default function App() {
         <Hero />
         <Stats />
         <About />
+        <System />
         <Work />
         <Contact />
       </main>
