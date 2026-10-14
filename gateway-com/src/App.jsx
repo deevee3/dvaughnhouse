@@ -288,7 +288,7 @@ function AboutPage() {
       <div className="mt-8 grid gap-8 md:grid-cols-2">
         <p className="text-base leading-relaxed text-slate-600 dark:text-slate-300">
           For over a decade I managed data pipelines and regulatory compliance
-          for clinical trials \u2014 first at the University of Cincinnati, then at
+          for clinical trials &mdash; first at the University of Cincinnati, then at
           AstraZeneca and Merck. That work taught me two things: how to run
           systems where mistakes have consequences, and how much good work
           dies inside bureaucracy.
@@ -298,7 +298,7 @@ function AboutPage() {
           agentic systems that run on hardware I own, publish research
           through an independent think tank, and build in public so the
           receipts are visible. Human judgment stays at the top of every
-          system I ship \u2014 the machine proposes, the person decides.
+          system I ship &mdash; the machine proposes, the person decides.
         </p>
       </div>
 
@@ -390,7 +390,7 @@ function System() {
             Three stages, one loop.
           </h2>
           <p className="mt-6 max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
-            The AI chief-of-staff OS does the work \u2014 directed, logged, verified. Glenride attests it \u2014 signed proof that it happened as claimed. SpinWave publishes the best of it \u2014 a library where knowledge isn\u2019t just free, it\u2019s proven. Every attestation makes the next one stronger.
+            The AI chief-of-staff OS does the work &mdash; directed, logged, verified. Glenride attests it &mdash; signed proof that it happened as claimed. SpinWave publishes the best of it &mdash; a library where knowledge isn&rsquo;t just free, it&rsquo;s proven. Every attestation makes the next one stronger.
           </p>
           <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
             {steps.map((s) => (
