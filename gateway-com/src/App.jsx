@@ -390,7 +390,7 @@ function System() {
             Three steps, one loop.
           </h2>
           <p className="mt-6 max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
-            Three callings, one loop. The AI chief-of-staff OS does the work \u2014 directed, logged, verified. Glenride attests it \u2014 signed proof that it happened as claimed. SpinWave publishes the best of it \u2014 a library where knowledge isn\u2019t just free, it\u2019s proven. Every attestation makes the next one stronger.
+            The AI chief-of-staff OS does the work \u2014 directed, logged, verified. Glenride attests it \u2014 signed proof that it happened as claimed. SpinWave publishes the best of it \u2014 a library where knowledge isn\u2019t just free, it\u2019s proven. Every attestation makes the next one stronger.
           </p>
           <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
             {steps.map((s) => (
