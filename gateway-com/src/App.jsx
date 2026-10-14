@@ -15,7 +15,7 @@ const DONATION_ADDRESS = "0xa6eab535043EB98De32e5791b0E83ab47f88C430";
 const DONATION_NETWORK = "Base";
 
 const NAV = [
-  { label: "About", href: "#about" },
+  { label: "About", href: "/about" },
   { label: "Work", href: "#work" },
   { label: "Contact", href: "#contact" },
 ];
@@ -234,28 +234,6 @@ function Stats() {
 }
 
 function About() {
-  const pillars = [
-    {
-      title: "The Independent Architect",
-      body: "The craft of building — systems design, runbooks, near-zero-cost infrastructure. No theory without a working artifact.",
-    },
-    {
-      title: "The Power–Wisdom Gap",
-      body: "This is not another dot-com. Plain-language work on what \u201cif you don\u2019t move, you lose\u201d means in practice.",
-    },
-    {
-      title: "Cognitive Stewardship",
-      body: "Human primacy. Free will and the machine. Words as load-bearing spells. The thinking that keeps the building honest.",
-    },
-    {
-      title: "Glenride Investigations",
-      body: "Supply-chain vulnerabilities, pharmaceutical data, the systems that seek to harm — investigated in plain language. Verified before asserted.",
-    },
-    {
-      title: "The Independent Economy",
-      body: "The ventures, built in public. Real numbers, real lessons, never a profit promise.",
-    },
-  ];
   return (
     <section id="about" aria-label="About" className="border-t border-slate-200 dark:border-slate-800">
       <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:px-8">
@@ -263,65 +241,108 @@ function About() {
         <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
           Built in regulated rooms. Building outside them now.
         </h2>
-        <div className="mt-8 grid gap-8 md:grid-cols-2">
-          <p className="text-base leading-relaxed text-slate-600 dark:text-slate-300">
-            For over a decade I managed data pipelines and regulatory compliance
-            for clinical trials — first at the University of Cincinnati, then at
-            AstraZeneca and Merck. That work taught me two things: how to run
-            systems where mistakes have consequences, and how much good work
-            dies inside bureaucracy.
-          </p>
-          <p className="text-base leading-relaxed text-slate-600 dark:text-slate-300">
-            Today I operate as an independent AI orchestrator. I design
-            agentic systems that run on hardware I own, publish research
-            through an independent think tank, and build in public so the
-            receipts are visible. Human judgment stays at the top of every
-            system I ship — the machine proposes, the person decides.
-          </p>
-        </div>
-
-        <div className="mt-14 flex flex-col gap-8 rounded-2xl border border-slate-200 bg-white p-8 sm:p-10 sm:flex-row sm:items-center dark:border-slate-800 dark:bg-slate-800/60">
-          <img
-            src={glenrideLogo}
-            alt="Glenride think tank logo"
-            className="h-28 w-28 shrink-0 rounded-2xl"
-          />
-          <div>
-            <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">
-              Mission statement
-            </p>
-            <p className="mt-4 text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
-              Combat systems that seek to harm you.
-            </p>
-            <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
-              Three motions: <strong className="font-semibold text-slate-900 dark:text-slate-100">understand</strong> the
-              system, <strong className="font-semibold text-slate-900 dark:text-slate-100">build</strong> the
-              alternative, <strong className="font-semibold text-slate-900 dark:text-slate-100">compel</strong> the
-              change. Less bureaucracy. More breakthroughs.
-            </p>
-          </div>
-        </div>
-
-        <h3 className="mt-14 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
-          The five pillars
-        </h3>
-        <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {pillars.map((p) => (
-            <div
-              key={p.title}
-              className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm dark:border-slate-800 dark:bg-slate-800/60"
-            >
-              <h4 className="text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100">
-                {p.title}
-              </h4>
-              <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-                {p.body}
-              </p>
-            </div>
-          ))}
-        </div>
+        <p className="mt-6 max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
+          Twelve years in clinical research, now operating as an independent AI orchestrator.
+        </p>
+        <a
+          href="/about"
+          className="mt-8 inline-flex items-center text-sm font-semibold tracking-wide text-slate-900 transition-colors hover:text-amber-600 dark:text-slate-100 dark:hover:text-amber-400"
+        >
+          Read the full story <span className="ml-2">\u2192</span>
+        </a>
       </div>
     </section>
+  );
+}
+
+const PILLARS = [
+  {
+    title: "The Independent Architect",
+    body: "The craft of building \u2014 systems design, runbooks, near-zero-cost infrastructure. No theory without a working artifact.",
+  },
+  {
+    title: "The Power\u2013Wisdom Gap",
+    body: "This is not another dot-com. Plain-language work on what \u201cif you don\u2019t move, you lose\u201d means in practice.",
+  },
+  {
+    title: "Cognitive Stewardship",
+    body: "Human primacy. Free will and the machine. Words as load-bearing spells. The thinking that keeps the building honest.",
+  },
+  {
+    title: "Glenride Investigations",
+    body: "Supply-chain vulnerabilities, pharmaceutical data, the systems that seek to harm \u2014 investigated in plain language. Verified before asserted.",
+  },
+  {
+    title: "The Independent Economy",
+    body: "The ventures, built in public. Real numbers, real lessons, never a profit promise.",
+  },
+];
+
+function AboutPage() {
+  return (
+    <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:px-8">
+      <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">About</p>
+      <h1 className="mt-4 text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">
+        Built in regulated rooms. Building outside them now.
+      </h1>
+      <div className="mt-8 grid gap-8 md:grid-cols-2">
+        <p className="text-base leading-relaxed text-slate-600 dark:text-slate-300">
+          For over a decade I managed data pipelines and regulatory compliance
+          for clinical trials \u2014 first at the University of Cincinnati, then at
+          AstraZeneca and Merck. That work taught me two things: how to run
+          systems where mistakes have consequences, and how much good work
+          dies inside bureaucracy.
+        </p>
+        <p className="text-base leading-relaxed text-slate-600 dark:text-slate-300">
+          Today I operate as an independent AI orchestrator. I design
+          agentic systems that run on hardware I own, publish research
+          through an independent think tank, and build in public so the
+          receipts are visible. Human judgment stays at the top of every
+          system I ship \u2014 the machine proposes, the person decides.
+        </p>
+      </div>
+
+      <div className="mt-14 flex flex-col gap-8 rounded-2xl border border-slate-200 bg-white p-8 sm:p-10 sm:flex-row sm:items-center dark:border-slate-800 dark:bg-slate-800/60">
+        <img
+          src={glenrideLogo}
+          alt="Glenride think tank logo"
+          className="h-28 w-28 shrink-0 rounded-2xl"
+        />
+        <div>
+          <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">
+            Mission statement
+          </p>
+          <p className="mt-4 text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+            Combat systems that seek to harm you.
+          </p>
+          <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
+            Three motions: <strong className="font-semibold text-slate-900 dark:text-slate-100">understand</strong> the
+            system, <strong className="font-semibold text-slate-900 dark:text-slate-100">build</strong> the
+            alternative, <strong className="font-semibold text-slate-900 dark:text-slate-100">compel</strong> the
+            change. Less bureaucracy. More breakthroughs.
+          </p>
+        </div>
+      </div>
+
+      <h2 className="mt-14 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+        The five pillars
+      </h2>
+      <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {PILLARS.map((p) => (
+          <div
+            key={p.title}
+            className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm dark:border-slate-800 dark:bg-slate-800/60"
+          >
+            <h3 className="text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100">
+              {p.title}
+            </h3>
+            <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+              {p.body}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -1176,6 +1197,7 @@ export default function App() {
   const path = window.location.pathname;
   const isDonate = path.startsWith("/donate");
   const isPatron = path.startsWith("/patron");
+  const isAbout = path.startsWith("/about");
   const isTerms = path.startsWith("/terms");
   const isPrivacy = path.startsWith("/privacy");
   if (isDonate) {
@@ -1195,6 +1217,17 @@ export default function App() {
         <Header base="/" />
         <main>
           <PatronPage />
+        </main>
+        <Footer base="/" />
+      </div>
+    );
+  }
+  if (isAbout) {
+    return (
+      <div className="min-h-screen bg-slate-50 text-slate-900 antialiased transition-colors dark:bg-slate-900 dark:text-slate-50">
+        <Header base="/" />
+        <main>
+          <AboutPage />
         </main>
         <Footer base="/" />
       </div>
