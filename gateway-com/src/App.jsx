@@ -349,19 +349,19 @@ function AboutPage() {
 function System() {
   const steps = [
     {
-      n: "01",
+      n: "Stage 01",
       title: "The Factory",
       sub: "AI chief-of-staff OS",
       body: "The way I run AI: persistent memory, an audit log of every action, standing protocols. The work gets done here \u2014 and the trail it leaves is the evidence.",
     },
     {
-      n: "02",
+      n: "Stage 02",
       title: "The Issuer",
       sub: "Glenride",
       body: "The think tank doesn't just publish research \u2014 it stamps it. Claim, evidence, verifier, timestamp. Other institutions sell reputation. Glenride sells receipts.",
     },
     {
-      n: "03",
+      n: "Stage 03",
       title: "The Proven Library",
       sub: "SpinWave",
       body: "Scholars earn for verified manuscripts and datasets; readers license knowledge they can trust. Set knowledge free \u2014 then prove it.",
@@ -387,7 +387,7 @@ function System() {
         <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:px-8">
           <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">The system</p>
           <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
-            Three steps, one loop.
+            Three stages, one loop.
           </h2>
           <p className="mt-6 max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
             The AI chief-of-staff OS does the work \u2014 directed, logged, verified. Glenride attests it \u2014 signed proof that it happened as claimed. SpinWave publishes the best of it \u2014 a library where knowledge isn\u2019t just free, it\u2019s proven. Every attestation makes the next one stronger.
