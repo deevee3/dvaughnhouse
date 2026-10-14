@@ -248,7 +248,7 @@ function About() {
           href="/about"
           className="mt-8 inline-flex items-center text-sm font-semibold tracking-wide text-slate-900 transition-colors hover:text-amber-600 dark:text-slate-100 dark:hover:text-amber-400"
         >
-          Read the full story <span className="ml-2">\u2192</span>
+          Read the full story <span className="ml-2">&rarr;</span>
         </a>
       </div>
     </section>
