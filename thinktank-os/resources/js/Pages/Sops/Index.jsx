@@ -1,21 +1,27 @@
-import InstitutionalHeader from '@/Components/InstitutionalHeader';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
 
-export default function Index({ documents = [], auth }) {
+export default function Index({ documents = [] }) {
     return (
-        <div className="min-h-screen bg-[#fafaf9] text-gray-900 font-sans selection:bg-[#E97451] selection:text-white">
+        <AuthenticatedLayout
+            header={
+                <div className="flex items-center justify-between">
+                    <div>
+                        <span className="font-mono text-xs uppercase tracking-widest text-[#E97451]">
+                            ThinkTank OS // Institutional Operations
+                        </span>
+                        <h2 className="text-2xl font-bold leading-tight text-gray-900">
+                            Standard Operating Procedures
+                        </h2>
+                    </div>
+                </div>
+            }
+        >
             <Head title="Standard Operating Procedures - Glenride" />
-            <InstitutionalHeader auth={auth} active="sops" />
 
-            <main className="mx-auto max-w-7xl px-6 lg:px-8 py-16">
+            <div className="mx-auto max-w-7xl px-6 lg:px-8 py-12">
                 <div className="max-w-3xl">
-                    <p className="font-mono text-xs uppercase tracking-widest text-[#E97451]">
-                        Glenride · Operations
-                    </p>
-                    <h1 className="mt-4 font-serif text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-                        Standard Operating Procedures
-                    </h1>
-                    <p className="mt-6 text-lg leading-relaxed text-stone-600">
+                    <p className="text-base leading-relaxed text-stone-600">
                         The documented way Glenride works. Every procedure carries an
                         owner, a version, and an approver — nothing here is binding
                         until it is approved and versioned.
@@ -29,7 +35,7 @@ export default function Index({ documents = [], auth }) {
                     </div>
                 </div>
 
-                <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {documents.map((doc) => (
                         <Link
                             key={doc.slug}
@@ -59,13 +65,7 @@ export default function Index({ documents = [], auth }) {
                         </Link>
                     ))}
                 </div>
-            </main>
-
-            <footer className="border-t border-stone-200 py-8">
-                <p className="text-center font-mono text-[11px] uppercase tracking-widest text-stone-400">
-                    Glenride · Procedures are versioned; numbers are permanent
-                </p>
-            </footer>
-        </div>
+            </div>
+        </AuthenticatedLayout>
     );
 }

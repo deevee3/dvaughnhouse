@@ -21,10 +21,6 @@ Route::get('/library', [VanguardLibraryController::class, 'index'])->name('libra
 Route::get('/briefs/{manuscript}', [VanguardLibraryController::class, 'show'])->name('briefs.show');
 Route::get('/thesis', [VanguardLibraryController::class, 'thesis'])->name('thesis.index');
 
-// Public Standard Operating Procedures
-Route::get('/sops', [SopController::class, 'index'])->name('sops.index');
-Route::get('/sops/{slug}', [SopController::class, 'show'])->name('sops.show');
-
 // Public Glenride standards
 Route::get('/standards', [StandardsController::class, 'show'])->name('standards.show');
 
@@ -57,6 +53,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/manuscripts/intake', [ManuscriptController::class, 'create'])->name('manuscripts.create');
     Route::post('/manuscripts/intake', [ManuscriptController::class, 'store'])->name('manuscripts.store');
     Route::get('/manuscripts', [ManuscriptController::class, 'index'])->name('manuscripts.index');
+
+    // Internal Standard Operating Procedures (Fellow Access Only)
+    Route::get('/sops', [SopController::class, 'index'])->name('sops.index');
+    Route::get('/sops/{slug}', [SopController::class, 'show'])->name('sops.show');
 });
 
 require __DIR__.'/auth.php';
