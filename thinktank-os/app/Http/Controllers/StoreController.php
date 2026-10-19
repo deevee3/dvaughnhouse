@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -296,10 +297,91 @@ class StoreController extends Controller
             ]);
         }
 
+        // Server-rendered AEO payload: the Blade root view turns this into
+        // JSON-LD structured data + a plain-text <noscript> catalog summary,
+        // so crawlers that don't run JS can still read the storefront.
+        View::share('storeSeo', $this->storeSeoData($grouped));
+
         return Inertia::render('Store/Index', [
             'categories' => $grouped,
             'stripeKey' => Config::get('services.stripe.key'),
         ]);
+    }
+
+    /**
+     * AEO payload for the storefront: JSON-LD structured data plus a
+     * plain-text catalog summary (name, price, status, description per
+     * product) rendered into raw HTML by the Blade root view.
+     * Prices as of October 2026.
+     */
+    private function storeSeoData(array $grouped): array
+    {
+        $statusLabels = [
+            'available' => 'Available now',
+            'external' => 'Free — opens in browser',
+            'coming_soon' => 'Coming soon — price and terms not yet published',
+            'custom' => 'Custom — scoped and quoted in writing',
+        ];
+
+        $products = [];
+        $listItems = [];
+        $position = 0;
+
+        foreach ($grouped as $category) {
+            foreach ($category['products'] as $p) {
+                $position++;
+                $price = $p['amount_cents'] !== null ? number_format((float) $p['amount'], 2, '.', '') : null;
+                $priceLabel = match (true) {
+                    $price === null => null,
+                    ($p['fulfillment'] ?? null) === 'digital_download' => '$'.$price.' one-time',
+                    ($p['fulfillment'] ?? null) === 'license' => '$'.$price.' per year',
+                    default => '$'.$price,
+                };
+
+                $products[] = [
+                    'name' => $p['name'],
+                    'tagline' => $p['tagline'],
+                    'priceLabel' => $priceLabel,
+                    'statusLabel' => $statusLabels[$p['status']] ?? $p['status'],
+                    'description' => $p['description'],
+                ];
+
+                $item = [
+                    '@type' => 'Product',
+                    'name' => $p['name'],
+                    'description' => $p['description'],
+                ];
+                if ($price !== null) {
+                    $item['offers'] = [
+                        '@type' => 'Offer',
+                        'price' => $price,
+                        'priceCurrency' => 'USD',
+                        'availability' => $p['status'] === 'available'
+                            ? 'https://schema.org/InStock'
+                            : 'https://schema.org/PreOrder',
+                    ];
+                }
+                $listItems[] = ['@type' => 'ListItem', 'position' => $position, 'item' => $item];
+            }
+        }
+
+        $jsonLd = json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'ItemList',
+            'name' => 'The Glenride Store',
+            'description' => "Field guides from Reynard's, tools and publications from Glenride, and executive briefings for institutions.",
+            'itemListElement' => $listItems,
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        // Never let catalog copy break out of the JSON-LD script tag.
+        $jsonLd = str_replace('</script', '<\/script', (string) $jsonLd);
+
+        return [
+            'asOf' => 'October 2026',
+            'updated' => 'October 19, 2026',
+            'products' => $products,
+            'jsonLd' => $jsonLd,
+            'faqAnswer' => 'Field guides from Reynard\'s (the 30-Day Ruck Reset is $19), free Glenride apps and tools that open in your browser, and executive briefings for institutions — salon seats at $500, the ContextForge license at $1,200 per year, and annual corporate retainers at $25,000. Anything marked "Available now" can be bought today through Stripe. "Coming soon" means the price and terms aren\'t published yet, and nothing here takes payment before they are. Prices as of October 2026.',
+        ];
     }
 
     /**

@@ -26,7 +26,7 @@ function ProductCard({ product, onBuy }) {
     const purchasable = product.status === 'available' && product.amount_cents != null;
 
     return (
-        <div className="relative flex flex-col justify-between rounded-3xl p-8 border border-slate-800 bg-slate-950/60 shadow-lg transition duration-200 hover:border-slate-700">
+        <article className="relative flex flex-col justify-between rounded-3xl p-8 border border-slate-800 bg-slate-950/60 shadow-lg transition duration-200 hover:border-slate-700">
             <div>
                 <div className="flex items-center justify-between mb-2">
                     <div className="text-xs font-mono uppercase tracking-widest text-[#f2c9b8] font-semibold">
@@ -111,7 +111,7 @@ function ProductCard({ product, onBuy }) {
                     </div>
                 )}
             </div>
-        </div>
+        </article>
     );
 }
 
@@ -174,7 +174,7 @@ export default function Index({ categories = [], stripeKey = '' }) {
 
     return (
         <div className="min-h-screen bg-slate-900 text-slate-100 font-sans selection:bg-[#cf6238] selection:text-white">
-            <Head title="The Store - dvaughnhouse.store" />
+            <Head title="The Store — store.dvaughnhouse.com" />
 
             {/* Header */}
             <header className="sticky top-0 z-40 border-b border-slate-800 bg-slate-900/90 backdrop-blur-md">
@@ -188,7 +188,7 @@ export default function Index({ categories = [], stripeKey = '' }) {
                                 The Store
                             </span>
                             <span className="block font-mono text-[10px] uppercase tracking-widest text-slate-400">
-                                dvaughnhouse.store
+                                store.dvaughnhouse.com
                             </span>
                         </div>
                     </div>
@@ -224,6 +224,9 @@ export default function Index({ categories = [], stripeKey = '' }) {
                         executive briefings for institutions. Every listing tells you exactly
                         what you get — no product takes payment before its price and terms are published.
                     </p>
+                    <p className="mt-4 text-[11px] font-mono uppercase tracking-widest text-slate-500">
+                        Prices as of October 2026 · Updated October 19, 2026
+                    </p>
                 </div>
             </section>
 
@@ -254,12 +257,30 @@ export default function Index({ categories = [], stripeKey = '' }) {
                 ))}
             </main>
 
+            {/* FAQ — plain-English answers for readers and answer engines */}
+            <section className="border-t border-slate-800 py-16" aria-labelledby="store-faq-heading">
+                <div className="mx-auto max-w-3xl px-6 lg:px-8">
+                    <h2 id="store-faq-heading" className="text-2xl font-bold text-white">
+                        What can I buy from the store?
+                    </h2>
+                    <p className="mt-4 text-sm leading-relaxed text-slate-300">
+                        Field guides from Reynard's (the 30-Day Ruck Reset is $19), free Glenride apps and tools that open in your browser, and executive briefings for institutions — salon seats at $500, the ContextForge license at $1,200 per year, and annual corporate retainers at $25,000. Anything marked "Available now" can be bought today through Stripe. "Coming soon" means the price and terms aren't published yet, and nothing here takes payment before they are. Prices as of October 2026.
+                    </p>
+                </div>
+            </section>
+
             {/* Checkout Modal */}
             {selectedProduct && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="Checkout"
+                >
                     <div className="w-full max-w-xl rounded-3xl border border-slate-700 bg-slate-900 p-8 shadow-2xl relative">
                         <button
                             type="button"
+                            aria-label="Close checkout"
                             onClick={closeCheckout}
                             className="absolute top-6 right-6 text-slate-400 hover:text-white transition"
                         >
@@ -343,10 +364,11 @@ export default function Index({ categories = [], stripeKey = '' }) {
 
                                 <div className="space-y-4">
                                     <div>
-                                        <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1">
+                                        <label htmlFor="checkout-name" className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1">
                                             Full Name *
                                         </label>
                                         <input
+                                            id="checkout-name"
                                             type="text"
                                             required
                                             value={customerName}
@@ -357,10 +379,11 @@ export default function Index({ categories = [], stripeKey = '' }) {
                                     </div>
 
                                     <div>
-                                        <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1">
+                                        <label htmlFor="checkout-email" className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1">
                                             Email *
                                         </label>
                                         <input
+                                            id="checkout-email"
                                             type="email"
                                             required
                                             value={customerEmail}
@@ -371,10 +394,11 @@ export default function Index({ categories = [], stripeKey = '' }) {
                                     </div>
 
                                     <div>
-                                        <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1">
+                                        <label htmlFor="checkout-company" className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1">
                                             Company / Organization
                                         </label>
                                         <input
+                                            id="checkout-company"
                                             type="text"
                                             value={customerCompany}
                                             onChange={(e) => setCustomerCompany(e.target.value)}
