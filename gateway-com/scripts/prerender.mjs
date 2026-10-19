@@ -1,0 +1,43 @@
+// Build-time prerendering: renders every route to static HTML with
+// react-dom/server so crawlers and AI agents see real content in raw HTML
+// instead of an empty <div id="root"> shell. Runs after both the client
+// and SSR builds (see package.json "build"). No headless browser needed.
+import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const here = dirname(fileURLToPath(import.meta.url));
+const root = join(here, "..");
+const dist = join(root, "dist");
+
+const { render, routes } = await import(join(root, "dist-ssr", "entry-server.js"));
+
+const titles = {
+  "/": "D'Vaughn House — Independent AI Orchestrator",
+  "/donate": "Donate — D'Vaughn House",
+  "/patron": "Become a Patron — D'Vaughn House",
+  "/about": "About — D'Vaughn House",
+  "/terms": "Terms of Service — D'Vaughn House",
+  "/privacy": "Privacy Policy — D'Vaughn House",
+};
+
+const template = readFileSync(join(dist, "index.html"), "utf8");
+if (!template.includes('<div id="root"></div>')) {
+  throw new Error("prerender: root placeholder not found in dist/index.html");
+}
+
+for (const route of routes) {
+  const body = render(route);
+  if (!body || body.length < 1000) {
+    throw new Error(`prerender: suspiciously small render for ${route} (${body?.length ?? 0} bytes)`);
+  }
+  let html = template.replace('<div id="root"></div>', `<div id="root">${body}</div>`);
+  const title = titles[route];
+  if (title) {
+    html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
+  }
+  const outDir = route === "/" ? dist : join(dist, route.slice(1));
+  mkdirSync(outDir, { recursive: true });
+  writeFileSync(join(outDir, "index.html"), html);
+  console.log(`prerendered ${route} -> ${join(outDir, "index.html")} (${html.length} bytes)`);
+}

@@ -137,6 +137,9 @@ function Hero() {
           the system. And everything here runs on one principle: proof,
           not promises.
         </p>
+        <p className="mt-6 max-w-3xl text-base sm:text-lg leading-relaxed text-white/90">
+          <strong className="font-bold text-white">This site is the gateway to my work as an independent AI orchestrator</strong> — one door into Glenride&rsquo;s investigations, the SpinWave scholarly commons, and the store. It&rsquo;s for anyone who wants proof, not promises: plain-language research and AI systems built in the open, verified before asserted.
+        </p>
         <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-3">
           {benefits.map((b) => (
             <div
@@ -174,36 +177,51 @@ function Hero() {
   );
 }
 
+function OrchestratorQA() {
+  return (
+    <section aria-label="What an independent AI orchestrator does" className="border-b border-slate-200 dark:border-slate-800">
+      <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:px-8">
+        <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+          What does an independent AI orchestrator do?
+        </h2>
+        <p className="mt-6 max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
+          An independent AI orchestrator designs, runs, and verifies AI systems outside big institutions — choosing the models, wiring the agents, and proving the work happened as claimed. I build on hardware I own, keep human judgment at the top of every system, and publish the receipts. If you want less busywork, straight facts on systems like drug supply chains, and plain talk on the AI shift without a sales pitch, that&rsquo;s what this site is for.
+        </p>
+      </div>
+    </section>
+  );
+}
+
 function Stats() {
   const stats = [
     {
       value: "227",
-      label: "U.S. drugs in shortage right now — rising for the third straight quarter",
+      label: "U.S. drugs in shortage, as of Q2 2026 — rising for the third straight quarter",
       source: "ASHP, Q2 2026",
     },
     {
       value: "78%",
-      label: "of drug-ingredient factories are outside the U.S.",
+      label: "of drug-ingredient factories are outside the U.S., as of the FDA's latest published data",
       source: "FDA",
     },
     {
       value: "~90%",
-      label: "of the world's most advanced chips are made in Taiwan",
+      label: "of the world's most advanced chips are made in Taiwan, as of 2026",
       source: "Industry analyses, 2026",
     },
     {
       value: "85%",
-      label: "of rare-earth refining happens in China",
+      label: "of rare-earth refining happens in China, as of 2025",
       source: "IEA, 2025",
     },
     {
       value: "$2.6B",
-      label: "average cost to develop one new drug",
+      label: "average cost to develop one new drug, per the latest Tufts CSDD estimate",
       source: "Tufts CSDD",
     },
     {
       value: "~12%",
-      label: "of drugs that enter trials ever get approved",
+      label: "of drugs that enter trials ever get approved, per the latest Tufts CSDD estimate",
       source: "Tufts CSDD",
     },
   ];
@@ -689,6 +707,15 @@ function DonatePage() {
       <div className="mt-10 space-y-12 text-base leading-relaxed text-slate-600 dark:text-slate-300">
         <section>
           <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-slate-50">
+            Where does my donation go?
+          </h2>
+          <p className="mt-4 max-w-3xl">
+            Straight to independent work. Donations fund Glenride&rsquo;s investigations — drug-shortage research, supply-chain analysis, plain-language publishing — plus the infrastructure that keeps everything free to read. They don&rsquo;t buy influence over findings, equity, tokens, or returns. The address is a 1-of-1 Safe on Base, controlled by my own wallet, and every investigation is published whether the conclusions are convenient or not.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-slate-50">
             Sponsor the findings. Never the conclusions.
           </h2>
           <div className="mt-8 grid gap-8 md:grid-cols-[1fr_260px] md:items-start">
@@ -706,7 +733,7 @@ function DonatePage() {
               </li>
               <li>
                 <strong className="font-semibold text-slate-900 dark:text-slate-100">Eyes on your own medicine cabinet.</strong>{" "}
-                227 drugs are in shortage in the U.S. right now. Independent
+                227 drugs are in shortage in the U.S., as of Q2 2026 (ASHP). Independent
                 investigation into why is a public good you personally benefit from.
               </li>
             </ul>
@@ -1188,13 +1215,17 @@ function Footer({ base = "" }) {
           Nothing on this site is financial, legal, investment, or medical advice.
           Token and market content is educational only.
         </p>
+        <p className="mt-2 text-[11px] leading-relaxed text-slate-400 dark:text-slate-500">
+          Content updated: October 19, 2026.
+        </p>
       </div>
     </footer>
   );
 }
 
-export default function App() {
-  const path = window.location.pathname;
+export default function App({ path: propPath } = {}) {
+  const path =
+    propPath ?? (typeof window !== "undefined" ? window.location.pathname : "/");
   const isDonate = path.startsWith("/donate");
   const isPatron = path.startsWith("/patron");
   const isAbout = path.startsWith("/about");
@@ -1249,6 +1280,7 @@ export default function App() {
       <Header />
       <main>
         <Hero />
+        <OrchestratorQA />
         <Stats />
         <About />
         <System />
