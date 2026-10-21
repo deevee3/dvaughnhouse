@@ -129,11 +129,7 @@ function Hero() {
               You don&rsquo;t need another lecture about AI. You need less
               busywork, straight facts on drug shortages, and plain talk on where
               things are headed — from someone who spent fifteen years inside
-              the system. And everything here runs on one principle: proof,
-              not promises.
-            </p>
-            <p className="mt-6 max-w-3xl text-[1.0625rem] leading-[1.7] text-cream/85">
-              <strong className="font-semibold text-cream">This site is the gateway to my work as an independent AI orchestrator</strong> — one door into Glenride&rsquo;s investigations, the SpinWave scholarly commons, and the store. It&rsquo;s for anyone who wants proof, not promises: plain-language research and AI systems built in the open, verified before asserted.
+              the system.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <a
@@ -150,6 +146,16 @@ function Hero() {
               </a>
             </div>
           </div>
+        </div>
+      </section>
+      <section aria-label="The principle" className="bg-paper dark:bg-night">
+        <div className="mx-auto max-w-3xl px-6 py-16 sm:py-20 lg:px-8">
+          <h2 className="font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl dark:text-cream">
+            Everything here runs on one principle: proof, not promises.
+          </h2>
+          <p className="mt-6 text-lg leading-[1.75] text-ink-soft dark:text-cream-soft">
+            This site is the gateway to my work as an independent AI orchestrator — one door into Glenride&rsquo;s investigations, the SpinWave scholarly commons, and the store. It&rsquo;s for anyone who wants proof, not promises: plain-language research and AI systems built in the open, verified before asserted.
+          </p>
         </div>
       </section>
       <section aria-label="What you get" className="bg-paper dark:bg-night">
