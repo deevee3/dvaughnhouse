@@ -469,9 +469,9 @@ function Work() {
       title: "Store",
       img: workStore,
       imgAlt: "Dark storefront with a glowing amber doorway and circuit pathways leading in",
-      body: "The isolated transaction layer — offerings, procurement, and commercial engagements. The institution lives at one address, the commerce at another. Separate on purpose.",
-      link: "#contact",
-      cta: "Get in touch",
+      body: "Everything for sale lives in one store — the Den. Field guides that get you outside and stronger, trail gear and apparel, plus the wider house's tools, digests, and briefings. One shelf, one checkout, nothing scattered.",
+      link: "https://den.dvaughnhouse.com",
+      cta: "Visit the store",
     },
   ];
   return (
@@ -1184,6 +1184,12 @@ function Footer({ base = "" }) {
               </a>
             ))}
             <a
+              href="https://den.dvaughnhouse.com"
+              className="text-sm text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-50 transition-colors"
+            >
+              Store — The Den
+            </a>
+            <a
               href="/donate"
               className="text-sm font-semibold text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-50 transition-colors"
             >
@@ -1215,7 +1221,7 @@ function Footer({ base = "" }) {
           Token and market content is educational only.
         </p>
         <p className="mt-2 text-[11px] leading-relaxed text-slate-400 dark:text-slate-500">
-          Content updated: October 19, 2026.
+          Content updated: October 21, 2026.
         </p>
       </div>
     </footer>
