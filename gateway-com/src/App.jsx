@@ -23,13 +23,13 @@ function Header({ base = "" }) {
   const [open, setOpen] = useState(false);
   const homeHref = base === "/" ? "/" : "#top";
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200/70 bg-slate-50/90 backdrop-blur dark:border-slate-800 dark:bg-slate-900/90">
+    <header className="sticky top-0 z-50 border-b border-line bg-paper/95 dark:border-line-dark dark:bg-night/95">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6 lg:px-8">
         <a href={homeHref} className="leading-none">
-          <span className="block text-lg font-extrabold tracking-tight text-slate-900 dark:text-slate-50">
+          <span className="block font-display text-lg font-extrabold tracking-tight text-ink dark:text-cream">
             D&rsquo;Vaughn House
           </span>
-          <span className="mt-1 hidden text-[11px] font-medium tracking-wide text-slate-500 sm:block dark:text-slate-400">
+          <span className="mt-1 hidden text-[11px] font-medium tracking-wide text-ink-soft sm:block dark:text-cream-soft">
             Independent AI Orchestrator
           </span>
         </a>
@@ -38,20 +38,20 @@ function Header({ base = "" }) {
             <a
               key={item.href}
               href={`${base}${item.href}`}
-              className="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-50 transition-colors"
+              className="text-sm font-medium text-ink-soft underline-offset-4 transition-colors hover:text-ink hover:underline dark:text-cream-soft dark:hover:text-cream"
             >
               {item.label}
             </a>
           ))}
           <a
             href="/donate"
-            className="rounded-lg bg-gradient-to-r from-amber-600 to-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:from-amber-500 hover:to-red-500 transition-colors"
+            className="rounded-full bg-sienna px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-sienna-deep hover:text-paper"
           >
             Donate
           </a>
         </nav>
         <button
-          className="md:hidden rounded-md p-2 text-slate-700 dark:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800"
+          className="rounded-full p-2 text-ink transition-colors hover:bg-paper-deep md:hidden dark:text-cream dark:hover:bg-night-card"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-label="Toggle navigation menu"
@@ -62,14 +62,14 @@ function Header({ base = "" }) {
         </button>
       </div>
       {open && (
-        <nav className="border-t border-slate-200 px-6 py-4 md:hidden dark:border-slate-800" aria-label="Mobile">
+        <nav className="border-t border-line px-6 py-4 md:hidden dark:border-line-dark" aria-label="Mobile">
           <ul className="space-y-3">
             {NAV.map((item) => (
               <li key={item.href}>
                 <a
                   href={`${base}${item.href}`}
                   onClick={() => setOpen(false)}
-                  className="block text-base font-medium text-slate-700 dark:text-slate-200"
+                  className="block text-base font-medium text-ink dark:text-cream"
                 >
                   {item.label}
                 </a>
@@ -79,7 +79,7 @@ function Header({ base = "" }) {
               <a
                 href="/donate"
                 onClick={() => setOpen(false)}
-                className="inline-block rounded-lg bg-gradient-to-r from-amber-600 to-red-600 px-4 py-2 text-sm font-semibold text-white"
+                className="inline-block rounded-full bg-sienna px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-sienna-deep hover:text-paper"
               >
                 Donate
               </a>
@@ -110,66 +110,63 @@ function Hero() {
     },
   ];
   return (
-    <section className="relative overflow-hidden" aria-label="Introduction">
-      <img
-        src={heroBanner}
-        alt="A diverse group of professionals collaborating around a table in a bright, grand conservatory"
-        className="absolute inset-0 h-full w-full object-cover"
-        loading="eager"
-      />
-      <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-slate-950/75 via-slate-950/60 to-slate-950/80" />
-      <div className="relative mx-auto max-w-6xl px-6 pt-20 pb-16 sm:pt-28 sm:pb-24 lg:px-8">
-        <p className="inline-flex items-center rounded-full border border-white/30 px-4 py-1.5 font-mono text-xs uppercase tracking-widest text-white/85">
-          Less bureaucracy. More breakthroughs.
-        </p>
-        <h1 className="mt-8 text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white">
-          Understand the system.
-          <br />
-          <span className="bg-gradient-to-r from-amber-400 to-red-400 bg-clip-text text-transparent">
-            Build your way out.
-          </span>
-        </h1>
-        <p className="mt-8 max-w-3xl text-base sm:text-lg leading-relaxed text-white/80">
-          You don&rsquo;t need another lecture about AI. You need less
-          busywork, straight facts on drug shortages, and plain talk on where
-          things are headed — from someone who spent fifteen years inside
-          the system. And everything here runs on one principle: proof,
-          not promises.
-        </p>
-        <p className="mt-6 max-w-3xl text-base sm:text-lg leading-relaxed text-white/90">
-          <strong className="font-bold text-white">This site is the gateway to my work as an independent AI orchestrator</strong> — one door into Glenride&rsquo;s investigations, the SpinWave scholarly commons, and the store. It&rsquo;s for anyone who wants proof, not promises: plain-language research and AI systems built in the open, verified before asserted.
-        </p>
-        <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-3">
+    <section aria-label="Introduction" className="bg-paper dark:bg-night">
+      <div className="mx-auto max-w-6xl px-6 pt-16 pb-24 sm:pt-24 lg:px-8">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+          <div>
+            <h1 className="font-display text-5xl font-extrabold leading-[1.02] tracking-[-0.02em] text-ink sm:text-6xl lg:text-7xl dark:text-cream">
+              Understand the system.
+              <br />
+              <span className="text-sienna-deep dark:text-sienna">
+                Build your way out.
+              </span>
+            </h1>
+            <p className="mt-8 max-w-3xl text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
+              You don&rsquo;t need another lecture about AI. You need less
+              busywork, straight facts on drug shortages, and plain talk on where
+              things are headed — from someone who spent fifteen years inside
+              the system. And everything here runs on one principle: proof,
+              not promises.
+            </p>
+            <p className="mt-6 max-w-3xl text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
+              <strong className="font-semibold text-ink dark:text-cream">This site is the gateway to my work as an independent AI orchestrator</strong> — one door into Glenride&rsquo;s investigations, the SpinWave scholarly commons, and the store. It&rsquo;s for anyone who wants proof, not promises: plain-language research and AI systems built in the open, verified before asserted.
+            </p>
+            <div className="mt-10 flex flex-wrap gap-4">
+              <a
+                href="#work"
+                className="inline-flex items-center rounded-full bg-sienna px-6 py-3 text-sm font-semibold text-ink transition-colors hover:bg-sienna-deep hover:text-paper"
+              >
+                See the work
+              </a>
+              <a
+                href="#contact"
+                className="inline-flex items-center rounded-full border border-ink px-6 py-3 text-sm font-semibold text-ink transition-colors hover:border-sienna-deep hover:text-sienna-deep dark:border-cream dark:text-cream dark:hover:border-sienna dark:hover:text-sienna"
+              >
+                Start a conversation
+              </a>
+            </div>
+          </div>
+          <img
+            src={heroBanner}
+            alt="A diverse group of professionals collaborating around a table in a bright, grand conservatory"
+            className="h-full max-h-[540px] w-full rounded-2xl border border-line object-cover dark:border-line-dark"
+            loading="eager"
+          />
+        </div>
+        <div className="mt-16 grid grid-cols-1 gap-5 sm:grid-cols-3">
           {benefits.map((b) => (
             <div
               key={b.n}
-              className="rounded-2xl border border-white/20 bg-white/95 p-6 shadow-lg backdrop-blur"
+              className="rounded-2xl border border-line bg-paper-deep p-6 dark:border-line-dark dark:bg-night-card"
             >
-              <p className="font-mono text-xs font-bold tracking-widest text-amber-700">
-                {b.n}
-              </p>
-              <h2 className="mt-3 text-lg font-bold tracking-tight text-slate-900">
+              <h2 className="font-display text-lg font-bold tracking-tight text-ink dark:text-cream">
                 {b.title}
               </h2>
-              <p className="mt-2 text-sm leading-relaxed text-slate-600">
+              <p className="mt-2 text-sm leading-relaxed text-ink-soft dark:text-cream-soft">
                 {b.body}
               </p>
             </div>
           ))}
-        </div>
-        <div className="mt-10 flex flex-wrap gap-4">
-          <a
-            href="#work"
-            className="inline-flex items-center rounded-xl bg-gradient-to-r from-amber-500 to-red-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/20 transition-transform hover:scale-[1.02]"
-          >
-            See the work
-          </a>
-          <a
-            href="#contact"
-            className="inline-flex items-center rounded-xl border border-white/40 px-6 py-3 text-sm font-semibold text-white hover:border-white transition-colors"
-          >
-            Start a conversation
-          </a>
         </div>
       </div>
     </section>
@@ -178,12 +175,12 @@ function Hero() {
 
 function OrchestratorQA() {
   return (
-    <section aria-label="What an independent AI orchestrator does" className="border-b border-slate-200 dark:border-slate-800">
-      <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:px-8">
-        <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+    <section aria-label="What an independent AI orchestrator does" className="border-t border-line bg-paper-deep dark:border-line-dark dark:bg-night-deep">
+      <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8">
+        <h2 className="font-display text-4xl font-bold tracking-tight text-ink dark:text-cream">
           What does an independent AI orchestrator do?
         </h2>
-        <p className="mt-6 max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
+        <p className="mt-6 max-w-3xl text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
           An independent AI orchestrator designs, runs, and verifies AI systems outside big institutions — choosing the models, wiring the agents, and proving the work happened as claimed. I build on hardware I own, keep human judgment at the top of every system, and publish the receipts. If you want less busywork, straight facts on systems like drug supply chains, and plain talk on the AI shift without a sales pitch, that&rsquo;s what this site is for.
         </p>
       </div>
@@ -225,23 +222,28 @@ function Stats() {
     },
   ];
   return (
-    <section aria-label="By the numbers" className="border-y border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-800/40">
-      <div className="mx-auto max-w-6xl px-6 py-14 lg:px-8">
-        <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">
+    <section aria-label="By the numbers" className="border-t border-line bg-paper dark:border-line-dark dark:bg-night">
+      <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8">
+        <h2 className="font-display text-4xl font-bold tracking-tight text-ink dark:text-cream">
           The problem, in numbers
-        </p>
-        <div className="mt-8 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
+        </h2>
+        <div className="mt-12 border-b border-line dark:border-line-dark">
           {stats.map((s) => (
-            <div key={s.value + s.label}>
-              <p className="text-4xl font-extrabold tracking-tight text-amber-700 dark:text-amber-400">
+            <div
+              key={s.value + s.label}
+              className="grid gap-2 border-t border-line py-7 sm:grid-cols-[12rem_1fr] sm:gap-8 dark:border-line-dark"
+            >
+              <p className="font-display text-4xl font-bold tracking-tight text-ink dark:text-cream">
                 {s.value}
               </p>
-              <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-                {s.label}
-              </p>
-              <p className="mt-2 font-mono text-[11px] uppercase tracking-wider text-slate-400 dark:text-slate-500">
-                Source: {s.source}
-              </p>
+              <div>
+                <p className="text-[1.0625rem] leading-[1.7] text-ink dark:text-cream">
+                  {s.label}
+                </p>
+                <p className="mt-2 font-mono text-[11px] uppercase tracking-wider text-ink-soft dark:text-cream-soft">
+                  Source: {s.source}
+                </p>
+              </div>
             </div>
           ))}
         </div>
@@ -252,18 +254,17 @@ function Stats() {
 
 function About() {
   return (
-    <section id="about" aria-label="About" className="border-t border-slate-200 dark:border-slate-800">
-      <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:px-8">
-        <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">About</p>
-        <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+    <section id="about" aria-label="About" className="border-t border-line bg-paper-deep dark:border-line-dark dark:bg-night-deep">
+      <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8">
+        <h2 className="font-display text-4xl font-bold tracking-tight text-ink dark:text-cream">
           Built in regulated rooms. Building outside them now.
         </h2>
-        <p className="mt-6 max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
+        <p className="mt-6 max-w-3xl text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
           Twelve years in clinical research, now operating as an independent AI orchestrator.
         </p>
         <a
           href="/about"
-          className="mt-8 inline-flex items-center text-sm font-semibold tracking-wide text-slate-900 transition-colors hover:text-amber-600 dark:text-slate-100 dark:hover:text-amber-400"
+          className="mt-8 inline-flex items-center text-sm font-semibold tracking-wide text-ink underline-offset-4 transition-colors hover:underline dark:text-cream dark:hover:text-sienna"
         >
           Read the full story <span className="ml-2">&rarr;</span>
         </a>
@@ -298,19 +299,18 @@ const PILLARS = [
 function AboutPage() {
   return (
     <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:px-8">
-      <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">About</p>
-      <h1 className="mt-4 text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">
+      <h1 className="font-display text-5xl font-extrabold tracking-tight text-ink sm:text-6xl dark:text-cream">
         Built in regulated rooms. Building outside them now.
       </h1>
       <div className="mt-8 grid gap-8 md:grid-cols-2">
-        <p className="text-base leading-relaxed text-slate-600 dark:text-slate-300">
+        <p className="text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
           For over a decade I managed data pipelines and regulatory compliance
           for clinical trials &mdash; first at the University of Cincinnati, then at
           AstraZeneca and Merck. That work taught me two things: how to run
           systems where mistakes have consequences, and how much good work
           dies inside bureaucracy.
         </p>
-        <p className="text-base leading-relaxed text-slate-600 dark:text-slate-300">
+        <p className="text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
           Today I operate as an independent AI orchestrator. I design
           agentic systems that run on hardware I own, publish research
           through an independent think tank, and build in public so the
@@ -319,41 +319,41 @@ function AboutPage() {
         </p>
       </div>
 
-      <div className="mt-14 flex flex-col gap-8 rounded-2xl border border-slate-200 bg-white p-8 sm:p-10 sm:flex-row sm:items-center dark:border-slate-800 dark:bg-slate-800/60">
+      <div className="mt-14 flex flex-col gap-8 rounded-2xl border border-line bg-paper p-8 sm:p-10 sm:flex-row sm:items-center dark:border-line-dark dark:bg-night-card">
         <img
           src={glenrideLogo}
           alt="Glenride think tank logo"
           className="h-28 w-28 shrink-0 rounded-2xl"
         />
         <div>
-          <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">
+          <p className="font-mono text-xs uppercase tracking-widest text-sienna-deep dark:text-sienna">
             Mission statement
           </p>
-          <p className="mt-4 text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+          <p className="mt-4 font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl dark:text-cream">
             Combat systems that seek to harm you.
           </p>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
-            Three motions: <strong className="font-semibold text-slate-900 dark:text-slate-100">understand</strong> the
-            system, <strong className="font-semibold text-slate-900 dark:text-slate-100">build</strong> the
-            alternative, <strong className="font-semibold text-slate-900 dark:text-slate-100">compel</strong> the
+          <p className="mt-4 max-w-3xl text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
+            Three motions: <strong className="font-semibold text-ink dark:text-cream">understand</strong> the
+            system, <strong className="font-semibold text-ink dark:text-cream">build</strong> the
+            alternative, <strong className="font-semibold text-ink dark:text-cream">compel</strong> the
             change. Less bureaucracy. More breakthroughs.
           </p>
         </div>
       </div>
 
-      <h2 className="mt-14 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+      <h2 className="mt-14 font-display text-4xl font-bold tracking-tight text-ink dark:text-cream">
         The five pillars
       </h2>
       <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {PILLARS.map((p) => (
           <div
             key={p.title}
-            className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm dark:border-slate-800 dark:bg-slate-800/60"
+            className="rounded-2xl border border-line bg-paper p-7 dark:border-line-dark dark:bg-night-card"
           >
-            <h3 className="text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            <h3 className="font-display text-lg font-bold tracking-tight text-ink dark:text-cream">
               {p.title}
             </h3>
-            <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+            <p className="mt-3 text-sm leading-relaxed text-ink-soft dark:text-cream-soft">
               {p.body}
             </p>
           </div>
@@ -400,45 +400,43 @@ function System() {
   ];
   return (
     <>
-      <section id="system" aria-label="The system" className="border-t border-slate-200 dark:border-slate-800">
-        <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:px-8">
-          <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">The system</p>
-          <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+      <section id="system" aria-label="The system" className="border-t border-line bg-paper dark:border-line-dark dark:bg-night">
+        <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8">
+          <h2 className="font-display text-4xl font-bold tracking-tight text-ink dark:text-cream">
             Three stages, one loop.
           </h2>
-          <p className="mt-6 max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
+          <p className="mt-6 max-w-3xl text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
             The AI chief-of-staff OS does the work &mdash; directed, logged, verified. Glenride attests it &mdash; signed proof that it happened as claimed. SpinWave publishes the best of it &mdash; a library where knowledge isn&rsquo;t just free, it&rsquo;s proven. Every attestation makes the next one stronger.
           </p>
           <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
             {steps.map((s) => (
-              <div key={s.n} className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm dark:border-slate-800 dark:bg-slate-800/60">
-                <p className="font-mono text-xs font-bold tracking-widest text-amber-700 dark:text-amber-500">{s.n}</p>
-                <h3 className="mt-3 text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100">{s.title}</h3>
-                <p className="mt-1 text-sm font-semibold text-amber-700 dark:text-amber-500">{s.sub}</p>
-                <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{s.body}</p>
+              <div key={s.n} className="rounded-2xl border border-line bg-paper p-7 dark:border-line-dark dark:bg-night-card">
+                <p className="font-mono text-xs font-bold tracking-widest text-sienna-deep dark:text-sienna">{s.n}</p>
+                <h3 className="mt-3 font-display text-lg font-bold tracking-tight text-ink dark:text-cream">{s.title}</h3>
+                <p className="mt-1 text-sm font-semibold text-sienna-deep dark:text-sienna">{s.sub}</p>
+                <p className="mt-3 text-sm leading-relaxed text-ink-soft dark:text-cream-soft">{s.body}</p>
               </div>
             ))}
           </div>
-          <p className="mt-10 max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
+          <p className="mt-10 max-w-3xl text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
             In a world where every agent claims and nobody verifies, this is the proof layer. Witnessed by Glenride.
           </p>
         </div>
       </section>
-      <section id="research" aria-label="Research areas" className="border-t border-slate-200 dark:border-slate-800">
-        <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:px-8">
-          <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">Research</p>
-          <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+      <section id="research" aria-label="Research areas" className="border-t border-line bg-paper-deep dark:border-line-dark dark:bg-night-deep">
+        <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8">
+          <h2 className="font-display text-4xl font-bold tracking-tight text-ink dark:text-cream">
             What Glenride&rsquo;s working on now.
           </h2>
           <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
             {areas.map((a) => (
-              <div key={a.title} className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm dark:border-slate-800 dark:bg-slate-800/60">
-                <h3 className="text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100">{a.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{a.body}</p>
+              <div key={a.title} className="rounded-2xl border border-line bg-paper p-7 dark:border-line-dark dark:bg-night-card">
+                <h3 className="font-display text-lg font-bold tracking-tight text-ink dark:text-cream">{a.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-ink-soft dark:text-cream-soft">{a.body}</p>
               </div>
             ))}
           </div>
-          <p className="mt-10 text-base leading-relaxed text-slate-600 dark:text-slate-300">
+          <p className="mt-10 text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
             All published free, in plain language.
           </p>
         </div>
@@ -475,10 +473,9 @@ function Work() {
     },
   ];
   return (
-    <section id="work" aria-label="Work" className="border-t border-slate-200 dark:border-slate-800">
-      <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:px-8">
-        <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">Work</p>
-        <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+    <section id="work" aria-label="Work" className="border-t border-line bg-paper dark:border-line-dark dark:bg-night">
+      <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8">
+        <h2 className="font-display text-4xl font-bold tracking-tight text-ink dark:text-cream">
           What I&rsquo;m building
         </h2>
         <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3 lg:gap-8">
@@ -486,7 +483,7 @@ function Work() {
             <a
               key={card.title}
               href={card.link}
-              className="group block overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 dark:border-slate-800 dark:bg-slate-800/60 dark:hover:border-slate-600 dark:focus:ring-slate-600"
+              className="group block overflow-hidden rounded-2xl border border-line bg-paper transition-colors hover:border-sienna-deep dark:border-line-dark dark:bg-night-card dark:hover:border-sienna"
             >
               <img
                 src={card.img}
@@ -495,14 +492,14 @@ function Work() {
                 loading="lazy"
               />
               <div className="p-8 sm:p-10">
-                <h3 className="text-2xl font-bold tracking-tight text-slate-900 transition-colors group-hover:text-amber-600 dark:text-slate-100 dark:group-hover:text-amber-400">
+                <h3 className="font-display text-2xl font-bold tracking-tight text-ink transition-colors group-hover:text-sienna-deep dark:text-cream dark:group-hover:text-sienna">
                   {card.title}
                 </h3>
-                <p className="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300">
+                <p className="mt-4 text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
                   {card.body}
                 </p>
-                <span className="mt-8 inline-flex items-center text-sm font-semibold tracking-wide text-slate-900 transition-colors group-hover:text-amber-600 dark:text-slate-100 dark:group-hover:text-amber-400">
-                  {card.cta} <span className="ml-2 transition-transform group-hover:translate-x-1">→</span>
+                <span className="mt-8 inline-flex items-center text-sm font-semibold tracking-wide text-ink transition-colors group-hover:text-sienna-deep dark:text-cream dark:group-hover:text-sienna">
+                  {card.cta} <span className="ml-2">→</span>
                 </span>
               </div>
             </a>
@@ -545,16 +542,15 @@ function Contact() {
   }
 
   const inputCls =
-    "w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-slate-500 dark:focus:ring-slate-700";
+    "w-full rounded-xl border border-ink/20 bg-paper px-4 py-3 text-sm text-ink placeholder:text-ink-soft/70 focus:border-sienna-deep dark:border-cream/20 dark:bg-night-card dark:text-cream dark:placeholder:text-cream-soft/70 dark:focus:border-sienna";
 
   return (
-    <section id="contact" aria-label="Contact" className="border-t border-slate-200 dark:border-slate-800">
-      <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:px-8">
-        <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">Contact</p>
-        <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+    <section id="contact" aria-label="Contact" className="border-t border-line bg-paper-deep dark:border-line-dark dark:bg-night-deep">
+      <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8">
+        <h2 className="font-display text-4xl font-bold tracking-tight text-ink dark:text-cream">
           Start a conversation
         </h2>
-        <p className="mt-6 max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
+        <p className="mt-6 max-w-3xl text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
           Partnerships, research collaboration, press, or just a sharp question
           about independent AI infrastructure. Your message goes directly to me —
           I read everything myself. No list, no resale, no sharing.
@@ -563,7 +559,7 @@ function Contact() {
           <form onSubmit={submit} className="max-w-2xl space-y-5">
           <div className="grid gap-5 sm:grid-cols-2">
             <div>
-              <label htmlFor="contact-name" className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
+              <label htmlFor="contact-name" className="mb-2 block text-sm font-medium text-ink dark:text-cream">
                 Name
               </label>
               <input
@@ -573,7 +569,7 @@ function Contact() {
               />
             </div>
             <div>
-              <label htmlFor="contact-email" className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
+              <label htmlFor="contact-email" className="mb-2 block text-sm font-medium text-ink dark:text-cream">
                 Email
               </label>
               <input
@@ -584,7 +580,7 @@ function Contact() {
             </div>
           </div>
           <div>
-            <label htmlFor="contact-topic" className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
+            <label htmlFor="contact-topic" className="mb-2 block text-sm font-medium text-ink dark:text-cream">
               Topic
             </label>
             <select id="contact-topic" value={form.topic} onChange={set("topic")} className={inputCls}>
@@ -596,7 +592,7 @@ function Contact() {
             </select>
           </div>
           <div>
-            <label htmlFor="contact-message" className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
+            <label htmlFor="contact-message" className="mb-2 block text-sm font-medium text-ink dark:text-cream">
               Message
             </label>
             <textarea
@@ -615,7 +611,7 @@ function Contact() {
             <button
               type="submit"
               disabled={status.state === "sending"}
-              className="inline-flex items-center rounded-xl bg-gradient-to-r from-amber-600 to-red-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:from-amber-500 hover:to-red-500 disabled:opacity-60"
+              className="inline-flex items-center rounded-full bg-sienna px-6 py-3 text-sm font-semibold text-ink transition-colors hover:bg-sienna-deep hover:text-paper disabled:opacity-60"
             >
               {status.state === "sending" ? "Sending…" : "Send message"}
             </button>
@@ -634,7 +630,7 @@ function Contact() {
           <img
             src={workAdvisory}
             alt="Glowing compass over architectural blueprints — finding direction through complex systems"
-            className="hidden w-full rounded-2xl border border-slate-200 object-cover shadow-sm lg:block dark:border-slate-800"
+            className="hidden w-full rounded-2xl border border-line object-cover lg:block dark:border-line-dark"
             loading="lazy"
           />
         </div>
@@ -663,49 +659,45 @@ function DonatePage() {
 
   return (
     <div>
-      <section className="relative overflow-hidden" aria-label="Support the mission">
-        <img
-          src={heroDonate}
-          alt="A speaker on stage before a packed grand hall — carrying the mission to the people"
-          className="absolute inset-0 h-full w-full object-cover"
-          loading="eager"
-        />
-        <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-slate-950/75 via-slate-950/60 to-slate-950/80" />
-        <div className="relative mx-auto max-w-6xl px-6 pt-16 pb-14 sm:pt-20 sm:pb-16 lg:px-8">
-          <p className="inline-flex items-center rounded-full border border-white/30 px-4 py-1.5 font-mono text-xs uppercase tracking-widest text-white/85">
-            Support
-          </p>
-          <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
+      <section aria-label="Support the mission" className="bg-paper dark:bg-night">
+        <div className="mx-auto max-w-6xl px-6 pt-16 pb-20 sm:pt-20 lg:px-8">
+          <h1 className="font-display text-5xl font-extrabold tracking-tight text-ink sm:text-6xl dark:text-cream">
             Fuel the mission.
           </h1>
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/80 sm:text-lg">
+          <p className="mt-6 max-w-2xl text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
             Fund independent investigation into the systems that touch your health,
             your work, and your future — and keep the findings free for everyone.
           </p>
           <div className="mt-8">
             <a
               href="#send"
-              className="inline-flex items-center rounded-xl bg-gradient-to-r from-amber-500 to-red-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/20 transition-transform hover:scale-[1.02]"
+              className="inline-flex items-center rounded-full bg-sienna px-6 py-3 text-sm font-semibold text-ink transition-colors hover:bg-sienna-deep hover:text-paper"
             >
               Get the address
             </a>
           </div>
+          <img
+            src={heroDonate}
+            alt="A speaker on stage before a packed grand hall — carrying the mission to the people"
+            className="mt-12 h-72 w-full rounded-2xl border border-line object-cover sm:h-96 dark:border-line-dark"
+            loading="eager"
+          />
         </div>
       </section>
 
       <div className="mx-auto max-w-3xl px-6 py-14 sm:py-16 lg:px-8">
-      <div className="rounded-2xl border border-amber-300 bg-amber-50 p-6 dark:border-amber-800 dark:bg-amber-950/40">
-        <p className="text-base leading-relaxed text-slate-800 dark:text-slate-200">
-          <strong className="font-bold">Plain talk first:</strong> I am not a
+      <div className="rounded-2xl border border-line bg-paper-deep p-6 dark:border-line-dark dark:bg-night-card">
+        <p className="text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
+          <strong className="font-bold text-ink dark:text-cream">Plain talk first:</strong> I am not a
           nonprofit and I do not have tax-exempt status. Nothing you send here
           is tax-deductible. This is personal support for independent work —
           not a charitable contribution, not an investment, and not a purchase.
         </p>
       </div>
 
-      <div className="mt-10 space-y-12 text-base leading-relaxed text-slate-600 dark:text-slate-300">
+      <div className="mt-10 space-y-12 text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
         <section>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-slate-50">
+          <h2 className="font-display text-3xl font-bold tracking-tight text-ink dark:text-cream">
             Where does my donation go?
           </h2>
           <p className="mt-4 max-w-3xl">
@@ -714,24 +706,24 @@ function DonatePage() {
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-slate-50">
+          <h2 className="font-display text-3xl font-bold tracking-tight text-ink dark:text-cream">
             Sponsor the findings. Never the conclusions.
           </h2>
           <div className="mt-8 grid gap-8 md:grid-cols-[1fr_260px] md:items-start">
             <ul className="space-y-6">
               <li>
-                <strong className="font-semibold text-slate-900 dark:text-slate-100">Evidence nobody bought.</strong>{" "}
+                <strong className="font-semibold text-ink dark:text-cream">Evidence nobody bought.</strong>{" "}
                 Every investigation is funded by people, not sponsors — so when
                 Glenride publishes on drug shortages, you know the conclusion
                 wasn&rsquo;t purchased.
               </li>
               <li>
-                <strong className="font-semibold text-slate-900 dark:text-slate-100">Research that stays public.</strong>{" "}
+                <strong className="font-semibold text-ink dark:text-cream">Research that stays public.</strong>{" "}
                 Findings go out in plain language, free to read. Your support is
                 what keeps it that way — no paywall, no gatekeeper.
               </li>
               <li>
-                <strong className="font-semibold text-slate-900 dark:text-slate-100">Eyes on your own medicine cabinet.</strong>{" "}
+                <strong className="font-semibold text-ink dark:text-cream">Eyes on your own medicine cabinet.</strong>{" "}
                 227 drugs are in shortage in the U.S., as of Q2 2026 (ASHP). Independent
                 investigation into why is a public good you personally benefit from.
               </li>
@@ -739,14 +731,14 @@ function DonatePage() {
             <img
               src={workResearch}
               alt="Glowing laboratory flask dissolving into data points — independent research, verified before asserted"
-              className="w-full rounded-2xl border border-slate-200 object-cover shadow-sm dark:border-slate-800"
+              className="w-full rounded-2xl border border-line object-cover dark:border-line-dark"
               loading="lazy"
             />
           </div>
         </section>
 
         <section>
-          <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+          <h2 className="font-display text-3xl font-bold tracking-tight text-ink dark:text-cream">
             What it never does
           </h2>
           <ul className="mt-3 list-disc space-y-2 pl-6">
@@ -757,24 +749,26 @@ function DonatePage() {
         </section>
 
         <section id="send" className="scroll-mt-24">
-          <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+          <h2 className="font-display text-3xl font-bold tracking-tight text-ink dark:text-cream">
             Where to send it
           </h2>
           {DONATION_ADDRESS ? (
-            <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-800/60">
-              <p className="font-mono text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            <>
+            <div className="mt-4 rounded-2xl border border-line bg-paper-deep p-6 dark:border-line-dark dark:bg-night-card">
+              <p className="font-mono text-xs uppercase tracking-wider text-ink-soft dark:text-cream-soft">
                 {DONATION_NETWORK} address
               </p>
-              <p className="mt-3 break-all font-mono text-sm text-slate-900 dark:text-slate-100">
+              <p className="mt-3 break-all font-mono text-sm text-ink dark:text-cream">
                 {DONATION_ADDRESS}
               </p>
               <button
                 type="button"
                 onClick={copyAddress}
-                className="mt-4 inline-flex items-center rounded-xl bg-gradient-to-r from-amber-600 to-red-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:from-amber-500 hover:to-red-500 transition-colors"
+                className="mt-4 inline-flex items-center rounded-full bg-sienna px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-sienna-deep hover:text-paper"
               >
                 {copied ? "Copied ✓" : "Copy address"}
               </button>
+            </div>
               <div
                 role="alert"
                 className="mt-6 flex gap-3 rounded-2xl border-2 border-red-400 bg-red-50 p-5 dark:border-red-700 dark:bg-red-950/50"
@@ -798,7 +792,7 @@ function DonatePage() {
                   network may be permanently unrecoverable.
                 </p>
               </div>
-            </div>
+            </>
           ) : (
             <p className="mt-3">
               The donation address is being set up — check back soon. Nothing
@@ -809,13 +803,13 @@ function DonatePage() {
         </section>
 
         <section>
-          <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+          <h2 className="font-display text-3xl font-bold tracking-tight text-ink dark:text-cream">
             Another way to support
           </h2>
           <p className="mt-3">
             If you&rsquo;d rather support the work commercially, reach out
             through the{" "}
-            <a href="#contact" className="font-semibold text-slate-900 underline underline-offset-4 dark:text-slate-100">
+            <a href="#contact" className="font-semibold text-sienna-deep underline underline-offset-4 transition-colors hover:text-ink dark:text-sienna dark:hover:text-cream">
               contact form
             </a>
             .
@@ -911,20 +905,16 @@ function PatronPage() {
   }
 
   const inputCls =
-    "w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-slate-500 dark:focus:ring-slate-700";
+    "w-full rounded-xl border border-ink/20 bg-paper-deep px-4 py-3 text-sm text-ink placeholder:text-ink-soft/70 focus:border-sienna-deep dark:border-cream/20 dark:bg-night-card dark:text-cream dark:placeholder:text-cream-soft/70 dark:focus:border-sienna";
 
   return (
     <div>
-      <section className="relative overflow-hidden" aria-label="Become a patron">
-        <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950" />
-        <div className="relative mx-auto max-w-6xl px-6 pt-16 pb-14 sm:pt-20 sm:pb-16 lg:px-8">
-          <p className="inline-flex items-center rounded-full border border-white/30 px-4 py-1.5 font-mono text-xs uppercase tracking-widest text-white/85">
-            Patrons
-          </p>
-          <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
+      <section aria-label="Become a patron" className="border-b border-line bg-paper-deep dark:border-line-dark dark:bg-night-deep">
+        <div className="mx-auto max-w-6xl px-6 pt-16 pb-20 sm:pt-20 lg:px-8">
+          <h1 className="font-display text-5xl font-extrabold tracking-tight text-ink sm:text-6xl dark:text-cream">
             Become a patron of the work.
           </h1>
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/80 sm:text-lg">
+          <p className="mt-6 max-w-2xl text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
             Independent work needs independent funding. Patrons keep the
             research free, the videos honest, and the mission pointed at people —
             not sponsors.
@@ -932,7 +922,7 @@ function PatronPage() {
           <div className="mt-8">
             <a
               href="#join"
-              className="inline-flex items-center rounded-xl bg-gradient-to-r from-amber-500 to-red-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/20 transition-transform hover:scale-[1.02]"
+              className="inline-flex items-center rounded-full bg-sienna px-6 py-3 text-sm font-semibold text-ink transition-colors hover:bg-sienna-deep hover:text-paper"
             >
               Choose your tier
             </a>
@@ -945,33 +935,33 @@ function PatronPage() {
           {PATRON_TIERS.map((tier) => (
             <div
               key={tier.id}
-              className="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-800/60"
+              className="flex flex-col rounded-2xl border border-line bg-paper-deep p-6 dark:border-line-dark dark:bg-night-card"
             >
-              <p className="font-mono text-xs uppercase tracking-widest text-amber-700 dark:text-amber-500">
-                {tier.tagline}
-              </p>
-              <h2 className="mt-3 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+              <h2 className="font-display text-2xl font-bold tracking-tight text-ink dark:text-cream">
                 {tier.name}
               </h2>
-              <p className="mt-1 text-lg font-semibold text-slate-700 dark:text-slate-200">{tier.price}</p>
-              <ul className="mt-6 flex-1 space-y-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+              <p className="mt-2 text-base italic text-ink-soft dark:text-cream-soft">
+                {tier.tagline}
+              </p>
+              <p className="mt-1 text-lg font-semibold text-ink dark:text-cream">{tier.price}</p>
+              <ul className="mt-6 flex-1 space-y-3 text-sm leading-relaxed text-ink-soft dark:text-cream-soft">
                 {tier.perks.map((perk) => (
                   <li key={perk} className="flex gap-2">
-                    <span aria-hidden="true" className="text-amber-600 dark:text-amber-500">✓</span>
+                    <span aria-hidden="true" className="text-sienna-deep dark:text-sienna">✓</span>
                     <span>{perk}</span>
                   </li>
                 ))}
               </ul>
-              <p className="mt-6 text-sm italic text-slate-500 dark:text-slate-400">{tier.cta}</p>
+              <p className="mt-6 text-sm italic text-ink-soft dark:text-cream-soft">{tier.cta}</p>
             </div>
           ))}
         </div>
 
         <div id="join" className="mx-auto mt-16 max-w-2xl scroll-mt-8">
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-slate-50">
+          <h2 className="font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl dark:text-cream">
             Join as a patron
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300">
+          <p className="mt-4 text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
             Tell me who you are and which tier fits. For paid tiers, I follow up
             personally within 48 hours to arrange everything — no automated
             billing, no surprises.
@@ -979,7 +969,7 @@ function PatronPage() {
           <form onSubmit={submit} className="mt-8 space-y-5">
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
-                <label htmlFor="patron-name" className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
+                <label htmlFor="patron-name" className="mb-2 block text-sm font-medium text-ink dark:text-cream">
                   Name
                 </label>
                 <input
@@ -989,7 +979,7 @@ function PatronPage() {
                 />
               </div>
               <div>
-                <label htmlFor="patron-email" className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
+                <label htmlFor="patron-email" className="mb-2 block text-sm font-medium text-ink dark:text-cream">
                   Email
                 </label>
                 <input
@@ -1000,7 +990,7 @@ function PatronPage() {
               </div>
             </div>
             <div>
-              <label htmlFor="patron-tier" className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
+              <label htmlFor="patron-tier" className="mb-2 block text-sm font-medium text-ink dark:text-cream">
                 Tier
               </label>
               <select id="patron-tier" value={form.tier} onChange={set("tier")} className={inputCls}>
@@ -1012,8 +1002,8 @@ function PatronPage() {
               </select>
             </div>
             <div>
-              <label htmlFor="patron-message" className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
-                Anything you want me to know? <span className="font-normal text-slate-400">(optional)</span>
+              <label htmlFor="patron-message" className="mb-2 block text-sm font-medium text-ink dark:text-cream">
+                Anything you want me to know? <span className="font-normal text-ink-soft dark:text-cream-soft">(optional)</span>
               </label>
               <textarea
                 id="patron-message" maxLength={2000} rows={3}
@@ -1031,7 +1021,7 @@ function PatronPage() {
               <button
                 type="submit"
                 disabled={status.state === "sending"}
-                className="inline-flex items-center rounded-xl bg-gradient-to-r from-amber-600 to-red-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:from-amber-500 hover:to-red-500 disabled:opacity-60"
+                className="inline-flex items-center rounded-full bg-sienna px-6 py-3 text-sm font-semibold text-ink transition-colors hover:bg-sienna-deep hover:text-paper disabled:opacity-60"
               >
                 {status.state === "sending" ? "Sending…" : "Become a patron"}
               </button>
@@ -1048,9 +1038,9 @@ function PatronPage() {
             )}
           </form>
 
-          <div className="mt-10 rounded-2xl border border-amber-300 bg-amber-50 p-6 dark:border-amber-800 dark:bg-amber-950/40">
-            <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-              <strong className="font-bold">Plain talk:</strong> I am not a
+          <div className="mt-10 rounded-2xl border border-line bg-paper-deep p-6 dark:border-line-dark dark:bg-night-card">
+            <p className="text-sm leading-relaxed text-ink-soft dark:text-cream-soft">
+              <strong className="font-bold text-ink dark:text-cream">Plain talk:</strong> I am not a
               nonprofit and I do not have tax-exempt status. Patronage is
               personal support for independent work — not a charitable
               contribution, not tax-deductible, not an investment, and not a
@@ -1139,23 +1129,20 @@ function LegalPage({ doc }) {
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-16 lg:px-8">
-      <p className="font-mono text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">
-        Legal
-      </p>
-      <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">
+      <h1 className="font-display text-4xl font-extrabold tracking-tight text-ink sm:text-5xl dark:text-cream">
         {doc.title}
       </h1>
-      <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+      <p className="mt-3 text-sm text-ink-soft dark:text-cream-soft">
         Last updated: {doc.updated}
       </p>
-      <p className="mt-6 leading-relaxed text-slate-600 dark:text-slate-300">{doc.intro}</p>
+      <p className="mt-6 text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">{doc.intro}</p>
       <div className="mt-10 space-y-8">
         {doc.sections.map((s) => (
           <section key={s.heading}>
-            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">
+            <h2 className="font-display text-2xl font-bold text-ink dark:text-cream">
               {s.heading}
             </h2>
-            <p className="mt-2 leading-relaxed text-slate-600 dark:text-slate-300">
+            <p className="mt-2 text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
               {s.body}
             </p>
           </section>
@@ -1167,10 +1154,10 @@ function LegalPage({ doc }) {
 
 function Footer({ base = "" }) {
   return (
-    <footer className="border-t border-slate-200 dark:border-slate-800">
+    <footer className="border-t border-line bg-paper dark:border-line-dark dark:bg-night">
       <div className="mx-auto max-w-6xl px-6 py-10 lg:px-8">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm font-bold tracking-tight text-slate-900 dark:text-slate-50">
+          <p className="font-display text-sm font-bold tracking-tight text-ink dark:text-cream">
             D&rsquo;Vaughn House
           </p>
           <nav className="flex flex-wrap gap-x-6 gap-y-2" aria-label="Footer">
@@ -1178,49 +1165,49 @@ function Footer({ base = "" }) {
               <a
                 key={item.href}
                 href={`${base}${item.href}`}
-                className="text-sm text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-50 transition-colors"
+                className="text-sm text-ink-soft underline-offset-4 transition-colors hover:text-ink hover:underline dark:text-cream-soft dark:hover:text-cream"
               >
                 {item.label}
               </a>
             ))}
             <a
               href="https://den.dvaughnhouse.com"
-              className="text-sm text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-50 transition-colors"
+              className="text-sm text-ink-soft underline-offset-4 transition-colors hover:text-ink hover:underline dark:text-cream-soft dark:hover:text-cream"
             >
               Store — The Den
             </a>
             <a
               href="/donate"
-              className="text-sm font-semibold text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-50 transition-colors"
+              className="text-sm font-semibold text-ink underline-offset-4 transition-colors hover:text-sienna-deep hover:underline dark:text-cream dark:hover:text-sienna"
             >
               Donate
             </a>
           </nav>
         </div>
-        <div className="mt-6 flex flex-col gap-4 border-t border-slate-200 pt-6 dark:border-slate-800 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-6 flex flex-col gap-4 border-t border-line pt-6 dark:border-line-dark sm:flex-row sm:items-center sm:justify-between">
           <nav className="flex flex-wrap gap-x-6 gap-y-2" aria-label="Legal">
             <a
               href="/terms"
-              className="text-xs text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-50 transition-colors"
+              className="text-xs text-ink-soft underline-offset-4 transition-colors hover:text-ink hover:underline dark:text-cream-soft dark:hover:text-cream"
             >
               Terms of Service
             </a>
             <a
               href="/privacy"
-              className="text-xs text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-50 transition-colors"
+              className="text-xs text-ink-soft underline-offset-4 transition-colors hover:text-ink hover:underline dark:text-cream-soft dark:hover:text-cream"
             >
               Privacy Policy
             </a>
           </nav>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
+          <p className="text-xs text-ink-soft dark:text-cream-soft">
             © 2026 D&rsquo;Vaughn House. All rights reserved.
           </p>
         </div>
-        <p className="mt-4 text-[11px] leading-relaxed text-slate-400 dark:text-slate-500">
+        <p className="mt-4 text-[11px] leading-relaxed text-ink-soft dark:text-cream-soft">
           Nothing on this site is financial, legal, investment, or medical advice.
           Token and market content is educational only.
         </p>
-        <p className="mt-2 text-[11px] leading-relaxed text-slate-400 dark:text-slate-500">
+        <p className="mt-2 text-[11px] leading-relaxed text-ink-soft dark:text-cream-soft">
           Content updated: October 21, 2026.
         </p>
       </div>
@@ -1238,7 +1225,7 @@ export default function App({ path: propPath } = {}) {
   const isPrivacy = path.startsWith("/privacy");
   if (isDonate) {
     return (
-      <div className="min-h-screen bg-slate-50 text-slate-900 antialiased transition-colors dark:bg-slate-900 dark:text-slate-50">
+      <div className="min-h-screen bg-paper font-serif text-ink antialiased dark:bg-night dark:text-cream">
         <Header base="/" />
         <main>
           <DonatePage />
@@ -1249,7 +1236,7 @@ export default function App({ path: propPath } = {}) {
   }
   if (isPatron) {
     return (
-      <div className="min-h-screen bg-slate-50 text-slate-900 antialiased transition-colors dark:bg-slate-900 dark:text-slate-50">
+      <div className="min-h-screen bg-paper font-serif text-ink antialiased dark:bg-night dark:text-cream">
         <Header base="/" />
         <main>
           <PatronPage />
@@ -1260,7 +1247,7 @@ export default function App({ path: propPath } = {}) {
   }
   if (isAbout) {
     return (
-      <div className="min-h-screen bg-slate-50 text-slate-900 antialiased transition-colors dark:bg-slate-900 dark:text-slate-50">
+      <div className="min-h-screen bg-paper font-serif text-ink antialiased dark:bg-night dark:text-cream">
         <Header base="/" />
         <main>
           <AboutPage />
@@ -1271,7 +1258,7 @@ export default function App({ path: propPath } = {}) {
   }
   if (isTerms || isPrivacy) {
     return (
-      <div className="min-h-screen bg-slate-50 text-slate-900 antialiased transition-colors dark:bg-slate-900 dark:text-slate-50">
+      <div className="min-h-screen bg-paper font-serif text-ink antialiased dark:bg-night dark:text-cream">
         <Header base="/" />
         <main>
           <LegalPage doc={isTerms ? LEGAL_DOCS.terms : LEGAL_DOCS.privacy} />
@@ -1281,7 +1268,7 @@ export default function App({ path: propPath } = {}) {
     );
   }
   return (
-    <div id="top" className="min-h-screen bg-slate-50 text-slate-900 antialiased transition-colors dark:bg-slate-900 dark:text-slate-50">
+    <div id="top" className="min-h-screen bg-paper font-serif text-ink antialiased dark:bg-night dark:text-cream">
       <Header />
       <main>
         <Hero />
