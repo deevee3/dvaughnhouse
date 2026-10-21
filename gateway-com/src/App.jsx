@@ -110,26 +110,30 @@ function Hero() {
     },
   ];
   return (
-    <section aria-label="Introduction" className="bg-paper dark:bg-night">
-      <div className="mx-auto max-w-6xl px-6 pt-16 pb-24 sm:pt-24 lg:px-8">
-        <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
-          <div>
-            <h1 className="font-display text-5xl font-extrabold leading-[1.02] tracking-[-0.02em] text-ink sm:text-6xl lg:text-7xl dark:text-cream">
+    <>
+      <section aria-label="Introduction" className="relative isolate overflow-hidden bg-night text-cream">
+        <img
+          src={heroBanner}
+          alt="A diverse group of professionals collaborating around a table in a bright, grand conservatory"
+          className="absolute inset-0 h-full w-full object-cover"
+          loading="eager"
+        />
+        <div aria-hidden="true" className="absolute inset-0 bg-ink/65" />
+        <div className="relative mx-auto flex min-h-[88vh] max-w-6xl flex-col justify-center px-6 py-24 lg:px-8">
+          <div className="max-w-3xl">
+            <h1 className="font-display text-5xl font-extrabold leading-[1.02] tracking-[-0.02em] text-cream sm:text-6xl lg:text-7xl">
               Understand the system.
-              <br />
-              <span className="text-sienna-deep dark:text-sienna">
-                Build your way out.
-              </span>
+              <span className="block">Build your way out.</span>
             </h1>
-            <p className="mt-8 max-w-3xl text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
+            <p className="mt-8 max-w-3xl text-[1.0625rem] leading-[1.7] text-cream/85">
               You don&rsquo;t need another lecture about AI. You need less
               busywork, straight facts on drug shortages, and plain talk on where
               things are headed — from someone who spent fifteen years inside
               the system. And everything here runs on one principle: proof,
               not promises.
             </p>
-            <p className="mt-6 max-w-3xl text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
-              <strong className="font-semibold text-ink dark:text-cream">This site is the gateway to my work as an independent AI orchestrator</strong> — one door into Glenride&rsquo;s investigations, the SpinWave scholarly commons, and the store. It&rsquo;s for anyone who wants proof, not promises: plain-language research and AI systems built in the open, verified before asserted.
+            <p className="mt-6 max-w-3xl text-[1.0625rem] leading-[1.7] text-cream/85">
+              <strong className="font-semibold text-cream">This site is the gateway to my work as an independent AI orchestrator</strong> — one door into Glenride&rsquo;s investigations, the SpinWave scholarly commons, and the store. It&rsquo;s for anyone who wants proof, not promises: plain-language research and AI systems built in the open, verified before asserted.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <a
@@ -140,36 +144,34 @@ function Hero() {
               </a>
               <a
                 href="#contact"
-                className="inline-flex items-center rounded-full border border-ink px-6 py-3 text-sm font-semibold text-ink transition-colors hover:border-sienna-deep hover:text-sienna-deep dark:border-cream dark:text-cream dark:hover:border-sienna dark:hover:text-sienna"
+                className="inline-flex items-center rounded-full border border-cream px-6 py-3 text-sm font-semibold text-cream transition-colors hover:bg-cream hover:text-ink"
               >
                 Start a conversation
               </a>
             </div>
           </div>
-          <img
-            src={heroBanner}
-            alt="A diverse group of professionals collaborating around a table in a bright, grand conservatory"
-            className="h-full max-h-[540px] w-full rounded-2xl border border-line object-cover dark:border-line-dark"
-            loading="eager"
-          />
         </div>
-        <div className="mt-16 grid grid-cols-1 gap-5 sm:grid-cols-3">
-          {benefits.map((b) => (
-            <div
-              key={b.n}
-              className="rounded-2xl border border-line bg-paper-deep p-6 dark:border-line-dark dark:bg-night-card"
-            >
-              <h2 className="font-display text-lg font-bold tracking-tight text-ink dark:text-cream">
-                {b.title}
-              </h2>
-              <p className="mt-2 text-sm leading-relaxed text-ink-soft dark:text-cream-soft">
-                {b.body}
-              </p>
-            </div>
-          ))}
+      </section>
+      <section aria-label="What you get" className="bg-paper dark:bg-night">
+        <div className="mx-auto max-w-6xl px-6 py-14 lg:px-8">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+            {benefits.map((b) => (
+              <div
+                key={b.n}
+                className="rounded-2xl border border-line bg-paper-deep p-6 dark:border-line-dark dark:bg-night-card"
+              >
+                <h2 className="font-display text-lg font-bold tracking-tight text-ink dark:text-cream">
+                  {b.title}
+                </h2>
+                <p className="mt-2 text-sm leading-relaxed text-ink-soft dark:text-cream-soft">
+                  {b.body}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
 
@@ -276,7 +278,7 @@ function About() {
 const PILLARS = [
   {
     title: "The Independent Architect",
-    body: "The craft of building \u2014 systems design, runbooks, near-zero-cost infrastructure. No theory without a working artifact.",
+    body: "The craft of building — systems design, runbooks, near-zero-cost infrastructure. No theory without a working artifact.",
   },
   {
     title: "The Power\u2013Wisdom Gap",
@@ -288,7 +290,7 @@ const PILLARS = [
   },
   {
     title: "Glenride Investigations",
-    body: "Supply-chain vulnerabilities, pharmaceutical data, the systems that seek to harm \u2014 investigated in plain language. Verified before asserted.",
+    body: "Supply-chain vulnerabilities, pharmaceutical data, the systems that seek to harm — investigated in plain language. Verified before asserted.",
   },
   {
     title: "The Independent Economy",
@@ -369,25 +371,25 @@ function System() {
       n: "Stage 01",
       title: "The Factory",
       sub: "AI chief-of-staff OS",
-      body: "The way I run AI: persistent memory, an audit log of every action, standing protocols. The work gets done here \u2014 and the trail it leaves is the evidence.",
+      body: "The way I run AI: persistent memory, an audit log of every action, standing protocols. The work gets done here — and the trail it leaves is the evidence.",
     },
     {
       n: "Stage 02",
       title: "The Issuer",
       sub: "Glenride",
-      body: "The think tank doesn't just publish research \u2014 it stamps it. Claim, evidence, verifier, timestamp. Other institutions sell reputation. Glenride sells receipts.",
+      body: "The think tank doesn't just publish research — it stamps it. Claim, evidence, verifier, timestamp. Other institutions sell reputation. Glenride sells receipts.",
     },
     {
       n: "Stage 03",
       title: "The Proven Library",
       sub: "SpinWave",
-      body: "Scholars earn for verified manuscripts and datasets; readers license knowledge they can trust. Set knowledge free \u2014 then prove it.",
+      body: "Scholars earn for verified manuscripts and datasets; readers license knowledge they can trust. Set knowledge free — then prove it.",
     },
   ];
   const areas = [
     {
       title: "Supply-chain resilience",
-      body: "Where the systems that move medicine and goods break \u2014 and who gets hurt when they do.",
+      body: "Where the systems that move medicine and goods break — and who gets hurt when they do.",
     },
     {
       title: "Pharmaceutical data",
@@ -395,7 +397,7 @@ function System() {
     },
     {
       title: "Applied AI",
-      body: "How AI actually gets directed and verified in real operations \u2014 the proof layer, built in the open.",
+      body: "How AI actually gets directed and verified in real operations — the proof layer, built in the open.",
     },
   ];
   return (
@@ -659,29 +661,32 @@ function DonatePage() {
 
   return (
     <div>
-      <section aria-label="Support the mission" className="bg-paper dark:bg-night">
-        <div className="mx-auto max-w-6xl px-6 pt-16 pb-20 sm:pt-20 lg:px-8">
-          <h1 className="font-display text-5xl font-extrabold tracking-tight text-ink sm:text-6xl dark:text-cream">
-            Fuel the mission.
-          </h1>
-          <p className="mt-6 max-w-2xl text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
-            Fund independent investigation into the systems that touch your health,
-            your work, and your future — and keep the findings free for everyone.
-          </p>
-          <div className="mt-8">
-            <a
-              href="#send"
-              className="inline-flex items-center rounded-full bg-sienna px-6 py-3 text-sm font-semibold text-ink transition-colors hover:bg-sienna-deep hover:text-paper"
-            >
-              Get the address
-            </a>
+      <section aria-label="Support the mission" className="relative isolate overflow-hidden bg-night text-cream">
+        <img
+          src={heroDonate}
+          alt="A speaker on stage before a packed grand hall — carrying the mission to the people"
+          className="absolute inset-0 h-full w-full object-cover"
+          loading="eager"
+        />
+        <div aria-hidden="true" className="absolute inset-0 bg-ink/60" />
+        <div className="relative mx-auto flex min-h-[72vh] max-w-6xl flex-col justify-center px-6 py-24 lg:px-8">
+          <div className="max-w-2xl">
+            <h1 className="font-display text-5xl font-extrabold tracking-tight text-cream sm:text-6xl">
+              Fuel the mission.
+            </h1>
+            <p className="mt-6 text-[1.0625rem] leading-[1.7] text-cream/85">
+              Fund independent investigation into the systems that touch your health,
+              your work, and your future — and keep the findings free for everyone.
+            </p>
+            <div className="mt-8">
+              <a
+                href="#send"
+                className="inline-flex items-center rounded-full bg-sienna px-6 py-3 text-sm font-semibold text-ink transition-colors hover:bg-sienna-deep hover:text-paper"
+              >
+                Get the address
+              </a>
+            </div>
           </div>
-          <img
-            src={heroDonate}
-            alt="A speaker on stage before a packed grand hall — carrying the mission to the people"
-            className="mt-12 h-72 w-full rounded-2xl border border-line object-cover sm:h-96 dark:border-line-dark"
-            loading="eager"
-          />
         </div>
       </section>
 

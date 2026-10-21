@@ -60,3 +60,9 @@ Copy edits, new pages, contact-function changes, asset regeneration.
   (cream-palette is the documented Glenride override; anything else gets fixed, not explained away).
 - Grep proof: no `bg-gradient`, `bg-clip-text`, `backdrop-blur`, `slate-`, `amber-` left in src/.
 - Report: files changed, build status, detector output summary, font route used (fontsource vs link).
+
+## Correction — 2026-10-21 (owner, post-ship)
+Hero images stay hero images. The framed-plate treatment is revoked: the homepage
+and /donate photos are full-bleed heroes again (image-led, flat ink scrim, headline
+and CTAs overlaid, new type + palette kept; benefit cards moved below the hero).
+This rule binds every later site in the program.
