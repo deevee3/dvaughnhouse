@@ -8,7 +8,6 @@ import workStore from "./assets/work-store.webp";
 import glenrideLogo from "./assets/glenride-logo.png";
 
 const ORG_URL = import.meta.env.VITE_ORG_URL || (import.meta.env.DEV ? 'http://127.0.0.1:8085' : 'https://dvaughnhouse.org');
-const STORE_URL = import.meta.env.VITE_STORE_URL || (import.meta.env.DEV ? 'http://127.0.0.1:8085/store' : 'https://dvaughnhouse.store');
 
 // Donation destination: the House Donation Treasury Safe on Base (1-of-1, his wallet).
 const DONATION_ADDRESS = "0xa6eab535043EB98De32e5791b0E83ab47f88C430";
@@ -471,8 +470,8 @@ function Work() {
       img: workStore,
       imgAlt: "Dark storefront with a glowing amber doorway and circuit pathways leading in",
       body: "The isolated transaction layer — offerings, procurement, and commercial engagements. The institution lives at one address, the commerce at another. Separate on purpose.",
-      link: STORE_URL,
-      cta: "Visit the store",
+      link: "#contact",
+      cta: "Get in touch",
     },
   ];
   return (
@@ -814,10 +813,10 @@ function DonatePage() {
             Another way to support
           </h2>
           <p className="mt-3">
-            If you&rsquo;d rather support the work commercially, the store is
-            open:{" "}
-            <a href={STORE_URL} className="font-semibold text-slate-900 underline underline-offset-4 dark:text-slate-100">
-              {STORE_URL.replace("https://", "")}
+            If you&rsquo;d rather support the work commercially, reach out
+            through the{" "}
+            <a href="#contact" className="font-semibold text-slate-900 underline underline-offset-4 dark:text-slate-100">
+              contact form
             </a>
             .
           </p>
