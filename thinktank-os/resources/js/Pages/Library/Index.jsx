@@ -38,25 +38,25 @@ export default function Index({ briefs = [], auth }) {
     }, [allBriefs, searchQuery]);
 
     return (
-        <div className="min-h-screen bg-[#fafaf9] text-gray-900 font-sans selection:bg-[#E97451] selection:text-white">
+        <div className="min-h-screen bg-paper text-ink dark:bg-night dark:text-cream font-serif selection:bg-sienna selection:text-ink">
             <Head title="The Vanguard Library - Glenride" />
 
             <InstitutionalHeader auth={auth} active="library" />
 
             {/* Hero Section */}
-            <section className="relative border-b border-stone-200 bg-white py-20">
+            <section className="relative border-b border-line dark:border-line-dark bg-paper dark:bg-night-card py-20">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     <div className="max-w-3xl">
-                        <div className="inline-flex items-center space-x-2 rounded-full border border-stone-200 bg-stone-50 px-3 py-1 text-xs font-mono text-stone-600 mb-6">
-                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-                            <span>The Glenride Monograph Series</span>
-                        </div>
-                        <h1 className="font-serif text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 leading-tight">
+                        <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-ink dark:text-cream leading-tight">
                             The Vanguard Library
                         </h1>
-                        <p className="mt-4 text-lg text-stone-600 font-serif leading-relaxed">
+                        <p className="mt-4 text-lg text-ink-soft dark:text-cream-soft font-serif leading-relaxed">
                             Peer-reviewed empirical research distilled into actionable, four-page executive policy briefs. Synthesized autonomously through ContextForge and curated by institutional fellows.
                         </p>
+                        <div className="mt-6"><div className="inline-flex items-center space-x-2 rounded-full border border-line dark:border-line-dark bg-paper-deep dark:bg-night-deep px-3 py-1 text-xs font-mono text-ink-soft dark:text-cream-soft mb-6">
+                            <span className="h-1.5 w-1.5 rounded-full bg-sienna"></span>
+                            <span>The Glenride Monograph Series</span>
+                        </div></div>
                     </div>
 
                     {/* Search & Topic Filter */}
@@ -67,10 +67,10 @@ export default function Index({ briefs = [], auth }) {
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 placeholder="Search policy briefs by keyword, topic, or author..."
-                                className="w-full rounded-xl border-stone-300 bg-stone-50/50 pl-11 pr-4 py-3 text-sm focus:border-[#cf6238] focus:bg-white focus:ring-[#cf6238] transition shadow-sm"
+                                className="w-full rounded-xl border-line dark:border-line-dark bg-paper-deep dark:bg-night-deep pl-11 pr-4 py-3 text-sm focus:border-sienna-deep focus:bg-paper dark:focus:bg-night-card focus:ring-sienna-deep transition shadow-sm"
                             />
                             <svg
-                                className="absolute left-3.5 top-3.5 h-5 w-5 text-stone-400"
+                                className="absolute left-3.5 top-3.5 h-5 w-5 text-ink-soft dark:text-cream-soft"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="currentColor"
@@ -83,7 +83,7 @@ export default function Index({ briefs = [], auth }) {
                                 />
                             </svg>
                         </div>
-                        <span className="text-xs font-mono text-stone-400">
+                        <span className="text-xs font-mono text-ink-soft dark:text-cream-soft">
                             Showing {filteredBriefs.length} Monographs
                         </span>
                     </div>
@@ -94,17 +94,17 @@ export default function Index({ briefs = [], auth }) {
             <main className="py-16">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     {filteredBriefs.length === 0 ? (
-                        <div className="rounded-2xl border border-dashed border-stone-300 bg-white p-12 text-center">
-                            <h3 className="font-serif text-lg font-bold text-gray-900">
+                        <div className="rounded-2xl border border-dashed border-line dark:border-line-dark bg-paper dark:bg-night-card p-12 text-center">
+                            <h3 className="font-display text-lg font-bold text-ink dark:text-cream">
                                 No monographs matched your search
                             </h3>
-                            <p className="mt-2 text-sm text-stone-500">
+                            <p className="mt-2 text-sm text-ink-soft dark:text-cream-soft">
                                 Try searching for terms like "supply chain", "agentic", or "governance".
                             </p>
                             <button
                                 type="button"
                                 onClick={() => setSearchQuery('')}
-                                className="mt-4 inline-flex items-center rounded-lg bg-[#E97451] px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-[#cf6238]"
+                                className="mt-4 inline-flex items-center rounded-lg bg-sienna px-4 py-2 text-xs font-semibold text-ink shadow-sm hover:bg-sienna-deep hover:text-paper"
                             >
                                 Clear Search
                             </button>
@@ -114,12 +114,12 @@ export default function Index({ briefs = [], auth }) {
                             {filteredBriefs.map((brief) => (
                                 <article
                                     key={brief.id}
-                                    className="group flex flex-col justify-between rounded-2xl border border-stone-200 bg-white p-7 shadow-sm hover:shadow-md hover:border-[#f2c9b8] transition duration-200"
+                                    className="group flex flex-col justify-between rounded-2xl border border-line dark:border-line-dark bg-paper dark:bg-night-card p-7 shadow-sm hover:shadow-md hover:border-sienna-deep/40 dark:hover:border-sienna/50 transition duration-200"
                                 >
                                     <div>
                                         {/* Meta Pill */}
-                                        <div className="flex items-center justify-between text-xs font-mono text-stone-400 mb-4">
-                                            <span className="text-[#E97451] font-medium">
+                                        <div className="flex items-center justify-between text-xs font-mono text-ink-soft dark:text-cream-soft mb-4">
+                                            <span className="text-sienna-deep dark:text-sienna font-medium">
                                                 {brief.series || 'Glenride Institutional Monograph'}
                                             </span>
                                             <span>
@@ -133,33 +133,33 @@ export default function Index({ briefs = [], auth }) {
                                         </div>
 
                                         {/* Title */}
-                                        <h2 className="font-serif text-xl font-bold text-gray-900 group-hover:text-[#E97451] transition leading-snug">
+                                        <h2 className="font-display text-xl font-bold text-ink dark:text-cream group-hover:text-sienna-deep dark:group-hover:text-sienna transition leading-snug">
                                             <Link href={route('briefs.show', brief.id)}>
                                                 {brief.title}
                                             </Link>
                                         </h2>
 
                                         {/* Abstract */}
-                                        <p className="mt-3 text-sm text-stone-600 line-clamp-3 leading-relaxed font-sans">
+                                        <p className="mt-3 text-sm text-ink-soft dark:text-cream-soft line-clamp-3 leading-relaxed font-serif">
                                             {brief.abstract ||
                                                 'Synthesized 4-page policy brief detailing empirical methodology, core operational findings, and actionable recommendations for modern leaders.'}
                                         </p>
                                     </div>
 
                                     {/* Card Footer */}
-                                    <div className="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between">
+                                    <div className="mt-6 pt-4 border-t border-line dark:border-line-dark flex items-center justify-between">
                                         <div className="text-xs">
-                                            <span className="block font-medium text-gray-900">
+                                            <span className="block font-medium text-ink dark:text-cream">
                                                 {brief.user?.name || 'Institutional Fellow'}
                                             </span>
-                                            <span className="block text-[11px] font-mono text-stone-400">
+                                            <span className="block text-[11px] font-mono text-ink-soft dark:text-cream-soft">
                                                 {brief.word_count ? `${brief.word_count} words` : '4-Page Brief'}
                                             </span>
                                         </div>
 
                                         <Link
                                             href={route('briefs.show', brief.id)}
-                                            className="inline-flex items-center text-xs font-mono font-semibold text-[#E97451] group-hover:text-[#9c4a28] transition"
+                                            className="inline-flex items-center text-xs font-mono font-semibold text-sienna-deep dark:text-sienna group-hover:text-sienna-deep dark:group-hover:text-sienna transition"
                                         >
                                             Read Brief →
                                         </Link>
@@ -172,23 +172,23 @@ export default function Index({ briefs = [], auth }) {
             </main>
 
             {/* Institutional Thesis Callout Banner */}
-            <section className="border-t border-stone-200 bg-stone-100/60 py-16">
+            <section className="border-t border-line dark:border-line-dark bg-paper-deep dark:bg-night-deep py-16">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                    <div className="rounded-3xl border border-stone-200 bg-white p-8 sm:p-12 shadow-sm flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div className="rounded-3xl border border-line dark:border-line-dark bg-paper dark:bg-night-card p-8 sm:p-12 shadow-sm flex flex-col md:flex-row items-center justify-between gap-8">
                         <div className="max-w-2xl">
-                            <span className="font-mono text-xs uppercase tracking-widest text-[#E97451] font-semibold">
-                                Foundational Essays
-                            </span>
-                            <h2 className="mt-2 font-serif text-2xl sm:text-3xl font-bold text-gray-900">
+                            <h2 className="font-display text-2xl sm:text-3xl font-bold text-ink dark:text-cream">
                                 The Power-Wisdom Gap & The Agentic Enterprise
                             </h2>
-                            <p className="mt-3 text-sm text-stone-600 font-serif leading-relaxed">
+                            <span className="mt-3 block font-mono text-xs uppercase tracking-widest text-sienna-deep dark:text-sienna font-semibold">
+                                Foundational Essays
+                            </span>
+                            <p className="mt-3 text-sm text-ink-soft dark:text-cream-soft font-serif leading-relaxed">
                                 Read the philosophical architecture underpinning Glenride. An exploration of why our technological leverage has outpaced institutional judgment—and how human moral primacy must direct autonomous cognition.
                             </p>
                         </div>
                         <Link
                             href={route('thesis.index')}
-                            className="inline-flex items-center shrink-0 rounded-xl bg-gray-900 px-6 py-3.5 text-xs font-mono font-semibold uppercase tracking-wider text-white shadow-sm hover:bg-[#E97451] transition"
+                            className="inline-flex items-center shrink-0 rounded-xl bg-ink px-6 py-3.5 text-xs font-mono font-semibold uppercase tracking-wider text-paper shadow-sm hover:bg-sienna hover:text-ink transition"
                         >
                             Explore Institutional Thesis →
                         </Link>
@@ -197,28 +197,28 @@ export default function Index({ briefs = [], auth }) {
             </section>
 
             {/* Institutional Footer */}
-            <footer className="border-t border-stone-200 bg-white py-12 text-xs text-stone-500 font-mono">
+            <footer className="border-t border-line dark:border-line-dark bg-paper dark:bg-night-card py-12 text-xs text-ink-soft dark:text-cream-soft font-mono">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div>
                         © {new Date().getFullYear()} Glenride. dvaughnhouse.org. All rights reserved.
                     </div>
                     <div className="flex items-center space-x-6">
-                        <Link href={route('library.index')} className="hover:text-gray-900 transition">
+                        <Link href={route('library.index')} className="hover:text-ink dark:hover:text-cream transition">
                             Vanguard Library
                         </Link>
-                        <Link href={route('thesis.index')} className="hover:text-gray-900 transition">
+                        <Link href={route('thesis.index')} className="hover:text-ink dark:hover:text-cream transition">
                             Institutional Thesis
                         </Link>
-                        <Link href={route('login')} className="hover:text-gray-900 transition">
+                        <Link href={route('login')} className="hover:text-ink dark:hover:text-cream transition">
                             ThinkTank OS Portal
                         </Link>
-                        <a href="https://dvaughnhouse.com/terms" className="hover:text-gray-900 transition">
+                        <a href="https://dvaughnhouse.com/terms" className="hover:text-ink dark:hover:text-cream transition">
                             Terms
                         </a>
-                        <a href="https://dvaughnhouse.com/privacy" className="hover:text-gray-900 transition">
+                        <a href="https://dvaughnhouse.com/privacy" className="hover:text-ink dark:hover:text-cream transition">
                             Privacy
                         </a>
-                        <a href="https://dvaughnhouse.com/#contact" className="hover:text-gray-900 transition">
+                        <a href="https://dvaughnhouse.com/#contact" className="hover:text-ink dark:hover:text-cream transition">
                             Contact
                         </a>
                     </div>

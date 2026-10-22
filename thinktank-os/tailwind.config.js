@@ -12,8 +12,34 @@ export default {
 
     theme: {
         extend: {
+            colors: {
+                paper: '#FAF5EC',
+                'paper-deep': '#F3ECDC',
+                ink: '#221D18',
+                'ink-soft': '#57504A',
+                sienna: '#E97451',
+                'sienna-deep': '#B84A2B',
+                line: 'rgba(34, 29, 24, 0.12)',
+                night: '#1B1611',
+                'night-deep': '#241D16',
+                'night-card': '#2A231C',
+                cream: '#F3ECDC',
+                'cream-soft': '#CFC6B4',
+                'line-dark': 'rgba(250, 245, 236, 0.14)',
+            },
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                display: ['"Bricolage Grotesque"', 'Georgia', 'serif'],
+                serif: ['"Newsreader"', 'Georgia', 'serif'],
+                mono: [
+                    'ui-monospace',
+                    'SFMono-Regular',
+                    'Menlo',
+                    'Monaco',
+                    'Consolas',
+                    '"Liberation Mono"',
+                    '"Courier New"',
+                    'monospace',
+                ],
             },
         },
     },

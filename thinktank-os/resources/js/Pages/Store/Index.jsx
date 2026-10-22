@@ -3,10 +3,10 @@ import { useState } from 'react';
 import SiteFooter from '@/Components/SiteFooter';
 
 const STATUS_STYLES = {
-    available: 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300',
-    external: 'border-sky-500/40 bg-sky-500/10 text-sky-300',
-    coming_soon: 'border-amber-500/40 bg-amber-500/10 text-amber-300',
-    custom: 'border-violet-500/40 bg-violet-500/10 text-violet-300',
+    available: 'border-sienna-deep/40 bg-sienna/10 text-sienna-deep dark:border-sienna/40 dark:bg-sienna/10 dark:text-sienna',
+    external: 'border-line bg-paper-deep text-ink-soft dark:border-line-dark dark:bg-night-deep dark:text-cream-soft',
+    coming_soon: 'border-sienna/50 bg-paper-deep text-ink-soft dark:border-sienna/40 dark:bg-night-deep dark:text-cream-soft',
+    custom: 'border-dashed border-line bg-paper text-ink-soft dark:border-line-dark dark:bg-night-card dark:text-cream-soft',
 };
 
 const STATUS_LABELS = {
@@ -26,10 +26,10 @@ function ProductCard({ product, onBuy }) {
     const purchasable = product.status === 'available' && product.amount_cents != null;
 
     return (
-        <article className="relative flex flex-col justify-between rounded-3xl p-8 border border-slate-800 bg-slate-950/60 shadow-lg transition duration-200 hover:border-slate-700">
+        <article className="relative flex flex-col justify-between rounded-3xl p-8 border border-line bg-paper shadow-sm transition duration-200 hover:border-sienna-deep/40 dark:border-line-dark dark:bg-night-card dark:hover:border-sienna/50">
             <div>
                 <div className="flex items-center justify-between mb-2">
-                    <div className="text-xs font-mono uppercase tracking-widest text-[#f2c9b8] font-semibold">
+                    <div className="text-xs font-mono uppercase tracking-widest text-sienna-deep dark:text-sienna font-semibold">
                         {product.tier}
                     </div>
                     <span
@@ -39,30 +39,30 @@ function ProductCard({ product, onBuy }) {
                     </span>
                 </div>
 
-                <h3 className="text-xl font-bold text-white leading-snug">{product.name}</h3>
-                <p className="mt-1 text-xs font-mono text-slate-400">{product.tagline}</p>
+                <h3 className="font-display text-xl font-bold text-ink dark:text-cream leading-snug">{product.name}</h3>
+                <p className="mt-1 text-xs font-mono text-ink-soft dark:text-cream-soft">{product.tagline}</p>
 
                 {price && (
                     <div className="mt-6 flex items-baseline space-x-2">
-                        <span className="text-4xl font-extrabold font-mono text-white">{price}</span>
-                        <span className="text-xs font-mono text-slate-400">
+                        <span className="text-4xl font-extrabold font-mono text-ink dark:text-cream">{price}</span>
+                        <span className="text-xs font-mono text-ink-soft dark:text-cream-soft">
                             {product.fulfillment === 'digital_download' ? 'one-time' : '/ year'}
                         </span>
                     </div>
                 )}
 
-                <p className="mt-4 text-xs leading-relaxed text-slate-300">{product.description}</p>
+                <p className="mt-4 text-sm leading-relaxed text-ink-soft dark:text-cream-soft">{product.description}</p>
 
                 {product.features?.length > 0 && (
-                    <div className="mt-8 border-t border-slate-800 pt-6 space-y-3">
-                        <div className="text-xs font-mono font-semibold text-slate-300 uppercase tracking-wider">
+                    <div className="mt-8 border-t border-line dark:border-line-dark pt-6 space-y-3">
+                        <div className="text-xs font-mono font-semibold text-ink dark:text-cream uppercase tracking-wider">
                             What's included:
                         </div>
-                        <ul className="space-y-2 text-xs text-slate-300">
+                        <ul className="space-y-2 text-xs text-ink-soft dark:text-cream-soft">
                             {product.features.map((feat, idx) => (
                                 <li key={idx} className="flex items-start">
                                     <svg
-                                        className="h-4 w-4 text-[#f2c9b8] mr-2 shrink-0 mt-0.5"
+                                        className="h-4 w-4 text-sienna-deep dark:text-sienna mr-2 shrink-0 mt-0.5"
                                         fill="currentColor"
                                         viewBox="0 0 20 20"
                                     >
@@ -85,7 +85,7 @@ function ProductCard({ product, onBuy }) {
                     <button
                         type="button"
                         onClick={() => onBuy(product)}
-                        className="w-full rounded-xl py-3.5 px-4 text-xs font-mono font-bold uppercase tracking-wider shadow-sm transition bg-[#E97451] text-white hover:bg-[#cf6238] shadow-[#E97451]/30"
+                        className="w-full rounded-xl py-3.5 px-4 text-xs font-mono font-bold uppercase tracking-wider shadow-sm transition bg-sienna text-ink hover:bg-sienna-deep hover:text-paper"
                     >
                         Buy now →
                     </button>
@@ -95,18 +95,18 @@ function ProductCard({ product, onBuy }) {
                         href={product.external_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="block w-full rounded-xl py-3.5 px-4 text-xs font-mono font-bold uppercase tracking-wider text-center transition bg-sky-600/20 text-sky-200 border border-sky-500/40 hover:bg-sky-600/30"
+                        className="block w-full rounded-xl py-3.5 px-4 text-xs font-mono font-bold uppercase tracking-wider text-center transition border border-line bg-paper-deep text-ink hover:bg-sienna hover:text-ink dark:border-line-dark dark:bg-night-deep dark:text-cream dark:hover:bg-sienna dark:hover:text-ink"
                     >
                         Open in browser →
                     </a>
                 )}
                 {product.status === 'coming_soon' && (
-                    <div className="w-full rounded-xl py-3.5 px-4 text-xs font-mono uppercase tracking-wider text-center border border-slate-700 text-slate-500 cursor-not-allowed">
+                    <div className="w-full rounded-xl py-3.5 px-4 text-xs font-mono uppercase tracking-wider text-center border border-line bg-paper-deep text-ink-soft cursor-not-allowed dark:border-line-dark dark:bg-night-deep dark:text-cream-soft">
                         Price & terms publishing soon
                     </div>
                 )}
                 {product.status === 'custom' && (
-                    <div className="w-full rounded-xl py-3.5 px-4 text-xs font-mono uppercase tracking-wider text-center border border-slate-700 text-slate-500 cursor-not-allowed">
+                    <div className="w-full rounded-xl py-3.5 px-4 text-xs font-mono uppercase tracking-wider text-center border border-line bg-paper-deep text-ink-soft cursor-not-allowed dark:border-line-dark dark:bg-night-deep dark:text-cream-soft">
                         Scoped & quoted in writing first
                     </div>
                 )}
@@ -173,33 +173,33 @@ export default function Index({ categories = [], stripeKey = '' }) {
     };
 
     return (
-        <div className="min-h-screen bg-slate-900 text-slate-100 font-sans selection:bg-[#cf6238] selection:text-white">
+        <div className="min-h-screen bg-paper text-ink font-serif selection:bg-sienna selection:text-ink dark:bg-night dark:text-cream">
             <Head title="The Store — store.dvaughnhouse.com" />
 
             {/* Header */}
-            <header className="sticky top-0 z-40 border-b border-slate-800 bg-slate-900/90 backdrop-blur-md">
+            <header className="sticky top-0 z-40 border-b border-line bg-paper dark:border-line-dark dark:bg-night">
                 <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
                     <div className="flex items-center space-x-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#E97451] text-white font-mono font-bold text-lg shadow-sm">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-sienna text-ink font-display font-bold text-lg shadow-sm">
                             $
                         </div>
                         <div>
-                            <span className="block font-bold tracking-tight text-white text-base">
+                            <span className="block font-display font-bold tracking-tight text-ink dark:text-cream text-base">
                                 The Store
                             </span>
-                            <span className="block font-mono text-[10px] uppercase tracking-widest text-slate-400">
+                            <span className="block font-mono text-[10px] uppercase tracking-widest text-ink-soft dark:text-cream-soft">
                                 store.dvaughnhouse.com
                             </span>
                         </div>
                     </div>
 
                     <div className="flex items-center space-x-6 text-xs font-mono">
-                        <Link href="/" className="text-slate-400 hover:text-white transition">
+                        <Link href="/" className="text-ink-soft hover:text-ink transition dark:text-cream-soft dark:hover:text-cream">
                             ← Vanguard Library
                         </Link>
                         <Link
                             href={route('dashboard')}
-                            className="rounded-lg bg-slate-800 px-3.5 py-2 text-slate-200 hover:bg-slate-700 transition"
+                            className="rounded-lg border border-line bg-paper-deep px-3.5 py-2 text-ink transition hover:bg-sienna hover:text-ink dark:border-line-dark dark:bg-night-card dark:text-cream dark:hover:bg-sienna dark:hover:text-ink"
                         >
                             ThinkTank OS Portal
                         </Link>
@@ -208,25 +208,24 @@ export default function Index({ categories = [], stripeKey = '' }) {
             </header>
 
             {/* Hero Section */}
-            <section className="relative border-b border-slate-800 py-20 bg-gradient-to-b from-slate-900 to-slate-950">
+            <section className="relative border-b border-ink bg-ink py-20 text-cream">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8 text-center">
-                    <div className="inline-flex items-center space-x-2 rounded-full border border-[#E97451]/30 bg-[#cf6238]/10 px-3.5 py-1 text-xs font-mono text-[#f2c9b8] mb-6">
-                        <span className="h-1.5 w-1.5 rounded-full bg-[#f2c9b8]"></span>
-                        <span>Secure checkout · Stripe PCI Level 1</span>
-                    </div>
-
-                    <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white max-w-3xl mx-auto leading-tight">
+                    <h1 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tight text-cream max-w-3xl mx-auto leading-tight">
                         Everything has a price. Nothing is promised.
                     </h1>
 
-                    <p className="mt-4 text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                    <p className="mt-4 text-base sm:text-lg text-cream-soft max-w-2xl mx-auto leading-relaxed">
                         Field guides from Reynard's, tools and publications from Glenride, and
                         executive briefings for institutions. Every listing tells you exactly
                         what you get — no product takes payment before its price and terms are published.
                     </p>
-                    <p className="mt-4 text-[11px] font-mono uppercase tracking-widest text-slate-500">
+                    <p className="mt-4 text-[11px] font-mono uppercase tracking-widest text-cream-soft">
                         Prices as of October 2026 · Updated October 19, 2026
                     </p>
+                    <div className="mt-6"><div className="inline-flex items-center space-x-2 rounded-full border border-line-dark bg-night-card px-3.5 py-1 text-xs font-mono text-cream mb-6">
+                        <span className="h-1.5 w-1.5 rounded-full bg-sienna"></span>
+                        <span>Secure checkout · Stripe PCI Level 1</span>
+                    </div></div>
                 </div>
             </section>
 
@@ -235,14 +234,14 @@ export default function Index({ categories = [], stripeKey = '' }) {
                 {categories.map((category) => (
                     <section key={category.id} className="mx-auto max-w-7xl px-6 lg:px-8">
                         <div className="mb-8">
-                            <h2 className="text-2xl font-bold text-white">{category.name}</h2>
-                            <p className="mt-1 text-sm font-mono text-slate-400">{category.tagline}</p>
+                            <h2 className="font-display text-2xl font-bold text-ink dark:text-cream">{category.name}</h2>
+                            <p className="mt-1 text-sm font-mono text-ink-soft dark:text-cream-soft">{category.tagline}</p>
                             {category.url && (
                                 <a
                                     href={category.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="mt-2 inline-flex items-center text-xs font-mono text-[#f2c9b8] hover:text-[#f2c9b8] transition"
+                                    className="mt-2 inline-flex items-center text-xs font-mono text-sienna-deep hover:text-sienna-deep dark:text-sienna dark:hover:text-sienna transition"
                                 >
                                     {category.url_label || 'Visit the standalone store'} →
                                 </a>
@@ -258,12 +257,12 @@ export default function Index({ categories = [], stripeKey = '' }) {
             </main>
 
             {/* FAQ — plain-English answers for readers and answer engines */}
-            <section className="border-t border-slate-800 py-16" aria-labelledby="store-faq-heading">
+            <section className="border-t border-line dark:border-line-dark py-16" aria-labelledby="store-faq-heading">
                 <div className="mx-auto max-w-3xl px-6 lg:px-8">
-                    <h2 id="store-faq-heading" className="text-2xl font-bold text-white">
+                    <h2 id="store-faq-heading" className="font-display text-2xl font-bold text-ink dark:text-cream">
                         What can I buy from the store?
                     </h2>
-                    <p className="mt-4 text-sm leading-relaxed text-slate-300">
+                    <p className="mt-4 text-sm leading-relaxed text-ink-soft dark:text-cream-soft">
                         Field guides from Reynard's (the 30-Day Ruck Reset is $19), free Glenride apps and tools that open in your browser, and executive briefings for institutions — salon seats at $500, the ContextForge license at $1,200 per year, and annual corporate retainers at $25,000. Anything marked "Available now" can be bought today through Stripe. "Coming soon" means the price and terms aren't published yet, and nothing here takes payment before they are. Prices as of October 2026.
                     </p>
                 </div>
@@ -272,17 +271,17 @@ export default function Index({ categories = [], stripeKey = '' }) {
             {/* Checkout Modal */}
             {selectedProduct && (
                 <div
-                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in"
+                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-night/80 animate-fade-in"
                     role="dialog"
                     aria-modal="true"
                     aria-label="Checkout"
                 >
-                    <div className="w-full max-w-xl rounded-3xl border border-slate-700 bg-slate-900 p-8 shadow-2xl relative">
+                    <div className="w-full max-w-xl rounded-3xl border border-line bg-paper dark:border-line-dark dark:bg-night-card p-8 shadow-2xl relative">
                         <button
                             type="button"
                             aria-label="Close checkout"
                             onClick={closeCheckout}
-                            className="absolute top-6 right-6 text-slate-400 hover:text-white transition"
+                            className="absolute top-6 right-6 text-ink-soft hover:text-ink transition dark:text-cream-soft dark:hover:text-cream"
                         >
                             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -291,49 +290,49 @@ export default function Index({ categories = [], stripeKey = '' }) {
 
                         {orderReceipt ? (
                             <div className="text-center py-4 space-y-6">
-                                <div className="h-14 w-14 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto text-2xl">
+                                <div className="h-14 w-14 rounded-full bg-sienna/15 text-sienna-deep dark:text-sienna flex items-center justify-center mx-auto text-2xl">
                                     ✓
                                 </div>
 
                                 <div>
-                                    <span className="font-mono text-xs uppercase tracking-widest text-emerald-400">
+                                    <span className="font-mono text-xs uppercase tracking-widest text-sienna-deep dark:text-sienna">
                                         Payment Authorized & Verified
                                     </span>
-                                    <h3 className="text-2xl font-bold text-white mt-1">
+                                    <h3 className="font-display text-2xl font-bold text-ink dark:text-cream mt-1">
                                         Transaction Confirmed
                                     </h3>
-                                    <p className="text-xs text-slate-400 mt-1">
+                                    <p className="text-xs text-ink-soft dark:text-cream-soft mt-1">
                                         A formal receipt has been transmitted to your email.
                                     </p>
                                 </div>
 
-                                <div className="rounded-2xl border border-slate-800 bg-slate-950 p-5 text-left text-xs space-y-2 font-mono">
+                                <div className="rounded-2xl border border-line bg-paper-deep dark:border-line-dark dark:bg-night-deep p-5 text-left text-xs space-y-2 font-mono">
                                     <div className="flex justify-between">
-                                        <span className="text-slate-500">Order Number:</span>
-                                        <span className="font-bold text-[#f2c9b8]">{orderReceipt.order_number}</span>
+                                        <span className="text-ink-soft dark:text-cream-soft">Order Number:</span>
+                                        <span className="font-bold text-sienna-deep dark:text-sienna">{orderReceipt.order_number}</span>
                                     </div>
                                     <div className="flex justify-between">
-                                        <span className="text-slate-500">Item:</span>
-                                        <span className="text-white">{selectedProduct.name}</span>
+                                        <span className="text-ink-soft dark:text-cream-soft">Item:</span>
+                                        <span className="text-ink dark:text-cream">{selectedProduct.name}</span>
                                     </div>
                                     <div className="flex justify-between">
-                                        <span className="text-slate-500">Authorized Amount:</span>
-                                        <span className="font-bold text-emerald-400">
+                                        <span className="text-ink-soft dark:text-cream-soft">Authorized Amount:</span>
+                                        <span className="font-bold text-sienna-deep dark:text-sienna">
                                             ${parseFloat(orderReceipt.amount).toLocaleString('en-US', {
                                                 minimumFractionDigits: 2,
                                             })}
                                         </span>
                                     </div>
                                     <div className="flex justify-between">
-                                        <span className="text-slate-500">Recipient Email:</span>
-                                        <span className="text-slate-300">{orderReceipt.customer_email}</span>
+                                        <span className="text-ink-soft dark:text-cream-soft">Recipient Email:</span>
+                                        <span className="text-ink-soft dark:text-cream-soft">{orderReceipt.customer_email}</span>
                                     </div>
                                 </div>
 
                                 <button
                                     type="button"
                                     onClick={closeCheckout}
-                                    className="w-full rounded-xl bg-[#E97451] py-3 text-xs font-mono font-bold uppercase tracking-wider text-white hover:bg-[#cf6238] transition"
+                                    className="w-full rounded-xl bg-sienna py-3 text-xs font-mono font-bold uppercase tracking-wider text-ink hover:bg-sienna-deep hover:text-paper transition"
                                 >
                                     Close & Return to Store
                                 </button>
@@ -341,15 +340,15 @@ export default function Index({ categories = [], stripeKey = '' }) {
                         ) : (
                             <form onSubmit={handleCheckoutSubmit} className="space-y-6">
                                 <div>
-                                    <div className="flex items-center space-x-2 text-xs font-mono text-[#f2c9b8] uppercase tracking-wider mb-1">
+                                    <div className="flex items-center space-x-2 text-xs font-mono text-sienna-deep dark:text-sienna uppercase tracking-wider mb-1">
                                         <span>Stripe Secure Gateway</span>
                                         <span>•</span>
                                         <span>PCI Level 1</span>
                                     </div>
-                                    <h3 className="text-xl font-bold text-white">
+                                    <h3 className="font-display text-xl font-bold text-ink dark:text-cream">
                                         Complete Purchase: {selectedProduct.name}
                                     </h3>
-                                    <div className="mt-1 text-2xl font-extrabold font-mono text-emerald-400">
+                                    <div className="mt-1 text-2xl font-extrabold font-mono text-sienna-deep dark:text-sienna">
                                         ${parseFloat(selectedProduct.amount).toLocaleString('en-US', {
                                             minimumFractionDigits: 2,
                                         })}
@@ -357,14 +356,14 @@ export default function Index({ categories = [], stripeKey = '' }) {
                                 </div>
 
                                 {errorMessage && (
-                                    <div className="rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-300 font-mono">
+                                    <div className="rounded-xl border border-sienna-deep/40 bg-sienna/10 p-3 text-xs text-sienna-deep dark:text-sienna font-mono">
                                         {errorMessage}
                                     </div>
                                 )}
 
                                 <div className="space-y-4">
                                     <div>
-                                        <label htmlFor="checkout-name" className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1">
+                                        <label htmlFor="checkout-name" className="block text-xs font-mono uppercase tracking-wider text-ink-soft dark:text-cream-soft mb-1">
                                             Full Name *
                                         </label>
                                         <input
@@ -374,12 +373,12 @@ export default function Index({ categories = [], stripeKey = '' }) {
                                             value={customerName}
                                             onChange={(e) => setCustomerName(e.target.value)}
                                             placeholder="e.g. Jordan Ellis"
-                                            className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-2.5 text-xs text-white placeholder-slate-600 focus:border-[#E97451] focus:ring-[#E97451]"
+                                            className="w-full rounded-xl border border-line bg-paper px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft/70 focus:border-sienna-deep focus:ring-sienna-deep dark:border-line-dark dark:bg-night-deep dark:text-cream dark:placeholder:text-cream-soft/70 dark:focus:border-sienna dark:focus:ring-sienna"
                                         />
                                     </div>
 
                                     <div>
-                                        <label htmlFor="checkout-email" className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1">
+                                        <label htmlFor="checkout-email" className="block text-xs font-mono uppercase tracking-wider text-ink-soft dark:text-cream-soft mb-1">
                                             Email *
                                         </label>
                                         <input
@@ -389,12 +388,12 @@ export default function Index({ categories = [], stripeKey = '' }) {
                                             value={customerEmail}
                                             onChange={(e) => setCustomerEmail(e.target.value)}
                                             placeholder="e.g. you@example.com"
-                                            className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-2.5 text-xs text-white placeholder-slate-600 focus:border-[#E97451] focus:ring-[#E97451]"
+                                            className="w-full rounded-xl border border-line bg-paper px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft/70 focus:border-sienna-deep focus:ring-sienna-deep dark:border-line-dark dark:bg-night-deep dark:text-cream dark:placeholder:text-cream-soft/70 dark:focus:border-sienna dark:focus:ring-sienna"
                                         />
                                     </div>
 
                                     <div>
-                                        <label htmlFor="checkout-company" className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1">
+                                        <label htmlFor="checkout-company" className="block text-xs font-mono uppercase tracking-wider text-ink-soft dark:text-cream-soft mb-1">
                                             Company / Organization
                                         </label>
                                         <input
@@ -403,20 +402,20 @@ export default function Index({ categories = [], stripeKey = '' }) {
                                             value={customerCompany}
                                             onChange={(e) => setCustomerCompany(e.target.value)}
                                             placeholder="Optional"
-                                            className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-2.5 text-xs text-white placeholder-slate-600 focus:border-[#E97451] focus:ring-[#E97451]"
+                                            className="w-full rounded-xl border border-line bg-paper px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft/70 focus:border-sienna-deep focus:ring-sienna-deep dark:border-line-dark dark:bg-night-deep dark:text-cream dark:placeholder:text-cream-soft/70 dark:focus:border-sienna dark:focus:ring-sienna"
                                         />
                                     </div>
 
                                     <div>
-                                        <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1">
+                                        <label className="block text-xs font-mono uppercase tracking-wider text-ink-soft dark:text-cream-soft mb-1">
                                             Payment Method
                                         </label>
-                                        <div className="rounded-xl border border-slate-700 bg-slate-950 p-3.5 flex items-center justify-between text-xs font-mono text-slate-400">
+                                        <div className="rounded-xl border border-line bg-paper-deep dark:border-line-dark dark:bg-night-deep p-3.5 flex items-center justify-between text-xs font-mono text-ink-soft dark:text-cream-soft">
                                             <div className="flex items-center space-x-2">
                                                 <span>🔒</span>
-                                                <span className="text-slate-300">•••• •••• •••• 4242</span>
+                                                <span className="text-ink-soft dark:text-cream-soft">•••• •••• •••• 4242</span>
                                             </div>
-                                            <span className="text-emerald-400 font-semibold">Stripe Verified</span>
+                                            <span className="text-sienna-deep dark:text-sienna font-semibold">Stripe Verified</span>
                                         </div>
                                     </div>
                                 </div>
@@ -425,7 +424,7 @@ export default function Index({ categories = [], stripeKey = '' }) {
                                     <button
                                         type="submit"
                                         disabled={isSubmitting}
-                                        className="w-full rounded-xl bg-[#E97451] py-3.5 text-xs font-mono font-bold uppercase tracking-wider text-white shadow-lg shadow-[#E97451]/30 hover:bg-[#cf6238] disabled:opacity-50 transition"
+                                        className="w-full rounded-xl bg-sienna py-3.5 text-xs font-mono font-bold uppercase tracking-wider text-ink shadow-sm hover:bg-sienna-deep hover:text-paper disabled:opacity-50 transition"
                                     >
                                         {isSubmitting ? 'Authorizing Payment...' : `Authorize $${parseFloat(selectedProduct.amount).toLocaleString('en-US', { minimumFractionDigits: 2 })} →`}
                                     </button>

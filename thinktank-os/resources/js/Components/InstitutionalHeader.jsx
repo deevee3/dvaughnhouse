@@ -11,63 +11,61 @@ export default function InstitutionalHeader({
     const auth = authProp ?? props?.auth;
 
     const linkCls = (isActive) =>
-        `whitespace-nowrap text-sm font-medium transition py-1 border-b-2 ${
-            isActive
-                ? 'text-[#E97451] border-[#E97451]'
-                : 'text-stone-600 hover:text-gray-900 border-transparent'
-        }`;
+        isActive
+            ? 'text-sienna-deep font-semibold whitespace-nowrap dark:text-sienna'
+            : 'text-ink-soft transition whitespace-nowrap hover:text-ink dark:text-cream-soft dark:hover:text-cream';
 
     return (
-        <header className="sticky top-0 z-40 border-b border-stone-200 bg-[#fafaf9]/90 backdrop-blur-md">
+        <header className="sticky top-0 z-40 border-b border-line bg-paper dark:border-line-dark dark:bg-night">
             <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
-                <div className="flex items-center gap-10">
-                    <Link href="/" className="group flex shrink-0 items-center space-x-3">
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-900 text-white font-serif font-bold text-lg shadow-sm group-hover:bg-[#E97451] transition">
+                <div className="flex items-center space-x-4">
+                    <Link href="/" className="group flex items-center space-x-3">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-ink text-paper font-display font-bold text-lg shadow-sm group-hover:bg-sienna group-hover:text-ink transition">
                             G
                         </div>
-                        <div className="shrink-0">
-                            <span className="block font-serif text-lg font-bold tracking-tight text-gray-900 group-hover:text-[#E97451] transition whitespace-nowrap">
+                        <div>
+                            <span className="block font-display text-lg font-bold tracking-tight text-ink transition group-hover:text-sienna-deep dark:text-cream dark:group-hover:text-sienna">
                                 Glenride
                             </span>
-                            <span className="block font-mono text-[10px] uppercase tracking-widest text-stone-500 whitespace-nowrap">
+                            <span className="block font-mono text-[10px] uppercase tracking-widest text-ink-soft dark:text-cream-soft">
                                 {subtitle}
                             </span>
                         </div>
                     </Link>
-
-                    <nav className="hidden md:flex items-center gap-8" aria-label="Institutional">
-                        <Link
-                            href={route('library.index')}
-                            className={linkCls(active === 'library')}
-                        >
-                            Vanguard Library
-                        </Link>
-                        <Link
-                            href={route('thesis.index')}
-                            className={linkCls(active === 'thesis')}
-                        >
-                            Institutional Thesis
-                        </Link>
-                        <Link
-                            href={route('essays.index')}
-                            className={linkCls(active === 'essays')}
-                        >
-                            Essays
-                        </Link>
-                        <a
-                            href={GATEWAY_URL}
-                            className="whitespace-nowrap py-1 text-sm font-medium border-b-2 border-transparent text-stone-600 hover:text-gray-900 transition"
-                        >
-                            Routing Hub
-                        </a>
-                    </nav>
                 </div>
 
-                <div className="flex shrink-0 items-center space-x-4">
+                <nav className="hidden md:flex items-center space-x-8 text-sm font-medium" aria-label="Institutional">
+                    <Link
+                        href={route('library.index')}
+                        className={linkCls(active === 'library')}
+                    >
+                        Vanguard Library
+                    </Link>
+                    <Link
+                        href={route('thesis.index')}
+                        className={linkCls(active === 'thesis')}
+                    >
+                        Institutional Thesis
+                    </Link>
+                    <Link
+                        href={route('essays.index')}
+                        className={linkCls(active === 'essays')}
+                    >
+                        Essays
+                    </Link>
+                    <a
+                        href={GATEWAY_URL}
+                        className="whitespace-nowrap text-ink-soft transition hover:text-ink dark:text-cream-soft dark:hover:text-cream"
+                    >
+                        Routing Hub
+                    </a>
+                </nav>
+
+                <div className="flex items-center space-x-4">
                     {auth?.user ? (
                         <Link
                             href={route('dashboard')}
-                            className="inline-flex items-center rounded-lg bg-gray-900 px-4 py-2 text-xs font-mono font-semibold uppercase tracking-wider text-white shadow-sm hover:bg-[#E97451] transition"
+                            className="inline-flex items-center rounded-lg bg-ink px-4 py-2 text-xs font-mono font-semibold uppercase tracking-wider text-paper shadow-sm transition hover:bg-sienna hover:text-ink"
                         >
                             ThinkTank OS Portal →
                         </Link>
@@ -75,13 +73,13 @@ export default function InstitutionalHeader({
                         <div className="flex items-center space-x-3">
                             <Link
                                 href={route('login')}
-                                className="text-xs font-mono font-medium text-stone-600 hover:text-gray-900 px-3 py-1.5 transition"
+                                className="text-xs font-mono font-medium px-3 py-1.5 text-ink-soft transition hover:text-ink dark:text-cream-soft dark:hover:text-cream"
                             >
                                 Fellow Sign In
                             </Link>
                             <Link
                                 href={route('login')}
-                                className="inline-flex items-center rounded-lg bg-[#E97451] px-4 py-2 text-xs font-mono font-semibold uppercase tracking-wider text-white shadow-sm hover:bg-[#cf6238] transition"
+                                className="inline-flex items-center rounded-lg bg-sienna px-4 py-2 text-xs font-mono font-semibold uppercase tracking-wider text-ink shadow-sm transition hover:bg-sienna-deep hover:text-paper"
                             >
                                 ThinkTank OS
                             </Link>
