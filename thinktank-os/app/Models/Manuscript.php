@@ -100,7 +100,9 @@ class Manuscript extends Model
      */
     public function latestRecord(): HasOne
     {
-        return $this->hasOne(ManuscriptRecord::class)->latestOfMany('version');
+        // Postgres cannot max() a uuid, so latestOfMany() breaks on this
+        // schema; an ordered hasOne returns the same highest-version row.
+        return $this->hasOne(ManuscriptRecord::class)->orderByDesc('version');
     }
 
     /**
