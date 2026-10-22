@@ -17,7 +17,7 @@ class AttestationController extends Controller
     /**
      * Public registry of Glenride attestations.
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
         $attestations = Attestation::with('verifier:id,name')
             ->latest('issued_at')
@@ -30,9 +30,34 @@ class AttestationController extends Controller
             'total' => Attestation::count(),
         ];
 
+        $user = $request->user();
+
         return Inertia::render('Attestations/Index', [
             'attestations' => $attestations,
             'stats' => $stats,
+            'canIssue' => $user ? $user->canIssueAttestations() : false,
+        ]);
+    }
+
+    /**
+     * Manual attestation entry form (issuers only).
+     */
+    public function create(Request $request): Response
+    {
+        $user = $request->user();
+
+        if (! $user || ! $user->canIssueAttestations()) {
+            abort(403, 'Only Glenride editors and orchestrators can issue attestations.');
+        }
+
+        $publishedManuscripts = Manuscript::where('status', 'published')
+            ->latest('published_at')
+            ->get(['id', 'title'])
+            ->map(fn ($m) => ['id' => $m->id, 'title' => $m->title])
+            ->values();
+
+        return Inertia::render('Attestations/Create', [
+            'publishedManuscripts' => $publishedManuscripts,
         ]);
     }
 
@@ -106,11 +131,26 @@ class AttestationController extends Controller
             abort(403, 'Only Glenride editors and orchestrators can issue attestations.');
         }
 
+        $validated = $request->validate([
+            'claim' => 'nullable|string|max:5000',
+            'evidence_notes' => 'nullable|string|max:5000',
+            'evidence_urls' => 'nullable|array|max:20',
+            'evidence_urls.*' => 'url|max:2048',
+        ]);
+
         // Plain axios callers (Portfolio Matrix) get JSON; Inertia form posts get a redirect.
         $wantsJson = $request->wantsJson() && ! $request->header('X-Inertia');
 
+        $evidenceExtra = [];
+        if (! empty($validated['evidence_notes']) || ! empty($validated['evidence_urls'])) {
+            $evidenceExtra = [
+                'notes' => $validated['evidence_notes'] ?? null,
+                'urls' => $validated['evidence_urls'] ?? [],
+            ];
+        }
+
         try {
-            $attestation = $service->issue($manuscript, $user);
+            $attestation = $service->issue($manuscript, $user, $validated['claim'] ?? null, $evidenceExtra);
         } catch (DomainException $e) {
             if ($wantsJson) {
                 return response()->json(['message' => $e->getMessage()], 422);
@@ -127,6 +167,85 @@ class AttestationController extends Controller
         }
 
         return back()->with('success', "Attestation issued: {$attestation->public_id}");
+    }
+
+    /**
+     * Issue an attestation for a manually entered subject (issuers only).
+     * The subject does not need to exist in the manuscript pipeline.
+     */
+    public function storeManual(Request $request, AttestationService $service): RedirectResponse
+    {
+        $user = $request->user();
+
+        if (! $user || ! $user->canIssueAttestations()) {
+            abort(403, 'Only Glenride editors and orchestrators can issue attestations.');
+        }
+
+        $validated = $request->validate([
+            'subject_title' => 'required|string|max:500',
+            'claim' => 'required|string|min:10',
+            'subject_kind' => 'required|string|in:manuscript,report,dataset,external_work,other',
+            'evidence_notes' => 'nullable|string|max:5000',
+            'evidence_urls' => 'nullable|array|max:20',
+            'evidence_urls.*' => 'url|max:2048',
+            'subject_hash_override' => 'nullable|string|regex:/^[a-fA-F0-9]{64}$/',
+        ]);
+
+        try {
+            $attestation = $service->issueManual([
+                'subject_title' => $validated['subject_title'],
+                'claim' => $validated['claim'],
+                'subject_kind' => $validated['subject_kind'],
+                'evidence_notes' => $validated['evidence_notes'] ?? null,
+                'evidence_urls' => $validated['evidence_urls'] ?? [],
+                'subject_hash_override' => $validated['subject_hash_override'] ?? null,
+            ], $user);
+        } catch (DomainException $e) {
+            return back()->with('error', $e->getMessage())->withInput();
+        }
+
+        return redirect()->route('attestations.show', $attestation->public_id)
+            ->with('success', "Attestation issued: {$attestation->public_id}");
+    }
+
+    /**
+     * Record an on-chain anchor for an attestation (issuers only).
+     * The anchoring transaction itself is performed via Pearls on Base;
+     * this records the resulting tx / contract / chain on the record.
+     */
+    public function recordAnchor(Request $request, Attestation $attestation, AttestationService $service): RedirectResponse|\Illuminate\Http\JsonResponse
+    {
+        $user = $request->user();
+
+        if (! $user || ! $user->canIssueAttestations()) {
+            abort(403, 'Only Glenride editors and orchestrators can record anchors.');
+        }
+
+        $validated = $request->validate([
+            'tx' => 'required|string|regex:/^0x[0-9a-fA-F]{64}$/',
+            'contract' => 'required|string|regex:/^0x[0-9a-fA-F]{40}$/',
+            'chain' => 'nullable|string|in:base,base-sepolia',
+            'platform' => 'nullable|string|max:50',
+        ]);
+
+        $service->recordAnchor(
+            $attestation,
+            $validated['tx'],
+            $validated['contract'],
+            $validated['chain'] ?? 'base',
+            $validated['platform'] ?? 'pearls'
+        );
+
+        $wantsJson = $request->wantsJson() && ! $request->header('X-Inertia');
+
+        if ($wantsJson) {
+            return response()->json([
+                'message' => "Anchor recorded for {$attestation->public_id}",
+                'attestation' => $attestation->fresh()->load('verifier:id,name'),
+            ]);
+        }
+
+        return back()->with('success', "Anchor recorded for {$attestation->public_id}");
     }
 
     /**

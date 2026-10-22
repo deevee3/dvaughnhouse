@@ -1,8 +1,9 @@
-# Attestations in ThinkTank OS — Witness v1
+# Attestations in ThinkTank OS — Witness v1 / v2
 
-**Status:** Built, working tree only (not yet committed, pushed, or deployed).
+**Status:** V1 shipped 2026-10-22 (commit `551fcd1`). V2 built, working tree only (not yet committed, pushed, or deployed).
 **Concept source:** `~/workspace/your_files/attestation-layer/concept.md` (2026-10-13).
 **Owner direction (2026-10-22):** attestation is a main feature of ThinkTank OS, not a side concept.
+**Owner direction (v2, 2026-10-22):** attestation must be embedded in the manuscript process, authorized users must be able to manually enter information and attest (pipeline and standalone subjects), and attestations must be able to get on chain via Pearls.
 
 ## What it is
 
@@ -48,6 +49,87 @@ Attestation is the final step of the manuscript pipeline:
 9. **No chain in v1.** On-chain anchoring is a later step, taken when there is
    volume worth anchoring (see Pearls note below).
 
+## V2 — embedded, manual, and anchor-ready
+
+### Embedded in the manuscript process
+
+Attestation is no longer a side panel action; it is the visible final step of
+the pipeline (`submitted → ai_synthesized → human_polish → published → attested`):
+
+- **Kanban card chips (Portfolio Matrix):** every card shows its attestation
+  state — `Attested · GLR-AT-…` when an active attestation exists, or a muted
+  `Not attested` chip on published cards. The board controller eager-loads each
+  manuscript's active attestation (`issued`/`challenged`, latest first).
+- **Publish → attest prompt:** when a transition to `published` succeeds, the
+  Editorial Studio automatically opens for that manuscript; when the user can
+  issue attestations, the toast reads "Published — now attest it from the
+  Glenride Attestation panel."
+- **Issue as a form, in the flow:** the Matrix attestation panel is an inline
+  form — claim textarea (prefilled with the default claim and editable),
+  optional evidence notes, and an optional evidence URL — posted to
+  `attestations.store`. Entered evidence is merged into the evidence manifest
+  under `manual_evidence` (`notes`, `urls`). The attested state additionally
+  carries the on-chain anchor UI (below).
+- **Manuscripts index:** each row carries an Attestation chip
+  (`Attested · {public_id}` / `Not attested` for published / `—` otherwise),
+  backed by the same constrained eager-load in `ManuscriptController@index`.
+- **Intake:** the manuscript intake compliance section states plainly that
+  after publication a Glenride editor attests the work — attestation is the
+  final step of the pipeline.
+
+### Manual entry
+
+Authorized users only (`canIssueAttestations()` — orchestrator, admin, editor;
+403 otherwise) can attest from **`/attestations/create`** (`Pages/Attestations/Create`,
+behind auth, linked from the registry for issuers and from the Matrix header):
+
+1. **From a manuscript** — pick a published manuscript, edit the claim,
+   add evidence notes / a URL, and issue through the same
+   `attestations.store` endpoint and gate as the Matrix form
+   (`entered_via = pipeline`, `subject_kind = manuscript`).
+2. **Manual entry (standalone)** — for subjects not in the manuscript
+   pipeline. Fields: `subject_title` (required, max 500), `claim` (required,
+   min 10), `subject_kind` (`manuscript|report|dataset|external_work|other`),
+   optional evidence notes, optional evidence URLs, and an optional
+   `subject_hash_override` (64-character hex). Posted to
+   `attestations.storeManual` → `AttestationService::issueManual()`:
+   - `attestable_type` / `attestable_id` are **null**; `entered_via = manual`;
+     `method = manual_entry_v1`; issuer is Glenride; the public ID format and
+     HMAC-SHA256 signature are identical to pipeline issuance (for standalone
+     records the signature payload carries empty attestable type/id strings).
+   - **Hash rules:** `subject_hash` is the validated override when supplied,
+     otherwise SHA-256 of the canonical JSON of title, claim, kind, evidence
+     notes, and the sorted evidence URLs.
+   - `evidence_manifest` is the entered data itself (title, kind, entry path,
+     notes, URLs, and whether an override was supplied).
+   - Issuance is idempotent per subject hash for active records, matching v1.
+   - On success the user is redirected to the public record
+     (`attestations.show`), which now displays the subject kind and the entry
+     path ("Manual entry" vs "Manuscript pipeline").
+
+### On-chain anchor recording
+
+Anchoring is performed via the **Pearls AttestationRegistry** on Base
+(hash-only: only the subject hash goes on chain, never content). ThinkTank OS
+is ready to record and display the result:
+
+- `AttestationService::recordAnchor()` sets `anchor_platform` (default
+  `pearls`), `anchor_chain` (default `base`), `anchor_contract`, `anchor_tx`,
+  and `anchored_at`.
+- `POST /attestations/{attestation}/anchor` (`attestations.recordAnchor`,
+  issuers only) validates the transaction hash (`0x` + 64 hex), the contract
+  address (`0x` + 40 hex), and the chain (`base` or `base-sepolia`). It
+  returns JSON for the Matrix axios caller and a redirect for Inertia posts.
+- **Surfaces:** the Matrix attested panel shows an "On-chain anchor" block —
+  short tx + chain (+ contract) when anchored, a small anchor form
+  (tx hash, contract, chain select) for issuers when not, and "Not anchored"
+  otherwise. The public record page shows platform · chain · tx · contract ·
+  anchored date when an anchor exists.
+- **Config status:** the OS records anchors; it does not send transactions.
+  The registry contract deploy is gated — Sepolia first, third-party audit
+  before mainnet — and until an anchor is recorded the public page keeps the
+  honest "Not anchored" line.
+
 ## Data model
 
 Migration: `database/migrations/2026_10_22_000001_create_attestations_tables.php`
@@ -58,7 +140,9 @@ Migration: `database/migrations/2026_10_22_000001_create_attestations_tables.php
 |---|---|---|
 | `id` | uuid, primary | |
 | `public_id` | string, unique | `GLR-AT-YYYY-XXXXXX` |
-| `attestable_type` / `attestable_id` | uuid morphs | v1 subject is `App\Models\Manuscript`; the morph keeps essays/digests attestable later |
+| `attestable_type` / `attestable_id` | uuid morphs, **nullable in v2** | v1 subject is `App\Models\Manuscript`; null for standalone manual subjects (migration `2026_10_22_000002_attestation_v2`) |
+| `subject_kind` | string, default `manuscript` (v2) | `manuscript` \| `report` \| `dataset` \| `external_work` \| `other` |
+| `entered_via` | string, default `pipeline` (v2) | `pipeline` \| `manual` |
 | `subject_title` | string | snapshot at issuance |
 | `claim` | text | the attested claim |
 | `evidence_manifest` | json, nullable | compliance flags, word count, status, published_at, `raw_file_sha256`, `brief_sha256` when files exist |
@@ -93,7 +177,10 @@ Migration: `database/migrations/2026_10_22_000001_create_attestations_tables.php
   `isAttested()`.
 - `User`: `attestations()` (as verifier), `canIssueAttestations()`.
 - `App\Services\Attestation\AttestationService` — `subjectHash()`,
-  `evidenceManifest()`, `issue()`, `verifySignature()`, `revoke()`.
+  `evidenceManifest()`, `issue()` (v2: claim override + `manual_evidence`),
+  `issueManual()` (v2: standalone subjects, `manual_entry_v1`),
+  `recordAnchor()` (v2: Pearls/Base anchor recording),
+  `verifySignature()`, `revoke()`.
 
 ## Pearls anchor-ready fields (tentative)
 
@@ -103,9 +190,12 @@ is the chain, and Pearls is the launch platform / contract system on Base.
 
 V1 therefore carries the anchor-ready columns above (`anchor_platform`,
 `anchor_chain`, `anchor_contract`, `anchor_tx`, `anchored_at`) and leaves them
-**null at issuance**. When anchoring is built, the expected values are
-`anchor_platform = 'pearls'` and `anchor_chain = 'base'`, and only the
-**subject hash** would be anchored on-chain — never the manuscript content.
+**null at issuance**. The expected values are `anchor_platform = 'pearls'`
+and `anchor_chain = 'base'`, and only the **subject hash** is anchored
+on-chain — never the manuscript content. **V2 status:** the OS side of
+anchoring is built (see "On-chain anchor recording" above) — anchoring is
+performed via the Pearls AttestationRegistry and recorded in ThinkTank OS.
+The contract deploy itself remains gated: Sepolia first, audit before mainnet.
 
 This is **tentative, not a public promise**. The public verification page says
 exactly: "Not anchored — anchoring via Pearls on Base is tentative and comes
@@ -116,10 +206,13 @@ Sepolia/local-only and unaudited, and any mainnet step remains the owner's gate.
 
 | Method | Path | Name | Access |
 |---|---|---|---|
-| GET | `/attestations` | `attestations.index` | public registry |
+| GET | `/attestations` | `attestations.index` | public registry (passes `canIssue` for the New attestation link) |
+| GET | `/attestations/create` | `attestations.create` | auth; issuers only — **registered before** `attestations.show` so `create` is not captured as a key |
+| POST | `/attestations/manual` | `attestations.storeManual` | auth; issuers only (standalone manual subjects) |
+| POST | `/attestations/{attestation}/anchor` | `attestations.recordAnchor` | auth; issuers only (record Pearls/Base anchor) |
 | POST | `/attestations/verify` | `attestations.verify` | public lookup by public ID or subject hash (registered before show) |
 | GET | `/attestations/{key}` | `attestations.show` | public record (key = public ID or uuid) |
-| POST | `/manuscripts/{manuscript}/attestations` | `attestations.store` | auth; issuers only |
+| POST | `/manuscripts/{manuscript}/attestations` | `attestations.store` | auth; issuers only; accepts optional `claim`, `evidence_notes`, `evidence_urls[]` |
 | POST | `/attestations/{attestation}/challenges` | `attestations.challenge` | auth; any signed-in user, active records only |
 | POST | `/attestations/{attestation}/revoke` | `attestations.revoke` | auth; issuers only, active records only |
 
@@ -139,9 +232,13 @@ key — querying a uuid column with a `GLR-AT-…` string errors on Postgres.
   ("Witnessed by Glenride" with public ID, status, date, verifier and a verify
   link; a plain "Not yet attested" block when there is none), and a
   "Witnessed by Glenride · {public_id}" line on `Library/Index` cards.
-- **Issuance** — Portfolio Matrix editorial modal: current attestation state,
-  eligibility note, and an Issue Attestation button for issuers (JSON response
-  for the axios caller, redirect for Inertia posts).
+- **Issuance (v2)** — embedded in the process: Kanban card chips, a
+  publish → attest prompt that opens the Editorial Studio, and an inline
+  claim/evidence form in the Matrix attestation panel (JSON response for the
+  axios caller, redirect for Inertia posts). Plus the manual entry page at
+  `/attestations/create` (from-manuscript and standalone modes), an
+  Attestation chip on the Manuscripts index, and anchor recording in the
+  Matrix panel. The public record shows subject kind + entry path.
 - **Navigation** — InstitutionalHeader carries an Attestations link between
   Thesis and Essays.
 

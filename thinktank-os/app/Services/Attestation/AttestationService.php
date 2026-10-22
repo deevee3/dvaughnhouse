@@ -82,7 +82,7 @@ class AttestationService
      * Idempotent per subject hash: if an active attestation already covers
      * this exact subject, it is returned instead of issuing a duplicate.
      */
-    public function issue(Manuscript $manuscript, User $verifier, ?string $claim = null): Attestation
+    public function issue(Manuscript $manuscript, User $verifier, ?string $claim = null, array $evidenceExtra = []): Attestation
     {
         if ($manuscript->status !== 'published') {
             throw new DomainException('Only published manuscripts can be attested.');
@@ -111,13 +111,25 @@ class AttestationService
 
         $signature = $this->sign($publicId, Manuscript::class, (string) $manuscript->id, $subjectHash, $issuedAt->format('c'));
 
+        $manifest = $this->evidenceManifest($manuscript);
+
+        if (! empty($evidenceExtra)) {
+            $urls = $evidenceExtra['urls'] ?? ($evidenceExtra['evidence_urls'] ?? []);
+            $manifest['manual_evidence'] = [
+                'notes' => $evidenceExtra['notes'] ?? ($evidenceExtra['evidence_notes'] ?? null),
+                'urls' => is_array($urls) ? array_values(array_filter($urls)) : [],
+            ];
+        }
+
         return Attestation::create([
             'public_id' => $publicId,
             'attestable_type' => Manuscript::class,
             'attestable_id' => $manuscript->id,
+            'subject_kind' => 'manuscript',
+            'entered_via' => 'pipeline',
             'subject_title' => $manuscript->title,
             'claim' => $claim ?: self::DEFAULT_CLAIM,
-            'evidence_manifest' => $this->evidenceManifest($manuscript),
+            'evidence_manifest' => $manifest,
             'subject_hash' => $subjectHash,
             'signature' => $signature,
             'verifier_id' => $verifier->id,
@@ -126,6 +138,114 @@ class AttestationService
             'status' => 'issued',
             'issued_at' => $issuedAt,
         ]);
+    }
+
+    /**
+     * Issue an attestation for a manually entered subject.
+     *
+     * The subject does not need to exist in the manuscript pipeline:
+     * the verifier enters the title, claim, kind and evidence directly.
+     * The subject hash is either the supplied override or a SHA-256 of
+     * the canonical entered data. Signing matches issue() exactly.
+     *
+     * @param  array{subject_title: string, claim: string, subject_kind: string, evidence_notes?: ?string, evidence_urls?: array<int, string>, subject_hash_override?: ?string}  $data
+     */
+    public function issueManual(array $data, User $verifier): Attestation
+    {
+        $subjectTitle = trim((string) ($data['subject_title'] ?? ''));
+        $claim = trim((string) ($data['claim'] ?? ''));
+        $subjectKind = (string) ($data['subject_kind'] ?? 'other');
+        $evidenceNotes = isset($data['evidence_notes']) ? trim((string) $data['evidence_notes']) : null;
+        $evidenceUrls = $data['evidence_urls'] ?? [];
+        $evidenceUrls = is_array($evidenceUrls) ? array_values(array_filter(array_map('trim', $evidenceUrls))) : [];
+
+        if ($subjectTitle === '' || $claim === '') {
+            throw new DomainException('A subject title and a claim are required for a manual attestation.');
+        }
+
+        $override = isset($data['subject_hash_override']) ? trim((string) $data['subject_hash_override']) : null;
+
+        if ($override !== null && $override !== '') {
+            if (! preg_match('/^[a-fA-F0-9]{64}$/', $override)) {
+                throw new DomainException('The subject hash override must be a 64-character hex SHA-256 value.');
+            }
+            $subjectHash = strtolower($override);
+        } else {
+            $sortedUrls = $evidenceUrls;
+            sort($sortedUrls);
+            $canonical = json_encode([
+                'subject_title' => $subjectTitle,
+                'claim' => $claim,
+                'subject_kind' => $subjectKind,
+                'evidence_notes' => $evidenceNotes,
+                'evidence_urls' => $sortedUrls,
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            $subjectHash = hash('sha256', $canonical);
+        }
+
+        $existing = Attestation::query()
+            ->whereNull('attestable_type')
+            ->whereNull('attestable_id')
+            ->where('subject_hash', $subjectHash)
+            ->whereIn('status', ['issued', 'challenged'])
+            ->latest('issued_at')
+            ->first();
+
+        if ($existing) {
+            return $existing;
+        }
+
+        $publicId = $this->generatePublicId();
+        $issuedAt = now();
+
+        $signature = $this->sign($publicId, '', '', $subjectHash, $issuedAt->format('c'));
+
+        $manifest = [
+            'subject_title' => $subjectTitle,
+            'subject_kind' => $subjectKind,
+            'entered_via' => 'manual',
+            'evidence_notes' => $evidenceNotes,
+            'evidence_urls' => $evidenceUrls,
+            'subject_hash_override' => $override ?: null,
+        ];
+
+        return Attestation::create([
+            'public_id' => $publicId,
+            'attestable_type' => null,
+            'attestable_id' => null,
+            'subject_kind' => $subjectKind,
+            'entered_via' => 'manual',
+            'subject_title' => $subjectTitle,
+            'claim' => $claim,
+            'evidence_manifest' => $manifest,
+            'subject_hash' => $subjectHash,
+            'signature' => $signature,
+            'verifier_id' => $verifier->id,
+            'issuer_name' => 'Glenride',
+            'method' => 'manual_entry_v1',
+            'status' => 'issued',
+            'issued_at' => $issuedAt,
+        ]);
+    }
+
+    /**
+     * Record an on-chain anchor for an attestation.
+     *
+     * Anchoring itself is performed externally via the Pearls
+     * AttestationRegistry on Base; ThinkTank OS records the resulting
+     * transaction, contract and chain so the public record can show it.
+     */
+    public function recordAnchor(Attestation $attestation, string $txHash, string $contract, string $chain = 'base', string $platform = 'pearls'): Attestation
+    {
+        $attestation->update([
+            'anchor_platform' => $platform,
+            'anchor_chain' => $chain,
+            'anchor_contract' => $contract,
+            'anchor_tx' => $txHash,
+            'anchored_at' => now(),
+        ]);
+
+        return $attestation;
     }
 
     /**
@@ -139,8 +259,8 @@ class AttestationService
 
         $expected = $this->sign(
             $attestation->public_id,
-            $attestation->attestable_type,
-            (string) $attestation->attestable_id,
+            (string) ($attestation->attestable_type ?? ''),
+            (string) ($attestation->attestable_id ?? ''),
             $attestation->subject_hash,
             $attestation->issued_at->format('c')
         );

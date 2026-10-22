@@ -10,7 +10,7 @@ const STATUS_STYLES = {
         'border border-line text-ink-soft dark:border-line-dark dark:text-cream-soft line-through',
 };
 
-export default function Index({ attestations = [], stats = {}, auth }) {
+export default function Index({ attestations = [], stats = {}, canIssue = false, auth }) {
     const { data, setData, post, processing, errors } = useForm({ code: '' });
 
     const submit = (e) => {
@@ -36,6 +36,14 @@ export default function Index({ attestations = [], stats = {}, auth }) {
                         record cannot be inspected, it should not be trusted — so every record
                         here can be.
                     </p>
+                    {canIssue && (
+                        <Link
+                            href={route('attestations.create')}
+                            className="mt-6 inline-flex items-center rounded-xl bg-ink px-5 py-2.5 text-xs font-mono font-semibold uppercase tracking-wider text-paper shadow-sm transition hover:bg-sienna hover:text-ink"
+                        >
+                            + New attestation
+                        </Link>
+                    )}
                 </div>
 
                 {/* What an attestation contains */}

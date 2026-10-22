@@ -51,6 +51,7 @@ export default function Index({ manuscripts = [] }) {
                                     <tr>
                                         <th className="px-6 py-4 font-semibold">Title & ID</th>
                                         <th className="px-6 py-4 font-semibold">Status</th>
+                                        <th className="px-6 py-4 font-semibold">Attestation</th>
                                         <th className="px-6 py-4 font-semibold">Compliance</th>
                                         <th className="px-6 py-4 font-semibold">Word Count</th>
                                         <th className="px-6 py-4 font-semibold">Micro-Grant</th>
@@ -80,6 +81,19 @@ export default function Index({ manuscripts = [] }) {
                                                 >
                                                     {m.status}
                                                 </span>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                {m.attestations?.[0] ? (
+                                                    <span className="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-mono font-semibold text-emerald-800">
+                                                        Attested · {m.attestations[0].public_id}
+                                                    </span>
+                                                ) : m.status === 'published' ? (
+                                                    <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-500">
+                                                        Not attested
+                                                    </span>
+                                                ) : (
+                                                    <span className="text-xs text-gray-400">—</span>
+                                                )}
                                             </td>
                                             <td className="px-6 py-4">
                                                 <span className="inline-flex items-center text-xs text-emerald-600 font-medium">

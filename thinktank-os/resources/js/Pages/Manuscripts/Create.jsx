@@ -296,6 +296,9 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
                                         <p className="text-sm text-gray-500">
                                             All three compliance criteria must be explicitly verified to qualify for the $500 micro-grant.
                                         </p>
+                                        <p className="mt-2 text-sm text-gray-500">
+                                            After publication, a Glenride editor attests this work — attestation is the final step of the pipeline.
+                                        </p>
                                     </div>
 
                                     <div className="space-y-3">

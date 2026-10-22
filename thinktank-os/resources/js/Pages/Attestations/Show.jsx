@@ -139,6 +139,18 @@ export default function Show({ attestation = {}, signature_valid = false, canIss
                             </span>
                         )}
                         <span>Method: {attestation.method || 'editorial_review_v1'}</span>
+                        {attestation.subject_kind && (
+                            <span>
+                                Subject:{' '}
+                                {attestation.subject_kind.replaceAll('_', ' ')}
+                            </span>
+                        )}
+                        <span>
+                            Entry:{' '}
+                            {attestation.entered_via === 'manual'
+                                ? 'Manual entry'
+                                : 'Manuscript pipeline'}
+                        </span>
                     </div>
                 </div>
 

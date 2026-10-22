@@ -23,6 +23,8 @@ class Attestation extends Model
         'public_id',
         'attestable_type',
         'attestable_id',
+        'subject_kind',
+        'entered_via',
         'subject_title',
         'claim',
         'evidence_manifest',

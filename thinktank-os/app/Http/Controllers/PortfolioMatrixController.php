@@ -23,7 +23,12 @@ class PortfolioMatrixController extends Controller
         $isOrchestrator = $user->canPolishManuscripts();
 
         // Orchestrators see all institutional manuscripts; scholars see their own
-        $query = Manuscript::with('user:id,name,email')
+        $query = Manuscript::with([
+            'user:id,name,email',
+            'attestations' => function ($q) {
+                $q->whereIn('status', ['issued', 'challenged'])->latest('issued_at');
+            },
+        ])
             ->latest();
 
         if (! $isOrchestrator) {

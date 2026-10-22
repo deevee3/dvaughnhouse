@@ -19,6 +19,9 @@ class ManuscriptController extends Controller
     {
         $manuscripts = $request->user()
             ->manuscripts()
+            ->with(['attestations' => function ($q) {
+                $q->whereIn('status', ['issued', 'challenged'])->latest('issued_at');
+            }])
             ->latest()
             ->get();
 

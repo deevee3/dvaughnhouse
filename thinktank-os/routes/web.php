@@ -22,6 +22,15 @@ Route::get('/library', [VanguardLibraryController::class, 'index'])->name('libra
 Route::get('/briefs/{manuscript}', [VanguardLibraryController::class, 'show'])->name('briefs.show');
 Route::get('/thesis', [VanguardLibraryController::class, 'thesis'])->name('thesis.index');
 
+// Glenride Attestations — manual entry + anchor recording (auth, issuers only).
+// The create route MUST register before the public /attestations/{key} route,
+// otherwise "create" is captured as an attestation key.
+Route::middleware('auth')->group(function () {
+    Route::get('/attestations/create', [AttestationController::class, 'create'])->name('attestations.create');
+    Route::post('/attestations/manual', [AttestationController::class, 'storeManual'])->name('attestations.storeManual');
+    Route::post('/attestations/{attestation}/anchor', [AttestationController::class, 'recordAnchor'])->name('attestations.recordAnchor');
+});
+
 // Public Glenride Attestations (Witness) — verify must register before show
 Route::get('/attestations', [AttestationController::class, 'index'])->name('attestations.index');
 Route::post('/attestations/verify', [AttestationController::class, 'verify'])->name('attestations.verify');

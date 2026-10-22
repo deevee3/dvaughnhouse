@@ -58,6 +58,15 @@ export default function Matrix({ columns = {}, stats = {}, isOrchestrator = fals
     const [selectedAttestation, setSelectedAttestation] = useState(null);
     const [canIssueAttestation, setCanIssueAttestation] = useState(false);
     const [isIssuingAttestation, setIsIssuingAttestation] = useState(false);
+    const [attestationClaim, setAttestationClaim] = useState(
+        'Glenride attests that this work was authored as claimed, passed editorial review, and matches the evidence recorded at issuance.'
+    );
+    const [attestationNotes, setAttestationNotes] = useState('');
+    const [attestationUrl, setAttestationUrl] = useState('');
+    const [anchorTx, setAnchorTx] = useState('');
+    const [anchorContract, setAnchorContract] = useState('');
+    const [anchorChain, setAnchorChain] = useState('base');
+    const [isRecordingAnchor, setIsRecordingAnchor] = useState(false);
 
     // Sync board state if props change
     useEffect(() => {
@@ -148,7 +157,7 @@ export default function Matrix({ columns = {}, stats = {}, isOrchestrator = fals
         };
     }, [auth?.user?.id]);
 
-    // Open Editorial Studio Modal
+    // Open Editorial Studio Modal — returns whether the user can issue attestations
     const openEditorialStudio = async (manuscript) => {
         setSelectedManuscript(manuscript);
         setEditableTitle(manuscript.title);
@@ -156,19 +165,30 @@ export default function Matrix({ columns = {}, stats = {}, isOrchestrator = fals
         setEditMode(manuscript.status === 'human_polish');
         setSelectedAttestation(null);
         setCanIssueAttestation(false);
+        setAttestationClaim(
+            'Glenride attests that this work was authored as claimed, passed editorial review, and matches the evidence recorded at issuance.'
+        );
+        setAttestationNotes('');
+        setAttestationUrl('');
+        setAnchorTx('');
+        setAnchorContract('');
+        setAnchorChain('base');
 
         try {
             const res = await window.axios.get(route('matrix.show', manuscript.id));
             setBriefContent(res.data.brief_content || '');
             setSelectedAttestation(res.data.attestation || null);
-            setCanIssueAttestation(Boolean(res.data.can_issue_attestation));
+            const canIssue = Boolean(res.data.can_issue_attestation);
+            setCanIssueAttestation(canIssue);
             if (res.data.manuscript) {
                 setSelectedManuscript(res.data.manuscript);
                 setEditableTitle(res.data.manuscript.title);
             }
+            return canIssue;
         } catch (err) {
             console.error('Failed to load manuscript details:', err);
             triggerToast('Failed to load full brief content from storage.');
+            return false;
         } finally {
             setIsLoadingBrief(false);
         }
@@ -183,14 +203,32 @@ export default function Matrix({ columns = {}, stats = {}, isOrchestrator = fals
         setCanIssueAttestation(false);
     };
 
-    // Issue a Glenride attestation for the selected manuscript
+    // Issue a Glenride attestation for the selected manuscript (embedded form)
     const issueAttestation = async () => {
         if (!selectedManuscript) return;
         setIsIssuingAttestation(true);
         try {
-            const res = await window.axios.post(route('attestations.store', selectedManuscript.id));
+            const payload = {
+                claim: attestationClaim,
+                evidence_notes: attestationNotes || null,
+                evidence_urls: attestationUrl ? [attestationUrl] : [],
+            };
+            const res = await window.axios.post(route('attestations.store', selectedManuscript.id), payload);
             if (res.data?.attestation) {
                 setSelectedAttestation(res.data.attestation);
+                // Reflect the attestation on the board card immediately
+                setBoardColumns((prev) => {
+                    const next = { ...prev };
+                    const status = selectedManuscript.status;
+                    if (next[status]) {
+                        next[status] = next[status].map((m) =>
+                            m.id === selectedManuscript.id
+                                ? { ...m, attestations: [res.data.attestation] }
+                                : m
+                        );
+                    }
+                    return next;
+                });
                 triggerToast(`Attestation issued: ${res.data.attestation.public_id}`);
             } else {
                 // Fallback: re-read the manuscript detail for its attestation state
@@ -207,10 +245,52 @@ export default function Matrix({ columns = {}, stats = {}, isOrchestrator = fals
             console.error('Failed to issue attestation:', err);
             const message =
                 err.response?.data?.message ||
+                err.response?.data?.errors?.claim?.[0] ||
+                err.response?.data?.errors?.evidence_urls?.[0] ||
                 'Error: Failed to issue attestation. The manuscript must be Published with all compliance checks verified.';
             triggerToast(message);
         } finally {
             setIsIssuingAttestation(false);
+        }
+    };
+
+    // Record an on-chain anchor (Pearls / Base) for the selected attestation
+    const recordAnchor = async () => {
+        if (!selectedAttestation) return;
+        setIsRecordingAnchor(true);
+        try {
+            const res = await window.axios.post(route('attestations.recordAnchor', selectedAttestation.id), {
+                tx: anchorTx,
+                contract: anchorContract,
+                chain: anchorChain,
+            });
+            if (res.data?.attestation) {
+                setSelectedAttestation(res.data.attestation);
+            } else {
+                setSelectedAttestation((curr) =>
+                    curr
+                        ? {
+                              ...curr,
+                              anchor_tx: anchorTx,
+                              anchor_contract: anchorContract,
+                              anchor_chain: anchorChain,
+                              anchor_platform: 'pearls',
+                              anchored_at: new Date().toISOString(),
+                          }
+                        : curr
+                );
+            }
+            triggerToast(`Anchor recorded for ${selectedAttestation.public_id}`);
+        } catch (err) {
+            console.error('Failed to record anchor:', err);
+            const message =
+                err.response?.data?.message ||
+                err.response?.data?.errors?.tx?.[0] ||
+                err.response?.data?.errors?.contract?.[0] ||
+                'Error: Failed to record anchor. Check the transaction hash and contract address.';
+            triggerToast(message);
+        } finally {
+            setIsRecordingAnchor(false);
         }
     };
 
@@ -238,6 +318,16 @@ export default function Matrix({ columns = {}, stats = {}, isOrchestrator = fals
 
             if (selectedManuscript && selectedManuscript.id === manuscriptId) {
                 setSelectedManuscript(updated);
+            }
+
+            if (newStatus === 'published') {
+                // Attestation is the final step of the pipeline: put the
+                // Glenride Attestation panel in front of the user right away.
+                const canIssue = await openEditorialStudio(updated);
+                if (canIssue) {
+                    triggerToast('Published — now attest it from the Glenride Attestation panel.');
+                    return;
+                }
             }
 
             triggerToast(`Success: Manuscript moved to ${newStatus.replace('_', ' ')}.`);
@@ -310,6 +400,14 @@ export default function Matrix({ columns = {}, stats = {}, isOrchestrator = fals
                         </h1>
                     </div>
                     <div className="flex items-center space-x-3">
+                        {isOrchestrator && (
+                            <Link
+                                href={route('attestations.create')}
+                                className="inline-flex items-center justify-center rounded-lg bg-gray-900 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 transition"
+                            >
+                                + New Attestation
+                            </Link>
+                        )}
                         <Link
                             href={route('manuscripts.create')}
                             className="inline-flex items-center justify-center rounded-lg bg-indigo-600 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 transition"
@@ -456,6 +554,19 @@ export default function Matrix({ columns = {}, stats = {}, isOrchestrator = fals
                                                         <span className="font-mono text-[11px] text-gray-400">
                                                             {item.word_count ? `${item.word_count} words` : '—'}
                                                         </span>
+                                                    </div>
+
+                                                    {/* Attestation chip — embedded in the pipeline board */}
+                                                    <div className="mt-2">
+                                                        {item.attestations?.[0] ? (
+                                                            <span className="inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-mono font-semibold text-emerald-800">
+                                                                Attested · {item.attestations[0].public_id}
+                                                            </span>
+                                                        ) : item.status === 'published' ? (
+                                                            <span className="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-mono font-medium text-gray-500">
+                                                                Not attested
+                                                            </span>
+                                                        ) : null}
                                                     </div>
 
                                                     {/* Card Stage Action Footer */}
@@ -620,39 +731,110 @@ export default function Matrix({ columns = {}, stats = {}, isOrchestrator = fals
                                     </ul>
                                 </div>
 
-                                {/* Glenride Attestation */}
+                                {/* Glenride Attestation — final step of the pipeline */}
                                 <div className="rounded-xl bg-white p-4 border border-gray-200 text-xs space-y-2">
                                     <div className="font-semibold text-gray-900">
                                         Glenride Attestation
                                     </div>
                                     {selectedAttestation ? (
-                                        <div className="space-y-1">
-                                            <div className="flex justify-between">
-                                                <span className="text-gray-500">Public ID:</span>
-                                                <span className="font-mono font-semibold text-gray-900">
-                                                    {selectedAttestation.public_id}
-                                                </span>
-                                            </div>
-                                            <div className="flex justify-between">
-                                                <span className="text-gray-500">Status:</span>
-                                                <span className="font-mono font-semibold uppercase text-gray-900">
-                                                    {selectedAttestation.status}
-                                                </span>
-                                            </div>
-                                            {selectedAttestation.verifier?.name && (
+                                        <div className="space-y-2">
+                                            <div className="space-y-1">
                                                 <div className="flex justify-between">
-                                                    <span className="text-gray-500">Verified by:</span>
-                                                    <span className="font-semibold text-gray-900">
-                                                        {selectedAttestation.verifier.name}
+                                                    <span className="text-gray-500">Public ID:</span>
+                                                    <span className="font-mono font-semibold text-gray-900">
+                                                        {selectedAttestation.public_id}
                                                     </span>
                                                 </div>
-                                            )}
-                                            <Link
-                                                href={route('attestations.show', selectedAttestation.public_id)}
-                                                className="inline-flex pt-1 font-mono font-semibold text-gray-900 underline"
-                                            >
-                                                View public record →
-                                            </Link>
+                                                <div className="flex justify-between">
+                                                    <span className="text-gray-500">Status:</span>
+                                                    <span className="font-mono font-semibold uppercase text-gray-900">
+                                                        {selectedAttestation.status}
+                                                    </span>
+                                                </div>
+                                                {selectedAttestation.verifier?.name && (
+                                                    <div className="flex justify-between">
+                                                        <span className="text-gray-500">Verified by:</span>
+                                                        <span className="font-semibold text-gray-900">
+                                                            {selectedAttestation.verifier.name}
+                                                        </span>
+                                                    </div>
+                                                )}
+                                                <Link
+                                                    href={route('attestations.show', selectedAttestation.public_id)}
+                                                    className="inline-flex pt-1 font-mono font-semibold text-gray-900 underline"
+                                                >
+                                                    View public record →
+                                                </Link>
+                                            </div>
+
+                                            {/* On-chain anchor */}
+                                            <div className="border-t border-gray-100 pt-2 space-y-2">
+                                                <div className="font-semibold text-gray-900">On-chain anchor</div>
+                                                {selectedAttestation.anchor_tx ? (
+                                                    <div className="space-y-1">
+                                                        <div className="flex justify-between">
+                                                            <span className="text-gray-500">Tx:</span>
+                                                            <span className="font-mono font-semibold text-gray-900">
+                                                                {selectedAttestation.anchor_tx.slice(0, 10)}…{selectedAttestation.anchor_tx.slice(-6)}
+                                                            </span>
+                                                        </div>
+                                                        <div className="flex justify-between">
+                                                            <span className="text-gray-500">Chain:</span>
+                                                            <span className="font-mono font-semibold text-gray-900">
+                                                                {selectedAttestation.anchor_chain || 'base'}
+                                                            </span>
+                                                        </div>
+                                                        {selectedAttestation.anchor_contract && (
+                                                            <div className="flex justify-between">
+                                                                <span className="text-gray-500">Contract:</span>
+                                                                <span className="font-mono text-gray-900">
+                                                                    {selectedAttestation.anchor_contract.slice(0, 10)}…{selectedAttestation.anchor_contract.slice(-6)}
+                                                                </span>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ) : canIssueAttestation ? (
+                                                    <div className="space-y-2">
+                                                        <input
+                                                            type="text"
+                                                            value={anchorTx}
+                                                            onChange={(e) => setAnchorTx(e.target.value)}
+                                                            placeholder="Anchor tx hash (0x…)"
+                                                            className="w-full rounded-lg border-gray-300 text-xs font-mono focus:border-gray-500 focus:ring-gray-500"
+                                                        />
+                                                        <input
+                                                            type="text"
+                                                            value={anchorContract}
+                                                            onChange={(e) => setAnchorContract(e.target.value)}
+                                                            placeholder="Registry contract (0x…)"
+                                                            className="w-full rounded-lg border-gray-300 text-xs font-mono focus:border-gray-500 focus:ring-gray-500"
+                                                        />
+                                                        <div className="flex items-center gap-2">
+                                                            <select
+                                                                value={anchorChain}
+                                                                onChange={(e) => setAnchorChain(e.target.value)}
+                                                                className="rounded-lg border-gray-300 text-xs focus:border-gray-500 focus:ring-gray-500"
+                                                            >
+                                                                <option value="base">base</option>
+                                                                <option value="base-sepolia">base-sepolia</option>
+                                                            </select>
+                                                            <button
+                                                                type="button"
+                                                                disabled={isRecordingAnchor || !anchorTx || !anchorContract}
+                                                                onClick={recordAnchor}
+                                                                className="rounded-lg bg-gray-900 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-gray-700 disabled:opacity-50 transition"
+                                                            >
+                                                                {isRecordingAnchor ? 'Recording…' : 'Record Anchor'}
+                                                            </button>
+                                                        </div>
+                                                        <p className="text-[11px] text-gray-500">
+                                                            Anchoring is performed via the Pearls AttestationRegistry on Base; record the resulting transaction here.
+                                                        </p>
+                                                    </div>
+                                                ) : (
+                                                    <p className="text-gray-600">Not anchored</p>
+                                                )}
+                                            </div>
                                         </div>
                                     ) : (
                                         <div className="space-y-2">
@@ -660,22 +842,60 @@ export default function Matrix({ columns = {}, stats = {}, isOrchestrator = fals
                                             <p className="text-[11px] text-gray-500">
                                                 Eligibility: the manuscript must be Published and all
                                                 compliance checks must be verified before Glenride can
-                                                attest it.
+                                                attest it. Attestation is the final step of the pipeline.
                                             </p>
                                             {canIssueAttestation && (
-                                                <button
-                                                    type="button"
-                                                    disabled={
-                                                        isIssuingAttestation ||
-                                                        selectedManuscript.status !== 'published'
-                                                    }
-                                                    onClick={issueAttestation}
-                                                    className="rounded-lg bg-gray-900 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-gray-700 disabled:opacity-50 transition"
-                                                >
-                                                    {isIssuingAttestation
-                                                        ? 'Issuing Attestation...'
-                                                        : 'Issue Attestation'}
-                                                </button>
+                                                <div className="space-y-2 pt-1">
+                                                    <div>
+                                                        <label className="block text-[11px] font-mono uppercase tracking-wider text-gray-500 mb-1">
+                                                            Claim
+                                                        </label>
+                                                        <textarea
+                                                            rows={3}
+                                                            value={attestationClaim}
+                                                            onChange={(e) => setAttestationClaim(e.target.value)}
+                                                            className="w-full rounded-lg border-gray-300 text-xs focus:border-gray-500 focus:ring-gray-500"
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-[11px] font-mono uppercase tracking-wider text-gray-500 mb-1">
+                                                            Evidence notes (optional)
+                                                        </label>
+                                                        <textarea
+                                                            rows={2}
+                                                            value={attestationNotes}
+                                                            onChange={(e) => setAttestationNotes(e.target.value)}
+                                                            placeholder="What was checked, where the evidence lives…"
+                                                            className="w-full rounded-lg border-gray-300 text-xs focus:border-gray-500 focus:ring-gray-500"
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-[11px] font-mono uppercase tracking-wider text-gray-500 mb-1">
+                                                            Evidence URL (optional)
+                                                        </label>
+                                                        <input
+                                                            type="url"
+                                                            value={attestationUrl}
+                                                            onChange={(e) => setAttestationUrl(e.target.value)}
+                                                            placeholder="https://…"
+                                                            className="w-full rounded-lg border-gray-300 text-xs focus:border-gray-500 focus:ring-gray-500"
+                                                        />
+                                                    </div>
+                                                    <button
+                                                        type="button"
+                                                        disabled={
+                                                            isIssuingAttestation ||
+                                                            selectedManuscript.status !== 'published' ||
+                                                            !attestationClaim.trim()
+                                                        }
+                                                        onClick={issueAttestation}
+                                                        className="rounded-lg bg-gray-900 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-gray-700 disabled:opacity-50 transition"
+                                                    >
+                                                        {isIssuingAttestation
+                                                            ? 'Issuing Attestation...'
+                                                            : 'Issue Attestation'}
+                                                    </button>
+                                                </div>
                                             )}
                                         </div>
                                     )}
