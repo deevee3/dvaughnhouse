@@ -90,10 +90,10 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
         <AuthenticatedLayout
             header={
                 <div>
-                    <span className="font-mono text-xs uppercase tracking-widest text-indigo-600">
+                    <span className="font-mono text-xs uppercase tracking-widest text-sienna-deep">
                         ThinkTank OS // ContextForge
                     </span>
-                    <h2 className="text-2xl font-bold leading-tight text-gray-900">
+                    <h2 className="font-display text-2xl font-bold leading-tight text-ink">
                         Manuscript Intake Dropzone
                     </h2>
                 </div>
@@ -105,32 +105,32 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
                 <div className="mx-auto max-w-7xl space-y-8 px-4 sm:px-6 lg:px-8">
                     {/* Real-time synthesis alert banner */}
                     {activeJob && (
-                        <div className="rounded-xl border border-indigo-200 bg-indigo-50/70 p-6 shadow-sm">
+                        <div className="rounded-xl border border-line bg-paper-deep p-6 shadow-sm">
                             <div className="flex items-start justify-between">
                                 <div className="space-y-1">
                                     <div className="flex items-center space-x-2">
                                         <span className="relative flex h-3 w-3">
                                             {activeJob.status === 'submitted' && (
-                                                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-indigo-400 opacity-75"></span>
+                                                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sienna opacity-75"></span>
                                             )}
                                             <span
                                                 className={`relative inline-flex h-3 w-3 rounded-full ${
                                                     activeJob.status === 'ai_synthesized'
                                                         ? 'bg-emerald-500'
-                                                        : 'bg-indigo-600'
+                                                        : 'bg-sienna'
                                                 }`}
                                             ></span>
                                         </span>
-                                        <span className="font-mono text-xs font-semibold uppercase tracking-wider text-indigo-800">
+                                        <span className="font-mono text-xs font-semibold uppercase tracking-wider text-sienna-deep">
                                             {activeJob.status === 'ai_synthesized'
                                                 ? 'Synthesis Complete (202 Verified)'
                                                 : 'Asynchronous Synthesis Running (202 Accepted)'}
                                         </span>
                                     </div>
-                                    <h3 className="text-lg font-bold text-gray-900">
+                                    <h3 className="text-lg font-bold text-ink">
                                         {activeJob.title}
                                     </h3>
-                                    <p className="text-sm text-gray-600">
+                                    <p className="text-sm text-ink-soft">
                                         {activeJob.status === 'ai_synthesized'
                                             ? `Vanguard Policy Brief drafted (${activeJob.word_count ?? 0} words). Ready for human editorial polish.`
                                             : 'The George Foreman Grill mechanic is active: web thread released; ContextForge is synthesizing in background via Redis queue.'}
@@ -140,7 +140,7 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
                                     className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
                                         activeJob.status === 'ai_synthesized'
                                             ? 'bg-emerald-100 text-emerald-800'
-                                            : 'bg-indigo-100 text-indigo-800'
+                                            : 'bg-paper-deep text-sienna-deep'
                                     }`}
                                 >
                                     {activeJob.status}
@@ -154,15 +154,15 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
                         <div className="lg:col-span-2">
                             <form
                                 onSubmit={handleSubmit}
-                                className="space-y-8 rounded-2xl border border-gray-200 bg-white p-6 sm:p-8 shadow-sm"
+                                className="space-y-8 rounded-2xl border border-line bg-paper p-6 sm:p-8 shadow-sm"
                             >
                                 {/* Section 1: Manuscript Metadata */}
                                 <div className="space-y-6">
-                                    <div className="border-b border-gray-100 pb-4">
-                                        <h3 className="text-lg font-bold text-gray-900">
+                                    <div className="border-b border-line pb-4">
+                                        <h3 className="text-lg font-bold text-ink">
                                             1. Manuscript Details
                                         </h3>
-                                        <p className="text-sm text-gray-500">
+                                        <p className="text-sm text-ink-soft">
                                             Scouted PhD research manuscripts (typically 25–40 pages).
                                         </p>
                                     </div>
@@ -186,7 +186,7 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
                                         <textarea
                                             id="abstract"
                                             rows={3}
-                                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                                            className="mt-1 block w-full rounded-md border-line shadow-sm focus:border-sienna-deep focus:ring-sienna-deep text-sm"
                                             value={data.abstract}
                                             onChange={(e) => setData('abstract', e.target.value)}
                                             placeholder="Core methodology, empirical dataset description, and institutional findings..."
@@ -197,11 +197,11 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
 
                                 {/* Section 2: Interactive Dropzone */}
                                 <div className="space-y-4">
-                                    <div className="border-b border-gray-100 pb-4">
-                                        <h3 className="text-lg font-bold text-gray-900">
+                                    <div className="border-b border-line pb-4">
+                                        <h3 className="text-lg font-bold text-ink">
                                             2. Raw Manuscript File Upload
                                         </h3>
-                                        <p className="text-sm text-gray-500">
+                                        <p className="text-sm text-ink-soft">
                                             Files will be ingested securely and scrubbed via ContextForge.
                                         </p>
                                     </div>
@@ -216,8 +216,8 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
                                         onClick={() => fileInputRef.current?.click()}
                                         className={`flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-8 text-center transition-colors ${
                                             dragOver
-                                                ? 'border-indigo-500 bg-indigo-50/50'
-                                                : 'border-gray-300 hover:border-gray-400 bg-gray-50/50'
+                                                ? 'border-sienna-deep bg-paper-deep'
+                                                : 'border-line hover:border-sienna-deep/60 bg-paper-deep/50'
                                         }`}
                                     >
                                         <input
@@ -229,7 +229,7 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
                                         />
 
                                         <svg
-                                            className="h-12 w-12 text-gray-400"
+                                            className="h-12 w-12 text-ink-soft"
                                             stroke="currentColor"
                                             fill="none"
                                             viewBox="0 0 48 48"
@@ -249,9 +249,9 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
                                             />
                                         </svg>
 
-                                        <div className="mt-4 text-sm text-gray-600">
+                                        <div className="mt-4 text-sm text-ink-soft">
                                             {data.manuscript_file ? (
-                                                <span className="font-semibold text-indigo-600">
+                                                <span className="font-semibold text-sienna-deep">
                                                     Selected: {data.manuscript_file.name} (
                                                     {(
                                                         data.manuscript_file.size /
@@ -261,14 +261,14 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
                                                 </span>
                                             ) : (
                                                 <span>
-                                                    <span className="font-semibold text-indigo-600">
+                                                    <span className="font-semibold text-sienna-deep">
                                                         Drop manuscript file here
                                                     </span>{' '}
                                                     or click to browse
                                                 </span>
                                             )}
                                         </div>
-                                        <p className="mt-1 text-xs text-gray-500">
+                                        <p className="mt-1 text-xs text-ink-soft">
                                             PDF, DOCX, TXT up to 50MB
                                         </p>
                                     </div>
@@ -278,9 +278,9 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
                                     />
 
                                     {progress && (
-                                        <div className="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div className="w-full bg-line rounded-full h-2.5">
                                             <div
-                                                className="bg-indigo-600 h-2.5 rounded-full"
+                                                className="bg-sienna h-2.5 rounded-full"
                                                 style={{ width: `${progress.percentage}%` }}
                                             ></div>
                                         </div>
@@ -289,14 +289,14 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
 
                                 {/* Section 3: Mandatory Compliance Checklists */}
                                 <div className="space-y-4">
-                                    <div className="border-b border-gray-100 pb-4">
-                                        <h3 className="text-lg font-bold text-gray-900">
+                                    <div className="border-b border-line pb-4">
+                                        <h3 className="text-lg font-bold text-ink">
                                             3. Mandatory Compliance Checklists
                                         </h3>
-                                        <p className="text-sm text-gray-500">
+                                        <p className="text-sm text-ink-soft">
                                             All three compliance criteria must be explicitly verified to qualify for the $500 micro-grant.
                                         </p>
-                                        <p className="mt-2 text-sm text-gray-500">
+                                        <p className="mt-2 text-sm text-ink-soft">
                                             After publication, a Glenride editor attests this work — attestation is the final step of the pipeline.
                                         </p>
                                     </div>
@@ -305,14 +305,14 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
                                         <label className="flex items-start space-x-3 cursor-pointer">
                                             <input
                                                 type="checkbox"
-                                                className="mt-1 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                className="mt-1 h-4 w-4 rounded border-line text-sienna-deep focus:ring-sienna-deep"
                                                 checked={data.compliance_ethics}
                                                 onChange={(e) =>
                                                     setData('compliance_ethics', e.target.checked)
                                                 }
                                             />
-                                            <span className="text-sm text-gray-700 leading-snug">
-                                                <strong className="font-semibold text-gray-900">
+                                            <span className="text-sm text-ink leading-snug">
+                                                <strong className="font-semibold text-ink">
                                                     Research Ethics Protocol:
                                                 </strong>{' '}
                                                 I certify that this research adheres to institutional review protocols, data privacy safeguards, and contains no undisclosed commercial conflicts of interest.
@@ -326,14 +326,14 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
                                         <label className="flex items-start space-x-3 cursor-pointer">
                                             <input
                                                 type="checkbox"
-                                                className="mt-1 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                className="mt-1 h-4 w-4 rounded border-line text-sienna-deep focus:ring-sienna-deep"
                                                 checked={data.compliance_transparency}
                                                 onChange={(e) =>
                                                     setData('compliance_transparency', e.target.checked)
                                                 }
                                             />
-                                            <span className="text-sm text-gray-700 leading-snug">
-                                                <strong className="font-semibold text-gray-900">
+                                            <span className="text-sm text-ink leading-snug">
+                                                <strong className="font-semibold text-ink">
                                                     Data Transparency &amp; Reproducibility:
                                                 </strong>{' '}
                                                 I confirm that all empirical figures, models, and references are accessible for independent audit and verification.
@@ -347,14 +347,14 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
                                         <label className="flex items-start space-x-3 cursor-pointer">
                                             <input
                                                 type="checkbox"
-                                                className="mt-1 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                className="mt-1 h-4 w-4 rounded border-line text-sienna-deep focus:ring-sienna-deep"
                                                 checked={data.compliance_citations}
                                                 onChange={(e) =>
                                                     setData('compliance_citations', e.target.checked)
                                                 }
                                             />
-                                            <span className="text-sm text-gray-700 leading-snug">
-                                                <strong className="font-semibold text-gray-900">
+                                            <span className="text-sm text-ink leading-snug">
+                                                <strong className="font-semibold text-ink">
                                                     Attribution &amp; Originality:
                                                 </strong>{' '}
                                                 I confirm this manuscript is original scholarship, rigorously cited, and complies with Glenride synthesis guidelines.
@@ -368,8 +368,8 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
                                 </div>
 
                                 {/* Submit button */}
-                                <div className="pt-4 flex items-center justify-between border-t border-gray-100">
-                                    <span className="text-xs text-gray-500">
+                                <div className="pt-4 flex items-center justify-between border-t border-line">
+                                    <span className="text-xs text-ink-soft">
                                         Submitting triggers the George Foreman Grill asynchronous synthesis loop.
                                     </span>
                                     <PrimaryButton
@@ -391,37 +391,37 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
 
                         {/* Sidebar: Status Matrix & Architecture Specs */}
                         <div className="space-y-6">
-                            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                                <h3 className="text-base font-bold text-gray-900">
+                            <div className="rounded-2xl border border-line bg-paper p-6 shadow-sm">
+                                <h3 className="text-base font-bold text-ink">
                                     Asynchronous Pipeline Specs
                                 </h3>
                                 <dl className="mt-4 space-y-3 text-xs">
-                                    <div className="flex justify-between border-b border-gray-100 pb-2">
-                                        <dt className="text-gray-500">Web Response</dt>
-                                        <dd className="font-mono font-semibold text-gray-900">
+                                    <div className="flex justify-between border-b border-line pb-2">
+                                        <dt className="text-ink-soft">Web Response</dt>
+                                        <dd className="font-mono font-semibold text-ink">
                                             202 Accepted
                                         </dd>
                                     </div>
-                                    <div className="flex justify-between border-b border-gray-100 pb-2">
-                                        <dt className="text-gray-500">Queue Engine</dt>
-                                        <dd className="font-mono font-semibold text-indigo-600">
+                                    <div className="flex justify-between border-b border-line pb-2">
+                                        <dt className="text-ink-soft">Queue Engine</dt>
+                                        <dd className="font-mono font-semibold text-sienna-deep">
                                             Redis + Horizon
                                         </dd>
                                     </div>
-                                    <div className="flex justify-between border-b border-gray-100 pb-2">
-                                        <dt className="text-gray-500">Live Broadcaster</dt>
-                                        <dd className="font-mono font-semibold text-gray-900">
+                                    <div className="flex justify-between border-b border-line pb-2">
+                                        <dt className="text-ink-soft">Live Broadcaster</dt>
+                                        <dd className="font-mono font-semibold text-ink">
                                             Laravel Reverb
                                         </dd>
                                     </div>
-                                    <div className="flex justify-between border-b border-gray-100 pb-2">
-                                        <dt className="text-gray-500">Target Output</dt>
-                                        <dd className="font-semibold text-gray-900">
+                                    <div className="flex justify-between border-b border-line pb-2">
+                                        <dt className="text-ink-soft">Target Output</dt>
+                                        <dd className="font-semibold text-ink">
                                             4-Page Vanguard Brief
                                         </dd>
                                     </div>
                                     <div className="flex justify-between">
-                                        <dt className="text-gray-500">Scholar Micro-grant</dt>
+                                        <dt className="text-ink-soft">Scholar Micro-grant</dt>
                                         <dd className="font-semibold text-emerald-600">
                                             $500.00 Fixed
                                         </dd>
@@ -430,16 +430,16 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
                             </div>
 
                             {/* Recent Scholar Submissions */}
-                            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                                <h3 className="text-base font-bold text-gray-900">
+                            <div className="rounded-2xl border border-line bg-paper p-6 shadow-sm">
+                                <h3 className="text-base font-bold text-ink">
                                     Your Manuscripts
                                 </h3>
                                 {manuscripts.length === 0 ? (
-                                    <p className="mt-4 text-xs text-gray-500">
+                                    <p className="mt-4 text-xs text-ink-soft">
                                         No manuscripts ingested yet. Upload your first file above.
                                     </p>
                                 ) : (
-                                    <ul className="mt-4 divide-y divide-gray-100">
+                                    <ul className="mt-4 divide-y divide-line">
                                         {manuscripts.map((m) => (
                                             <li
                                                 key={m.id}
@@ -447,20 +447,20 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
                                                 onClick={() => setActiveJob(m)}
                                             >
                                                 <div className="flex items-center justify-between">
-                                                    <span className="font-medium text-gray-900 truncate max-w-[180px]">
+                                                    <span className="font-medium text-ink truncate max-w-[180px]">
                                                         {m.title}
                                                     </span>
                                                     <span
                                                         className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
                                                             m.status === 'ai_synthesized'
                                                                 ? 'bg-emerald-100 text-emerald-800'
-                                                                : 'bg-indigo-100 text-indigo-800'
+                                                                : 'bg-paper-deep text-sienna-deep'
                                                         }`}
                                                     >
                                                         {m.status}
                                                     </span>
                                                 </div>
-                                                <div className="text-[11px] text-gray-400 font-mono">
+                                                <div className="text-[11px] text-ink-soft font-mono">
                                                     {m.id.substring(0, 8)}...
                                                 </div>
                                             </li>

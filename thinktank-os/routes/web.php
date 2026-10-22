@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AttestationController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ManuscriptController;
 use App\Http\Controllers\PortfolioMatrixController;
 use App\Http\Controllers\ProfileController;
@@ -16,8 +17,8 @@ Route::domain('store.dvaughnhouse.com')->group(function () {
     Route::get('/', fn () => redirect()->route('store.index'));
 });
 
-// Public Institutional Vanguard Library & Foundational Thesis
-Route::get('/', [VanguardLibraryController::class, 'index'])->name('home');
+// Glenride institutional front door; the Vanguard Library lives at /library
+Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/library', [VanguardLibraryController::class, 'index'])->name('library.index');
 Route::get('/briefs/{manuscript}', [VanguardLibraryController::class, 'show'])->name('briefs.show');
 Route::get('/thesis', [VanguardLibraryController::class, 'thesis'])->name('thesis.index');

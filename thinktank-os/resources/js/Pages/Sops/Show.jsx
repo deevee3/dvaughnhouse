@@ -10,13 +10,13 @@ export default function Show({ document }) {
                         <span className="font-mono text-xs uppercase tracking-widest text-[#E97451]">
                             ThinkTank OS // Standard Operating Procedures · {document.id}
                         </span>
-                        <h2 className="text-2xl font-bold leading-tight text-gray-900">
+                        <h2 className="text-2xl font-bold leading-tight text-ink">
                             {document.title}
                         </h2>
                     </div>
                     <Link
                         href={route('sops.index')}
-                        className="text-xs font-mono font-medium text-stone-600 hover:text-gray-900 transition"
+                        className="text-xs font-mono font-medium text-ink-soft hover:text-ink transition"
                     >
                         ← All procedures
                     </Link>
@@ -52,7 +52,7 @@ export default function Show({ document }) {
                     <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#E97451]">
                         {document.id}
                     </span>
-                    <span className="rounded-full bg-stone-100 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-stone-600">
+                    <span className="rounded-full bg-stone-100 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-ink-soft">
                         {document.status}
                     </span>
                 </div>
@@ -63,7 +63,7 @@ export default function Show({ document }) {
                 </div>
 
                 <article
-                    className="sop-content mt-8 rounded-xl border border-stone-200 bg-white p-8 shadow-sm sm:p-12"
+                    className="sop-content mt-8 rounded-xl border border-stone-200 bg-paper p-8 shadow-sm sm:p-12"
                     dangerouslySetInnerHTML={{ __html: document.html }}
                 />
 

@@ -1,0 +1,289 @@
+import InstitutionalHeader from '@/Components/InstitutionalHeader';
+import SiteFooter from '@/Components/SiteFooter';
+import { Head, Link } from '@inertiajs/react';
+
+const RESEARCH_AREAS = [
+    {
+        name: 'Supply-Chain Resilience',
+        line: 'How critical supply chains fail, where they bend, and what keeps them running.',
+    },
+    {
+        name: 'Pharmaceutical Data Evaluation',
+        line: 'Clinical and regulatory data, evaluated for what it actually shows.',
+    },
+    {
+        name: 'Applied AI & Enterprise Software Systems',
+        line: 'Autonomous systems under non-negotiable human primacy — AI prepares, humans decide.',
+    },
+];
+
+const CURATED_FALLBACK = {
+    id: 'featured-monograph-1',
+    title: 'Autonomous Agentic Governance in High-Assurance Sectors',
+    abstract:
+        'A strategic framework addressing the latency gap between rapid algorithmic decision-making and human moral verification across clinical trial data pipelines and defense infrastructure.',
+    published_at: '2026-09-15',
+    attestation_public_id: null,
+};
+
+function formatDate(value) {
+    if (!value) return null;
+    return new Date(value).toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+    });
+}
+
+export default function Landing({
+    featuredBriefs = [],
+    publishedCount = 0,
+    attestationCount = 0,
+    essayCount = 0,
+    auth,
+}) {
+    const briefs = featuredBriefs.length > 0 ? featuredBriefs : [CURATED_FALLBACK];
+
+    return (
+        <div className="min-h-screen bg-paper font-serif text-ink selection:bg-sienna selection:text-ink dark:bg-night dark:text-cream">
+            <Head title="Glenride — Independent, AI-Native Think Tank" />
+
+            <InstitutionalHeader
+                auth={auth}
+                active="home"
+                subtitle="Independent, AI-Native Think Tank"
+            />
+
+            {/* Hero — flat ink band, image-led system has no photographic
+                asset for the institution yet, so the wordmark carries it. */}
+            <section className="bg-ink text-paper dark:bg-night-deep dark:text-cream">
+                <div className="animate-rise mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
+                    <h1 className="font-display text-6xl font-extrabold leading-none tracking-tight sm:text-7xl lg:text-8xl">
+                        Glenride
+                    </h1>
+                    <p className="mt-8 max-w-2xl text-xl leading-relaxed text-paper/85 dark:text-cream-soft sm:text-2xl">
+                        An independent, AI-native think tank. Glenride turns deep
+                        research into short, checkable policy briefs — and signs its
+                        work, so every claim carries its evidence, its verifier, and
+                        its date.
+                    </p>
+                    <div className="mt-10 flex flex-wrap items-center gap-4">
+                        <Link
+                            href={route('library.index')}
+                            className="inline-flex items-center rounded-lg bg-sienna px-6 py-3 text-sm font-semibold text-ink shadow-sm transition hover:bg-sienna-deep hover:text-paper"
+                        >
+                            Enter the Vanguard Library
+                        </Link>
+                        <Link
+                            href={route('thesis.index')}
+                            className="inline-flex items-center rounded-lg border border-paper/40 px-6 py-3 text-sm font-semibold text-paper transition hover:border-paper hover:bg-paper hover:text-ink dark:border-line-dark dark:text-cream dark:hover:bg-cream dark:hover:text-night"
+                        >
+                            Read the thesis
+                        </Link>
+                    </div>
+                    {!auth?.user && (
+                        <p className="mt-8 font-mono text-xs uppercase tracking-widest text-paper/60 dark:text-cream-soft">
+                            Fellows and scholars —{' '}
+                            <Link
+                                href={route('login')}
+                                className="font-semibold text-paper underline decoration-sienna decoration-2 underline-offset-4 transition hover:text-sienna dark:text-cream"
+                            >
+                                Scholar sign in
+                            </Link>
+                        </p>
+                    )}
+                </div>
+            </section>
+
+            {/* What Glenride is */}
+            <section className="border-b border-line dark:border-line-dark">
+                <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+                    <div className="max-w-3xl">
+                        <h2 className="font-display text-3xl font-bold tracking-tight text-ink dark:text-cream sm:text-4xl">
+                            Built to close the power-wisdom gap
+                        </h2>
+                        <div className="mt-6 space-y-5 text-lg leading-relaxed text-ink-soft dark:text-cream-soft">
+                            <p>
+                                Algorithmic velocity now expands exponentially while
+                                institutional wisdom remains bounded by human
+                                cognition. Glenride exists to close that gap:
+                                autonomous synthesis does the distillation, and human
+                                orchestrators keep the moral responsibility.
+                            </p>
+                            <p>
+                                Machines provide analytical velocity. Humans provide
+                                the judgment. No brief is published, and no claim is
+                                attested, without decisive human verification.
+                            </p>
+                        </div>
+                    </div>
+
+                    <dl className="mt-14 border-t border-line dark:border-line-dark">
+                        {RESEARCH_AREAS.map((area) => (
+                            <div
+                                key={area.name}
+                                className="grid gap-2 border-b border-line py-7 dark:border-line-dark sm:grid-cols-3 sm:gap-8"
+                            >
+                                <dt className="font-display text-xl font-bold text-ink dark:text-cream">
+                                    {area.name}
+                                </dt>
+                                <dd className="text-base leading-relaxed text-ink-soft dark:text-cream-soft sm:col-span-2">
+                                    {area.line}
+                                </dd>
+                            </div>
+                        ))}
+                    </dl>
+                </div>
+            </section>
+
+            {/* The proof layer */}
+            <section className="border-b border-line bg-paper-deep dark:border-line-dark dark:bg-night-card">
+                <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+                    <div className="max-w-3xl">
+                        <h2 className="font-display text-3xl font-bold tracking-tight text-ink dark:text-cream sm:text-4xl">
+                            Proof, not promises.
+                        </h2>
+                        <p className="mt-6 text-lg leading-relaxed text-ink-soft dark:text-cream-soft">
+                            Every attested work carries a signed Glenride record: the
+                            claim, the evidence behind it, the verifier who checked
+                            it, and the timestamp. The record is public, and anyone
+                            can verify it — or challenge it.
+                        </p>
+                        <p className="mt-5 text-lg leading-relaxed text-ink-soft dark:text-cream-soft">
+                            The registry currently holds{' '}
+                            <span className="font-semibold text-ink dark:text-cream">
+                                {attestationCount}{' '}
+                                {attestationCount === 1 ? 'attestation' : 'attestations'}
+                            </span>{' '}
+                            across{' '}
+                            <span className="font-semibold text-ink dark:text-cream">
+                                {publishedCount}{' '}
+                                {publishedCount === 1
+                                    ? 'published brief'
+                                    : 'published briefs'}
+                            </span>{' '}
+                            in the Vanguard Library.
+                        </p>
+                        <Link
+                            href={route('attestations.index')}
+                            className="mt-8 inline-flex items-center font-mono text-sm font-semibold text-sienna-deep transition hover:text-ink dark:text-sienna dark:hover:text-cream"
+                        >
+                            Browse the public registry →
+                        </Link>
+                    </div>
+                </div>
+            </section>
+
+            {/* From the Vanguard Library */}
+            <section className="border-b border-line dark:border-line-dark">
+                <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+                    <div className="flex flex-wrap items-end justify-between gap-4">
+                        <h2 className="font-display text-3xl font-bold tracking-tight text-ink dark:text-cream sm:text-4xl">
+                            From the Vanguard Library
+                        </h2>
+                        <Link
+                            href={route('library.index')}
+                            className="font-mono text-sm font-semibold text-sienna-deep transition hover:text-ink dark:text-sienna dark:hover:text-cream"
+                        >
+                            All monographs →
+                        </Link>
+                    </div>
+
+                    <div className="mt-10 border-t border-line dark:border-line-dark">
+                        {briefs.map((brief) => (
+                            <article
+                                key={brief.id}
+                                className="group border-b border-line py-8 dark:border-line-dark"
+                            >
+                                <div className="flex flex-wrap items-baseline justify-between gap-3">
+                                    <h3 className="max-w-3xl font-display text-2xl font-bold leading-snug text-ink transition group-hover:text-sienna-deep dark:text-cream dark:group-hover:text-sienna">
+                                        <Link href={route('briefs.show', brief.id)}>
+                                            {brief.title}
+                                        </Link>
+                                    </h3>
+                                    {formatDate(brief.published_at) && (
+                                        <span className="font-mono text-xs text-ink-soft dark:text-cream-soft">
+                                            {formatDate(brief.published_at)}
+                                        </span>
+                                    )}
+                                </div>
+                                {brief.abstract && (
+                                    <p className="mt-3 max-w-3xl leading-relaxed text-ink-soft dark:text-cream-soft">
+                                        {brief.abstract}
+                                    </p>
+                                )}
+                                {brief.attestation_public_id && (
+                                    <p className="mt-4 font-mono text-xs font-semibold text-sienna-deep dark:text-sienna">
+                                        Witnessed by Glenride ·{' '}
+                                        {brief.attestation_public_id}
+                                    </p>
+                                )}
+                            </article>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Doors */}
+            <section>
+                <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+                    <h2 className="font-display text-3xl font-bold tracking-tight text-ink dark:text-cream sm:text-4xl">
+                        Go deeper
+                    </h2>
+                    <div className="mt-10 border-t border-line dark:border-line-dark">
+                        <Link
+                            href={route('essays.index')}
+                            className="group flex flex-wrap items-baseline justify-between gap-2 border-b border-line py-6 transition dark:border-line-dark"
+                        >
+                            <span className="font-display text-xl font-bold text-ink transition group-hover:text-sienna-deep dark:text-cream dark:group-hover:text-sienna">
+                                Essays
+                            </span>
+                            <span className="text-sm text-ink-soft dark:text-cream-soft">
+                                Long-form foundational writing
+                                {essayCount > 0
+                                    ? ` — ${essayCount} published`
+                                    : ''}{' '}
+                                →
+                            </span>
+                        </Link>
+                        <Link
+                            href={route('standards.show')}
+                            className="group flex flex-wrap items-baseline justify-between gap-2 border-b border-line py-6 transition dark:border-line-dark"
+                        >
+                            <span className="font-display text-xl font-bold text-ink transition group-hover:text-sienna-deep dark:text-cream dark:group-hover:text-sienna">
+                                Standards
+                            </span>
+                            <span className="text-sm text-ink-soft dark:text-cream-soft">
+                                The standards Glenride works to →
+                            </span>
+                        </Link>
+                        <Link
+                            href={route('store.index')}
+                            className="group flex flex-wrap items-baseline justify-between gap-2 border-b border-line py-6 transition dark:border-line-dark"
+                        >
+                            <span className="font-display text-xl font-bold text-ink transition group-hover:text-sienna-deep dark:text-cream dark:group-hover:text-sienna">
+                                Store
+                            </span>
+                            <span className="text-sm text-ink-soft dark:text-cream-soft">
+                                Commercial work and executive salons →
+                            </span>
+                        </Link>
+                        <a
+                            href="https://dvaughnhouse.com/#contact"
+                            className="group flex flex-wrap items-baseline justify-between gap-2 border-b border-line py-6 transition dark:border-line-dark"
+                        >
+                            <span className="font-display text-xl font-bold text-ink transition group-hover:text-sienna-deep dark:text-cream dark:group-hover:text-sienna">
+                                Contact
+                            </span>
+                            <span className="text-sm text-ink-soft dark:text-cream-soft">
+                                Reach the institute through the routing hub →
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <SiteFooter />
+        </div>
+    );
+}

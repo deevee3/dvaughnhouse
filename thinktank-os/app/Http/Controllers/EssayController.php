@@ -31,6 +31,16 @@ class EssayController extends Controller
     ];
 
     /**
+     * Slugs of the published essays (used for counts on the home page).
+     *
+     * @return array<int, string>
+     */
+    public static function publishedSlugs(): array
+    {
+        return array_keys(self::DOCUMENTS);
+    }
+
+    /**
      * Display the essays index.
      */
     public function index(Request $request): Response
