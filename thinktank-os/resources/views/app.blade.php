@@ -8,7 +8,7 @@
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=bricolage-grotesque:700,800|newsreader:400,400i,500,500i,600,600i&amp;display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
         @routes
@@ -20,7 +20,7 @@
         <script type="application/ld+json">{!! $storeSeo['jsonLd'] !!}</script>
         @endisset
     </head>
-    <body class="font-sans antialiased">
+    <body class="bg-paper font-serif text-ink antialiased dark:bg-night dark:text-cream">
         @inertia
         {{-- AEO: plain-text catalog summary for crawlers that don't run JS.
              Same offers and prices as the interactive storefront — no cloaking. --}}

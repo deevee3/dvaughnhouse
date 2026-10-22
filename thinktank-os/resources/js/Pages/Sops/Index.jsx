@@ -3,24 +3,24 @@ import { Head, Link } from '@inertiajs/react';
 
 export default function Index({ documents = [], auth }) {
     return (
-        <div className="min-h-screen bg-[#fafaf9] text-gray-900 font-sans selection:bg-[#E97451] selection:text-white">
+        <div className="min-h-screen bg-paper text-ink dark:bg-night dark:text-cream font-serif selection:bg-sienna selection:text-ink">
             <Head title="Standard Operating Procedures - Glenride" />
             <InstitutionalHeader auth={auth} active="sops" />
 
             <main className="mx-auto max-w-7xl px-6 lg:px-8 py-16">
                 <div className="max-w-3xl">
-                    <p className="font-mono text-xs uppercase tracking-widest text-[#E97451]">
-                        Glenride · Operations
-                    </p>
-                    <h1 className="mt-4 font-serif text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+                    <h1 className="mt-4 font-display text-4xl font-bold tracking-tight text-ink dark:text-cream sm:text-5xl">
                         Standard Operating Procedures
                     </h1>
-                    <p className="mt-6 text-lg leading-relaxed text-stone-600">
+                                        <p className="font-mono text-xs uppercase tracking-widest text-sienna-deep dark:text-sienna">
+                        Glenride · Operations
+                    </p>
+                    <p className="mt-6 text-lg leading-relaxed text-ink-soft dark:text-cream-soft">
                         The documented way Glenride works. Every procedure carries an
                         owner, a version, and an approver — nothing here is binding
                         until it is approved and versioned.
                     </p>
-                    <div className="mt-6 inline-flex items-center rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                    <div className="mt-6 inline-flex items-center rounded-lg border border-line bg-paper-deep dark:border-line-dark dark:bg-night-deep px-4 py-3 text-sm text-ink dark:text-cream">
                         <span className="mr-2 font-mono text-xs font-bold uppercase tracking-wider">
                             Draft
                         </span>
@@ -34,26 +34,26 @@ export default function Index({ documents = [], auth }) {
                         <Link
                             key={doc.slug}
                             href={route('sops.show', doc.slug)}
-                            className="group flex flex-col rounded-xl border border-stone-200 bg-white p-6 shadow-sm transition hover:border-[#f6d3c2] hover:shadow-md"
+                            className="group flex flex-col rounded-xl border border-line dark:border-line-dark bg-paper dark:bg-night-card p-6 shadow-sm transition hover:border-sienna-deep/40 dark:hover:border-sienna/50 hover:shadow-md"
                         >
                             <div className="flex items-center justify-between">
-                                <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#E97451]">
+                                <span className="font-mono text-xs font-bold uppercase tracking-widest text-sienna-deep dark:text-sienna">
                                     {doc.id}
                                 </span>
-                                <span className="rounded-full bg-stone-100 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-stone-600">
+                                <span className="rounded-full bg-paper-deep dark:bg-night-deep px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-ink-soft dark:text-cream-soft">
                                     {doc.status}
                                 </span>
                             </div>
-                            <h2 className="mt-3 font-serif text-xl font-bold text-gray-900 group-hover:text-[#b5532c] transition">
+                            <h2 className="mt-3 font-display text-xl font-bold text-ink dark:text-cream group-hover:text-sienna-deep dark:group-hover:text-sienna transition">
                                 {doc.title}
                             </h2>
-                            <p className="mt-2 flex-1 text-sm leading-relaxed text-stone-600">
+                            <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-soft dark:text-cream-soft">
                                 {doc.description}
                             </p>
-                            <div className="mt-4 border-t border-stone-100 pt-3 font-mono text-[11px] uppercase tracking-wider text-stone-500">
+                            <div className="mt-4 border-t border-line dark:border-line-dark pt-3 font-mono text-[11px] uppercase tracking-wider text-ink-soft dark:text-cream-soft">
                                 Owner: {doc.owner} · Approver: {doc.approver}
                             </div>
-                            <span className="mt-3 text-sm font-medium text-[#E97451] group-hover:text-[#9c4a28] transition">
+                            <span className="mt-3 text-sm font-medium text-sienna-deep dark:text-sienna group-hover:text-sienna-deep dark:group-hover:text-sienna transition">
                                 Read procedure →
                             </span>
                         </Link>
@@ -61,8 +61,8 @@ export default function Index({ documents = [], auth }) {
                 </div>
             </main>
 
-            <footer className="border-t border-stone-200 py-8">
-                <p className="text-center font-mono text-[11px] uppercase tracking-widest text-stone-400">
+            <footer className="border-t border-line dark:border-line-dark py-8">
+                <p className="text-center font-mono text-[11px] uppercase tracking-widest text-ink-soft dark:text-cream-soft">
                     Glenride · Procedures are versioned; numbers are permanent
                 </p>
             </footer>
