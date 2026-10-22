@@ -140,6 +140,49 @@ is ready to record and display the result:
   before mainnet — and until an anchor is recorded the public page keeps the
   honest "Not anchored" line.
 
+## SpinWave records — the permanent publish-time snapshot
+
+Per the settled model, publishing **is** recording: the submission is
+permanently recorded on **SpinWave, a project of Glenride** — the database
+of record for manuscripts and attestation certificates. ThinkTank OS makes
+that permanence a system property, not a policy:
+
+- **What a record is:** a row in `manuscript_records` (migration
+  `2026_10_22_000003`) holding the manuscript id, a `version`, a
+  `record_hash`, a JSONB `snapshot` (title, abstract, author name, word
+  count, brief SHA-256 when a synthesized brief exists, the three
+  compliance booleans, `published_at`), who recorded it, and timestamps.
+- **When it is created:** when a manuscript transitions **into**
+  `published` — `PortfolioMatrixController::updateStatus` (the only status
+  transition path) calls `App\Services\SpinWave\RecordService::recordPublication()`
+  with the acting user, serialized under a row lock. Unpublishing and all
+  other transitions create nothing.
+- **Idempotent re-publish:** if the content is unchanged since the latest
+  record (the recomputed hash equals the latest record's hash), no
+  duplicate version is written. A content change re-published later earns
+  the next version — history is a chain of versions, never an edit.
+- **Hash parity:** the record hash is `AttestationService::subjectHash()`
+  itself — same inputs, same precedence (synthesized brief file, else raw
+  file, else canonical `title | abstract | author id | published_at`).
+  So a record created at publish carries exactly the `subject_hash` an
+  attestation will bear for unchanged content, and attestations bind back
+  to the record: `issue()` adds `spinwave_record` (`record_id`, `version`,
+  `record_hash`) to the evidence manifest when a record exists.
+- **Append-only:** `ManuscriptRecord` throws on update, and on delete
+  while its manuscript exists. The only removal is the database cascade
+  when the manuscript itself is deleted.
+- **Backfill:** `php artisan spinwave:backfill-records` creates v1 records
+  for manuscripts published before recording shipped, keeping each
+  manuscript's existing `published_at`. For an already-attested brief with
+  unchanged content, the backfilled record hash equals the attestation's
+  `subject_hash`.
+- **Where records surface:** the Matrix Editorial Studio shows a
+  "SpinWave Record" block (version, short hash, recorded date, or
+  "Not recorded — recording happens at publish."); the public Library
+  brief page prints "Recorded on SpinWave · v{n} · {date} · {short hash}"
+  under the attestation seal; the landing page appends
+  "SpinWave record v{n}" to a featured brief's meta line when present.
+
 ## Data model
 
 Migration: `database/migrations/2026_10_22_000001_create_attestations_tables.php`
@@ -184,8 +227,11 @@ Migration: `database/migrations/2026_10_22_000001_create_attestations_tables.php
   `scopeActive()`, `isActive()`, `isAnchored()`, `signatureFingerprint()`.
 - `App\Models\AttestationChallenge` — `attestation()`, `challenger()`.
 - `Manuscript`: `attestations()`, `latestAttestation()`, `activeAttestation()`,
-  `isAttested()`.
+  `isAttested()`, `records()` / `latestRecord()` (SpinWave records).
+- `App\Models\ManuscriptRecord` — the append-only publish-time snapshot
+  (see "SpinWave records" above); `manuscript()`, `recorder()`.
 - `User`: `attestations()` (as verifier), `canIssueAttestations()`.
+- `App\Services\SpinWave\RecordService` — `recordPublication()`.
 - `App\Services\Attestation\AttestationService` — `subjectHash()`,
   `evidenceManifest()`, `issue()` (v2: claim override + `manual_evidence`),
   `issueManual()` (v2: standalone subjects, `manual_entry_v1`),

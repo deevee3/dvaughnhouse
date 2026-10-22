@@ -113,6 +113,19 @@ class AttestationService
 
         $manifest = $this->evidenceManifest($manuscript);
 
+        // Bind the attestation to the manuscript's permanent SpinWave
+        // record: the certificate points at the exact recorded version
+        // it was issued against.
+        $latestRecord = $manuscript->latestRecord;
+
+        if ($latestRecord) {
+            $manifest['spinwave_record'] = [
+                'record_id' => $latestRecord->id,
+                'version' => $latestRecord->version,
+                'record_hash' => $latestRecord->record_hash,
+            ];
+        }
+
         if (! empty($evidenceExtra)) {
             $urls = $evidenceExtra['urls'] ?? ($evidenceExtra['evidence_urls'] ?? []);
             $manifest['manual_evidence'] = [

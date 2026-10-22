@@ -2,7 +2,7 @@ import AttestationSeal from '@/Components/AttestationSeal';
 import { Head, Link } from '@inertiajs/react';
 import { useState, useMemo } from 'react';
 
-export default function Show({ manuscript = {}, content = '', related = [], isPreview = false, attestation = null }) {
+export default function Show({ manuscript = {}, content = '', related = [], isPreview = false, attestation = null, latestRecord = null }) {
     const [copiedCitation, setCopiedCitation] = useState(false);
 
     // Build standard Glenride academic citation
@@ -110,6 +110,24 @@ export default function Show({ manuscript = {}, content = '', related = [], isPr
                 {/* Glenride Attestation Seal */}
                 <div className="mb-12">
                     <AttestationSeal attestation={attestation} />
+                    {latestRecord && (
+                        <p className="mt-3 font-mono text-xs text-ink-soft dark:text-cream-soft">
+                            Recorded on SpinWave · v{latestRecord.version}
+                            {latestRecord.created_at && (
+                                <>
+                                    {' · '}
+                                    {new Date(latestRecord.created_at).toLocaleDateString('en-US', {
+                                        month: 'long',
+                                        day: 'numeric',
+                                        year: 'numeric',
+                                    })}
+                                </>
+                            )}
+                            {latestRecord.record_hash && (
+                                <span className="ml-2">{latestRecord.record_hash.slice(0, 12)}…</span>
+                            )}
+                        </p>
+                    )}
                 </div>
 
                 {/* Abstract Callout */}

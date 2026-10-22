@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Manuscript extends Model
@@ -82,6 +84,23 @@ class Manuscript extends Model
         return $this->compliance_ethics_verified
             && $this->compliance_transparency_verified
             && $this->compliance_citations_verified;
+    }
+
+    /**
+     * SpinWave records: the append-only publish-time snapshots of this
+     * manuscript, oldest version first.
+     */
+    public function records(): HasMany
+    {
+        return $this->hasMany(ManuscriptRecord::class)->orderBy('version');
+    }
+
+    /**
+     * The latest SpinWave record (highest version), if any.
+     */
+    public function latestRecord(): HasOne
+    {
+        return $this->hasOne(ManuscriptRecord::class)->latestOfMany('version');
     }
 
     /**

@@ -24,6 +24,7 @@ const CURATED_FALLBACK = {
         'A strategic framework addressing the latency gap between rapid algorithmic decision-making and human moral verification across clinical trial data pipelines and defense infrastructure.',
     published_at: '2026-09-15',
     attestation_public_id: null,
+    record_version: null,
 };
 
 function formatDate(value) {
@@ -212,10 +213,15 @@ export default function Landing({
                                         {brief.abstract}
                                     </p>
                                 )}
-                                {brief.attestation_public_id && (
+                                {(brief.attestation_public_id || brief.record_version) && (
                                     <p className="mt-4 font-mono text-xs font-semibold text-sienna-deep dark:text-sienna">
-                                        Witnessed by Glenride ·{' '}
-                                        {brief.attestation_public_id}
+                                        {brief.attestation_public_id && (
+                                            <>Witnessed by Glenride · {brief.attestation_public_id}</>
+                                        )}
+                                        {brief.attestation_public_id && brief.record_version && ' · '}
+                                        {brief.record_version && (
+                                            <>SpinWave record v{brief.record_version}</>
+                                        )}
                                     </p>
                                 )}
                             </article>

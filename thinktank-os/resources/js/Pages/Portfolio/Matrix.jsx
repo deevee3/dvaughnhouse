@@ -56,6 +56,7 @@ export default function Matrix({ columns = {}, stats = {}, isOrchestrator = fals
     const [toastMessage, setToastMessage] = useState(null);
     const [liveEventCount, setLiveEventCount] = useState(0);
     const [selectedAttestation, setSelectedAttestation] = useState(null);
+    const [selectedRecord, setSelectedRecord] = useState(null);
     const [canIssueAttestation, setCanIssueAttestation] = useState(false);
     const [isIssuingAttestation, setIsIssuingAttestation] = useState(false);
     const [attestationClaim, setAttestationClaim] = useState(
@@ -164,6 +165,7 @@ export default function Matrix({ columns = {}, stats = {}, isOrchestrator = fals
         setIsLoadingBrief(true);
         setEditMode(manuscript.status === 'human_polish');
         setSelectedAttestation(null);
+        setSelectedRecord(null);
         setCanIssueAttestation(false);
         setAttestationClaim(
             'Glenride attests that this work was authored as claimed, passed editorial review, and matches the evidence recorded at issuance.'
@@ -178,6 +180,7 @@ export default function Matrix({ columns = {}, stats = {}, isOrchestrator = fals
             const res = await window.axios.get(route('matrix.show', manuscript.id));
             setBriefContent(res.data.brief_content || '');
             setSelectedAttestation(res.data.attestation || null);
+            setSelectedRecord(res.data.latest_record || null);
             const canIssue = Boolean(res.data.can_issue_attestation);
             setCanIssueAttestation(canIssue);
             if (res.data.manuscript) {
@@ -200,6 +203,7 @@ export default function Matrix({ columns = {}, stats = {}, isOrchestrator = fals
         setBriefContent('');
         setEditMode(false);
         setSelectedAttestation(null);
+        setSelectedRecord(null);
         setCanIssueAttestation(false);
     };
 
@@ -729,6 +733,45 @@ export default function Matrix({ columns = {}, stats = {}, isOrchestrator = fals
                                         <li>Data Transparency: Certified</li>
                                         <li>Original Citations: Verified</li>
                                     </ul>
+                                </div>
+
+                                {/* SpinWave Record — the permanent publish-time snapshot */}
+                                <div className="rounded-xl bg-paper p-4 border border-line text-xs space-y-2">
+                                    <div className="font-semibold text-ink">
+                                        SpinWave Record
+                                    </div>
+                                    {selectedRecord ? (
+                                        <div className="space-y-1">
+                                            <div className="flex justify-between">
+                                                <span className="text-ink-soft">Status:</span>
+                                                <span className="font-semibold text-ink">
+                                                    Recorded on SpinWave · v{selectedRecord.version}
+                                                </span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span className="text-ink-soft">Record hash:</span>
+                                                <span className="font-mono font-semibold text-ink">
+                                                    {selectedRecord.record_hash?.slice(0, 12)}…
+                                                </span>
+                                            </div>
+                                            {selectedRecord.created_at && (
+                                                <div className="flex justify-between">
+                                                    <span className="text-ink-soft">Recorded:</span>
+                                                    <span className="font-semibold text-ink">
+                                                        {new Date(selectedRecord.created_at).toLocaleDateString('en-US', {
+                                                            month: 'long',
+                                                            day: 'numeric',
+                                                            year: 'numeric',
+                                                        })}
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <p className="text-ink-soft">
+                                            Not recorded — recording happens at publish.
+                                        </p>
+                                    )}
                                 </div>
 
                                 {/* Glenride Attestation — final step of the pipeline */}

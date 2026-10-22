@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\ManuscriptStatusUpdated;
 use App\Models\Manuscript;
+use App\Services\SpinWave\RecordService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -80,6 +81,7 @@ class PortfolioMatrixController extends Controller
             'manuscript' => $manuscript,
             'brief_content' => $briefContent,
             'attestation' => $attestation,
+            'latest_record' => $manuscript->latestRecord,
             'can_issue_attestation' => $user ? $user->canIssueAttestations() : false,
         ]);
     }
@@ -87,13 +89,14 @@ class PortfolioMatrixController extends Controller
     /**
      * Transition manuscript status across Kanban columns.
      */
-    public function updateStatus(Request $request, Manuscript $manuscript): JsonResponse|RedirectResponse
+    public function updateStatus(Request $request, Manuscript $manuscript, RecordService $records): JsonResponse|RedirectResponse
     {
         $validated = $request->validate([
             'status' => 'required|string|in:submitted,ai_synthesized,human_polish,published',
         ]);
 
         $newStatus = $validated['status'];
+        $previousStatus = $manuscript->status;
         $updateData = ['status' => $newStatus];
 
         if ($newStatus === 'published' && ! $manuscript->published_at) {
@@ -101,6 +104,14 @@ class PortfolioMatrixController extends Controller
         }
 
         $manuscript->update($updateData);
+
+        // Publishing is a permanent record on SpinWave: transitioning
+        // INTO published snapshots the manuscript into the append-only
+        // record store. Re-publishes of unchanged content are idempotent
+        // (handled in RecordService); other transitions are not records.
+        if ($newStatus === 'published' && $previousStatus !== 'published') {
+            $records->recordPublication($manuscript->fresh(), $request->user());
+        }
 
         // Broadcast real-time transition event
         try {

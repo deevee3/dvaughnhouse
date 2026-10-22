@@ -89,6 +89,9 @@ class VanguardLibraryController extends Controller
             'attestation' => $manuscriptModel->exists
                 ? $manuscriptModel->activeAttestation()?->load('verifier:id,name')
                 : null,
+            'latestRecord' => $manuscriptModel->exists
+                ? $manuscriptModel->latestRecord
+                : null,
         ]);
     }
 

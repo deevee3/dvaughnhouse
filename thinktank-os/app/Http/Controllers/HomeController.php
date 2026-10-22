@@ -30,6 +30,7 @@ class HomeController extends Controller
                     'abstract' => $brief->abstract,
                     'published_at' => $brief->published_at,
                     'attestation_public_id' => $brief->activeAttestation()?->public_id,
+                    'record_version' => $brief->latestRecord?->version,
                 ];
             });
 
