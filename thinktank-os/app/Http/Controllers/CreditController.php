@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attestation;
 use App\Models\CreditAccount;
 use App\Models\CreditTransaction;
 use App\Models\User;
@@ -50,8 +51,8 @@ class CreditController extends Controller
             'accounts' => $accounts,
             'recentTransactions' => $recentTransactions,
             'users' => $users,
-            'pegUsd' => (float) config('credits.peg_usd', 0.01),
-            'attestationPriceCredits' => (float) config('credits.attestation_price_credits', 100),
+            'creditsPerUsd' => (float) config('credits.credits_per_usd', 75),
+            'attestationPriceCredits' => (float) config('credits.attestation_price_credits', 75),
             'depositAddress' => config('credits.deposit_address'),
             'stanzaContract' => config('credits.stanza_contract'),
         ]);
@@ -74,7 +75,7 @@ class CreditController extends Controller
         return Inertia::render('Credits/Show', [
             'account' => $account,
             'transactions' => $transactions,
-            'pegUsd' => (float) config('credits.peg_usd', 0.01),
+            'creditsPerUsd' => (float) config('credits.credits_per_usd', 75),
         ]);
     }
 
@@ -119,11 +120,11 @@ class CreditController extends Controller
             return back()->with('error', $e->getMessage())->withInput();
         }
 
-        return back()->with('success', "Granted {$validated['credits']} credits to {$account->name}.");
+        return back()->with('success', "Granted {$validated['credits']} TTOS to {$account->name}.");
     }
 
     /**
-     * Record a STANZA deposit manually and allocate credits at the peg.
+     * Record a STANZA deposit manually and allocate TTOS at the fixed rate.
      *
      * This is the prepaid-study path today: the study pays STANZA to the
      * deposit address, and an orchestrator records the confirmed deposit
@@ -150,6 +151,47 @@ class CreditController extends Controller
             $user
         );
 
-        return back()->with('success', "Deposit recorded: {$transaction->amount} credits allocated to {$account->name}.");
+        return back()->with('success', "Deposit recorded: {$transaction->amount} TTOS allocated to {$account->name}.");
+    }
+
+    /**
+     * Refund unused TTOS back to STANZA (owner policy, decided 2026-10-22).
+     *
+     * The STANZA quantity is priced at the lower of the account's original
+     * (weighted-average deposit) price and the current market price, and a
+     * refund tied to an attestation is eligible only after midnight
+     * (America/New_York) following the attestation day. The payout itself
+     * is a treasury Safe transfer made outside the app; the orchestrator
+     * records it here with the payout tx hash when available.
+     */
+    public function refund(Request $request, CreditAccount $account, CreditService $credits): RedirectResponse
+    {
+        $user = $this->authorizeCreditsAdmin($request);
+
+        $validated = $request->validate([
+            'credits' => 'required|numeric|gt:0|max:100000000',
+            'current_price_usd' => 'required|numeric|gt:0',
+            'attestation_public_id' => 'nullable|string|exists:attestations,public_id',
+            'payout_tx_hash' => 'nullable|string|regex:/^0x[0-9a-fA-F]{64}$/',
+        ]);
+
+        $attestation = ! empty($validated['attestation_public_id'])
+            ? Attestation::where('public_id', $validated['attestation_public_id'])->first()
+            : null;
+
+        try {
+            $transaction = $credits->refund(
+                $account,
+                (float) $validated['credits'],
+                (float) $validated['current_price_usd'],
+                $attestation,
+                $validated['payout_tx_hash'] ?? null,
+                $user
+            );
+        } catch (DomainException $e) {
+            return back()->with('error', $e->getMessage())->withInput();
+        }
+
+        return back()->with('success', "Refund recorded: {$validated['credits']} TTOS from {$account->name} converts to {$transaction->token_amount} STANZA at the policy price basis.");
     }
 }

@@ -184,29 +184,31 @@ that permanence a system property, not a policy:
   under the attestation seal; the landing page appends
   "SpinWave record v{n}" to a featured brief's meta line when present.
 
-## Credits (STANZA) — the prepaid budget ledger
+## Credits (TTOS) — the STANZA-backed prepaid budget ledger
 
 Per the settled model, **attestations are prepaid from budgets**: a study's
 or project's budget pays for its attestations up front. The credit system
-(owner blueprint, adopted 2026-10-22) makes that real: credits **are**
-STANZA-backed service credits, held in an off-chain relational ledger that
-syncs with on-chain STANZA deposits — on-chain microtransactions per
-service call would be cost-prohibitive and slow.
+(owner blueprint, adopted 2026-10-22) makes that real: the credit unit is
+**TTOS** (ThinkTank OS credits) — STANZA-backed service credits, held in an
+off-chain relational ledger that syncs with on-chain STANZA deposits —
+on-chain microtransactions per service call would be cost-prohibitive and
+slow.
 
-### Peg and formulas
+### Rate and formulas
 
-- **Fixed internal peg:** `1 Credit = $0.01 USD` (`config('credits.peg_usd')`).
-  The peg isolates the ledger from token volatility: STANZA's price is
+- **Fixed internal rate:** `75 TTOS = $1.00 USD`
+  (`config('credits.credits_per_usd') = 75`, so `V_cr = 1/75 USD`). The
+  fixed rate isolates the ledger from token volatility: STANZA's price is
   dynamic (paired with wTAO on Base), but once a deposit is converted, the
-  credit balance does not float.
+  TTOS balance does not float.
 - **Deposit allocation:**
-  `Credits Allocated = (STANZA Deposited × STANZA Price USD) / V_cr`,
-  with `V_cr = $0.01`. Example: 250,000 STANZA at $0.0004 = $100 → 10,000 credits.
+  `TTOS Allocated = STANZA Deposited × STANZA Price USD × 75`.
+  Example: 250,000 STANZA at $0.0004 = $100 → 7,500 TTOS.
 - **Service cost:** `Cost_cr = C_op / V_cr`, where `C_op` is the raw
   operational cost of one service execution (compute/API + hosting
   overhead). The **attestation price** is
-  `config('credits.attestation_price_credits') = 100` credits ($1.00 at
-  the peg) — a launch placeholder, owner-adjustable.
+  `config('credits.attestation_price_credits') = 75` TTOS ($1.00 of
+  service; owner decision, 2026-10-22).
 
 ### Accounts and ledger (migration `2026_10_22_000004`)
 
@@ -223,9 +225,9 @@ service call would be cost-prohibitive and slow.
 - **`manuscripts.credit_account_id`** — a manuscript may link to one
   account (set at intake; the intake form offers an optional account
   select). `App\Services\Credits\CreditService` is the only writer:
-  `grant()`, `recordDeposit()` (idempotent per tx + log index), and
-  `debitForAttestation()` all lock the account row and round to 2
-  decimals at every write.
+  `grant()`, `recordDeposit()` (idempotent per tx + log index),
+  `debitForAttestation()`, and `refund()` all lock the account row and
+  round to 2 decimals at every write.
 
 ### Attestation debit semantics
 
@@ -271,13 +273,34 @@ recent activity) and `/credits/{account}` (full ledger) are restricted to
 **orchestrator/admin** roles (403 otherwise), enforced in
 `CreditController`; the nav link renders only for those roles.
 
-### Open: refunds and withdrawals
+### Refunds (policy decided by the owner, 2026-10-22)
 
-**Refund/withdrawal policy is NOT defined yet — an open owner decision.**
-V1 has no withdrawal path: credits are prepaid service balances, STANZA
-deposits are converted at deposit time and not redeemable through the
-system, and ledger `refund`/`adjustment` types exist as vocabulary only.
-Nothing in v1 moves tokens back out of the deposit address.
+**Unused TTOS are refundable back to STANZA.** The policy:
+
+- **Price basis:** the STANZA quantity is computed at the **lower of the
+  original price and the current market price**. The original price is
+  the account's weighted-average deposit price (priced `deposit` ledger
+  rows, weighted by STANZA amount). Accounts with no priced deposits
+  (grant-funded) refund at the **current** price as the basis — no
+  gain/loss adjustment. `STANZA out = TTOS / 75 / basis`.
+  Worked example: refunding 150 TTOS with an original average price of
+  $0.002 and a current price of $0.003 → basis $0.002 → 150 / 75 / 0.002
+  = **1,000 STANZA out**. (If the current price had fallen to $0.001, the
+  basis would be $0.001 and the refund would pay 2,000 STANZA.)
+- **Eligibility:** a refund tied to an attestation becomes eligible only
+  **after midnight (America/New_York) on the day of that attestation** —
+  i.e. from 00:00 the following day, New York time. `CreditService::refund()`
+  enforces this against the attestation's `issued_at`; refunds with no
+  attestation attached carry no time gate.
+- **Execution (v1):** orchestrator-executed and recorded. The STANZA
+  payout itself is a transfer from the treasury Safe performed **outside
+  the app**; the orchestrator records the refund at
+  `POST /credits/{account}/refund` (`credits.refund`) with the current
+  price, the optional attestation public ID, and the payout tx hash when
+  sent. The ledger row is `type = refund`, `amount = −TTOS`,
+  `token_amount = STANZA out`, `token_price_usd = basis`. A refund at an
+  unknown (zero/missing) current price is refused — the system never
+  refunds at an invented price.
 
 ## Data model
 

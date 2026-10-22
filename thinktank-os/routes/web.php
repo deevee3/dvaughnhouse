@@ -77,6 +77,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/credits/{account}', [CreditController::class, 'show'])->name('credits.show');
     Route::post('/credits/{account}/grant', [CreditController::class, 'grant'])->name('credits.grant');
     Route::post('/credits/{account}/deposit', [CreditController::class, 'deposit'])->name('credits.deposit');
+    Route::post('/credits/{account}/refund', [CreditController::class, 'refund'])->name('credits.refund');
 
     // Glenride Attestations — issue, challenge, revoke
     Route::post('/manuscripts/{manuscript}/attestations', [AttestationController::class, 'store'])->name('attestations.store');

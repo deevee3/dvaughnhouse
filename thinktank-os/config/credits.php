@@ -4,22 +4,24 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | STANZA Credit Ledger
+    | STANZA Credit Ledger (TTOS)
     |--------------------------------------------------------------------------
     |
-    | Credits are STANZA-backed service credits. Users deposit STANZA (Base)
-    | and receive off-chain credits in the relational ledger; services
-    | (attestations first) consume them. The internal peg is FIXED so the
+    | The credit unit is TTOS (ThinkTank OS credits). Credits are
+    | STANZA-backed service credits: users deposit STANZA (Base) and
+    | receive off-chain TTOS in the relational ledger; services
+    | (attestations first) consume them. The internal rate is FIXED so the
     | ledger is isolated from token price volatility:
     |
-    |   1 Credit = $0.01 USD
-    |   Credits Allocated = (STANZA Deposited × STANZA Price USD) / peg
-    |   Service Cost (credits) = Operational Cost USD / peg
+    |   75 TTOS = $1.00 USD   (V_cr = 1/75 USD per TTOS)
+    |   TTOS Allocated = STANZA Deposited × STANZA Price USD × 75
+    |   Service Cost (TTOS) = Operational Cost USD × 75
     |
     */
 
-    // Fixed internal value of one credit, in USD.
-    'peg_usd' => 0.01,
+    // Fixed internal rate: 75 TTOS = $1.00 USD. V_cr (the USD value of one
+    // TTOS) is therefore 1/75 USD.
+    'credits_per_usd' => 75,
 
     // STANZA token contract on Base (paired with wTAO; USD price is dynamic).
     'stanza_contract' => '0xf629f16ba91086e266accc417d10742f76207ba3',
@@ -43,15 +45,15 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Service prices (in credits)
+    | Service prices (in TTOS)
     |--------------------------------------------------------------------------
     |
-    | Service Cost (credits) = C_op (USD) / peg. The attestation price is a
-    | launch placeholder: 100 credits = $1.00 at the peg. Owner-adjustable.
+    | Service Cost (TTOS) = C_op (USD) / V_cr = C_op × 75. One attestation
+    | costs 75 TTOS = $1.00 of service (owner decision, 2026-10-22).
     |
     */
 
-    'attestation_price_credits' => 100,
+    'attestation_price_credits' => 75,
 
     // When true, issuing an attestation for a manuscript linked to a credit
     // account debits the account, and an insufficient balance aborts the

@@ -53,7 +53,7 @@ function CreateAccountForm({ users }) {
             <h3 className="text-base font-bold text-ink">New Credit Account</h3>
             <p className="text-xs text-ink-soft">
                 One account per study or project budget. Balances are prepaid
-                service credits (1 Credit = $0.01 USD).
+                ThinkTank OS credits, TTOS (75 TTOS = $1.00 USD).
             </p>
 
             <div>
@@ -127,7 +127,7 @@ function GrantForm({ account }) {
         <form onSubmit={submit} className="space-y-3">
             <div className="flex flex-wrap items-end gap-3">
                 <div className="min-w-[140px] flex-1">
-                    <InputLabel htmlFor={`grant-${account.id}`} value="Grant credits" />
+                    <InputLabel htmlFor={`grant-${account.id}`} value="Grant TTOS" />
                     <TextInput
                         id={`grant-${account.id}`}
                         type="number"
@@ -241,8 +241,8 @@ function DepositForm({ account }) {
                 </div>
             </div>
             <p className="text-xs text-ink-soft">
-                Credits allocated = (STANZA × price USD) / $0.01. Recording the
-                same tx hash + log index twice never double-credits.
+                TTOS allocated = STANZA × price USD × 75. Recording the same
+                tx hash + log index twice never double-credits.
             </p>
             <PrimaryButton disabled={processing}>Record Deposit</PrimaryButton>
         </form>
@@ -264,7 +264,7 @@ function TransactionTable({ transactions }) {
                         <th className="py-2 pr-3 font-semibold">Date</th>
                         <th className="py-2 pr-3 font-semibold">Account</th>
                         <th className="py-2 pr-3 font-semibold">Type</th>
-                        <th className="py-2 pr-3 text-right font-semibold">Credits</th>
+                        <th className="py-2 pr-3 text-right font-semibold">Amount (TTOS)</th>
                         <th className="py-2 pr-3 font-semibold">Token</th>
                         <th className="py-2 pr-3 font-semibold">Tx</th>
                         <th className="py-2 font-semibold">Reference</th>
@@ -311,8 +311,8 @@ export default function Index({
     accounts = [],
     recentTransactions = [],
     users = [],
-    pegUsd = 0.01,
-    attestationPriceCredits = 100,
+    creditsPerUsd = 75,
+    attestationPriceCredits = 75,
     depositAddress = '',
     stanzaContract = '',
 }) {
@@ -327,10 +327,10 @@ export default function Index({
                         STANZA Credit Ledger
                     </h2>
                     <p className="mt-1 max-w-3xl text-sm text-ink-soft">
-                        Study and project budgets are prepaid in STANZA and held
-                        as service credits at a fixed peg of 1 Credit = $
-                        {Number(pegUsd).toFixed(2)} USD. An attestation draws{' '}
-                        {fmt(attestationPriceCredits)} credits. Deposits are
+                        ThinkTank OS credits (TTOS). Study and project budgets
+                        are prepaid in STANZA and held as TTOS at a fixed rate
+                        of {fmt(creditsPerUsd)} TTOS = $1.00 USD. An attestation
+                        draws {fmt(attestationPriceCredits)} TTOS. Deposits are
                         sent to{' '}
                         <span className="font-mono text-xs">{depositAddress}</span>{' '}
                         (STANZA contract{' '}
@@ -385,18 +385,19 @@ export default function Index({
                                             </div>
                                             <div className="text-right">
                                                 <div className="font-mono text-2xl font-bold text-ink">
-                                                    {fmt(account.balance)}
+                                                    {fmt(account.balance)} TTOS
                                                 </div>
                                                 <div className="text-xs uppercase tracking-wider text-ink-soft">
-                                                    credits (≈ $
-                                                    {fmt(Number(account.balance) * pegUsd)})
+                                                    TTOS (≈ $
+                                                    {fmt(Number(account.balance) / creditsPerUsd)}{' '}
+                                                    USD)
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div>
                                             <h4 className="mb-2 text-sm font-semibold text-ink">
-                                                Grant credits
+                                                Grant TTOS
                                             </h4>
                                             <GrantForm account={account} />
                                         </div>
