@@ -146,6 +146,15 @@ export default function Index({ briefs = [], auth }) {
                                         </p>
                                     </div>
 
+                                    {brief.attestations?.[0] && (
+                                        <Link
+                                            href={route('attestations.show', brief.attestations[0].public_id)}
+                                            className="mt-4 inline-flex items-center text-xs font-mono font-semibold text-sienna-deep dark:text-sienna hover:text-ink dark:hover:text-cream transition"
+                                        >
+                                            Witnessed by Glenride · {brief.attestations[0].public_id}
+                                        </Link>
+                                    )}
+
                                     {/* Card Footer */}
                                     <div className="mt-6 pt-4 border-t border-line dark:border-line-dark flex items-center justify-between">
                                         <div className="text-xs">

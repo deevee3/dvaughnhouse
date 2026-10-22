@@ -1,7 +1,8 @@
+import AttestationSeal from '@/Components/AttestationSeal';
 import { Head, Link } from '@inertiajs/react';
 import { useState, useMemo } from 'react';
 
-export default function Show({ manuscript = {}, content = '', related = [], isPreview = false }) {
+export default function Show({ manuscript = {}, content = '', related = [], isPreview = false, attestation = null }) {
     const [copiedCitation, setCopiedCitation] = useState(false);
 
     // Build standard Glenride academic citation
@@ -104,6 +105,11 @@ export default function Show({ manuscript = {}, content = '', related = [], isPr
                             </div>
                         </div>
                     </div>
+                </div>
+
+                {/* Glenride Attestation Seal */}
+                <div className="mb-12">
+                    <AttestationSeal attestation={attestation} />
                 </div>
 
                 {/* Abstract Callout */}

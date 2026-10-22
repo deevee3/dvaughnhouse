@@ -15,7 +15,10 @@ class VanguardLibraryController extends Controller
      */
     public function index(Request $request): Response
     {
-        $published = Manuscript::with('user:id,name,email')
+        $published = Manuscript::with([
+                'user:id,name,email',
+                'attestations' => fn ($q) => $q->whereIn('status', ['issued', 'challenged'])->latest('issued_at'),
+            ])
             ->published()
             ->latest('published_at')
             ->get();
@@ -83,6 +86,9 @@ class VanguardLibraryController extends Controller
             'content' => $content,
             'related' => $related,
             'isPreview' => $manuscriptModel->status !== 'published',
+            'attestation' => $manuscriptModel->exists
+                ? $manuscriptModel->activeAttestation()?->load('verifier:id,name')
+                : null,
         ]);
     }
 

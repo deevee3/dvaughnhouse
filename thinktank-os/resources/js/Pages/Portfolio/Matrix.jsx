@@ -55,6 +55,9 @@ export default function Matrix({ columns = {}, stats = {}, isOrchestrator = fals
     const [editMode, setEditMode] = useState(false);
     const [toastMessage, setToastMessage] = useState(null);
     const [liveEventCount, setLiveEventCount] = useState(0);
+    const [selectedAttestation, setSelectedAttestation] = useState(null);
+    const [canIssueAttestation, setCanIssueAttestation] = useState(false);
+    const [isIssuingAttestation, setIsIssuingAttestation] = useState(false);
 
     // Sync board state if props change
     useEffect(() => {
@@ -151,10 +154,14 @@ export default function Matrix({ columns = {}, stats = {}, isOrchestrator = fals
         setEditableTitle(manuscript.title);
         setIsLoadingBrief(true);
         setEditMode(manuscript.status === 'human_polish');
+        setSelectedAttestation(null);
+        setCanIssueAttestation(false);
 
         try {
             const res = await window.axios.get(route('matrix.show', manuscript.id));
             setBriefContent(res.data.brief_content || '');
+            setSelectedAttestation(res.data.attestation || null);
+            setCanIssueAttestation(Boolean(res.data.can_issue_attestation));
             if (res.data.manuscript) {
                 setSelectedManuscript(res.data.manuscript);
                 setEditableTitle(res.data.manuscript.title);
@@ -172,6 +179,39 @@ export default function Matrix({ columns = {}, stats = {}, isOrchestrator = fals
         setSelectedManuscript(null);
         setBriefContent('');
         setEditMode(false);
+        setSelectedAttestation(null);
+        setCanIssueAttestation(false);
+    };
+
+    // Issue a Glenride attestation for the selected manuscript
+    const issueAttestation = async () => {
+        if (!selectedManuscript) return;
+        setIsIssuingAttestation(true);
+        try {
+            const res = await window.axios.post(route('attestations.store', selectedManuscript.id));
+            if (res.data?.attestation) {
+                setSelectedAttestation(res.data.attestation);
+                triggerToast(`Attestation issued: ${res.data.attestation.public_id}`);
+            } else {
+                // Fallback: re-read the manuscript detail for its attestation state
+                const detail = await window.axios.get(route('matrix.show', selectedManuscript.id));
+                setSelectedAttestation(detail.data.attestation || null);
+                setCanIssueAttestation(Boolean(detail.data.can_issue_attestation));
+                triggerToast(
+                    detail.data.attestation
+                        ? `Attestation issued: ${detail.data.attestation.public_id}`
+                        : 'Attestation request completed — no active attestation returned.'
+                );
+            }
+        } catch (err) {
+            console.error('Failed to issue attestation:', err);
+            const message =
+                err.response?.data?.message ||
+                'Error: Failed to issue attestation. The manuscript must be Published with all compliance checks verified.';
+            triggerToast(message);
+        } finally {
+            setIsIssuingAttestation(false);
+        }
     };
 
     // Move manuscript status
@@ -578,6 +618,67 @@ export default function Matrix({ columns = {}, stats = {}, isOrchestrator = fals
                                         <li>Data Transparency: Certified</li>
                                         <li>Original Citations: Verified</li>
                                     </ul>
+                                </div>
+
+                                {/* Glenride Attestation */}
+                                <div className="rounded-xl bg-white p-4 border border-gray-200 text-xs space-y-2">
+                                    <div className="font-semibold text-gray-900">
+                                        Glenride Attestation
+                                    </div>
+                                    {selectedAttestation ? (
+                                        <div className="space-y-1">
+                                            <div className="flex justify-between">
+                                                <span className="text-gray-500">Public ID:</span>
+                                                <span className="font-mono font-semibold text-gray-900">
+                                                    {selectedAttestation.public_id}
+                                                </span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span className="text-gray-500">Status:</span>
+                                                <span className="font-mono font-semibold uppercase text-gray-900">
+                                                    {selectedAttestation.status}
+                                                </span>
+                                            </div>
+                                            {selectedAttestation.verifier?.name && (
+                                                <div className="flex justify-between">
+                                                    <span className="text-gray-500">Verified by:</span>
+                                                    <span className="font-semibold text-gray-900">
+                                                        {selectedAttestation.verifier.name}
+                                                    </span>
+                                                </div>
+                                            )}
+                                            <Link
+                                                href={route('attestations.show', selectedAttestation.public_id)}
+                                                className="inline-flex pt-1 font-mono font-semibold text-gray-900 underline"
+                                            >
+                                                View public record →
+                                            </Link>
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-2">
+                                            <p className="text-gray-600">Not attested.</p>
+                                            <p className="text-[11px] text-gray-500">
+                                                Eligibility: the manuscript must be Published and all
+                                                compliance checks must be verified before Glenride can
+                                                attest it.
+                                            </p>
+                                            {canIssueAttestation && (
+                                                <button
+                                                    type="button"
+                                                    disabled={
+                                                        isIssuingAttestation ||
+                                                        selectedManuscript.status !== 'published'
+                                                    }
+                                                    onClick={issueAttestation}
+                                                    className="rounded-lg bg-gray-900 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-gray-700 disabled:opacity-50 transition"
+                                                >
+                                                    {isIssuingAttestation
+                                                        ? 'Issuing Attestation...'
+                                                        : 'Issue Attestation'}
+                                                </button>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
 
                                 {/* Stage Progression Actions */}

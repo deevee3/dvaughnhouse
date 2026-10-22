@@ -59,7 +59,7 @@ class PortfolioMatrixController extends Controller
     /**
      * Fetch full details of a specific manuscript, including brief content.
      */
-    public function show(Manuscript $manuscript): JsonResponse
+    public function show(Request $request, Manuscript $manuscript): JsonResponse
     {
         $manuscript->load('user:id,name,email');
 
@@ -68,9 +68,14 @@ class PortfolioMatrixController extends Controller
             $briefContent = Storage::disk('local')->get($manuscript->synthesized_brief_path);
         }
 
+        $attestation = $manuscript->activeAttestation()?->load('verifier:id,name');
+        $user = $request->user();
+
         return response()->json([
             'manuscript' => $manuscript,
             'brief_content' => $briefContent,
+            'attestation' => $attestation,
+            'can_issue_attestation' => $user ? $user->canIssueAttestations() : false,
         ]);
     }
 

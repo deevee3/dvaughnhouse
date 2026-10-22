@@ -48,6 +48,12 @@ export default function InstitutionalHeader({
                         Institutional Thesis
                     </Link>
                     <Link
+                        href={route('attestations.index')}
+                        className={linkCls(active === 'attestations')}
+                    >
+                        Attestations
+                    </Link>
+                    <Link
                         href={route('essays.index')}
                         className={linkCls(active === 'essays')}
                     >

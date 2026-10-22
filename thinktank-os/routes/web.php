@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttestationController;
 use App\Http\Controllers\ManuscriptController;
 use App\Http\Controllers\PortfolioMatrixController;
 use App\Http\Controllers\ProfileController;
@@ -20,6 +21,11 @@ Route::get('/', [VanguardLibraryController::class, 'index'])->name('home');
 Route::get('/library', [VanguardLibraryController::class, 'index'])->name('library.index');
 Route::get('/briefs/{manuscript}', [VanguardLibraryController::class, 'show'])->name('briefs.show');
 Route::get('/thesis', [VanguardLibraryController::class, 'thesis'])->name('thesis.index');
+
+// Public Glenride Attestations (Witness) — verify must register before show
+Route::get('/attestations', [AttestationController::class, 'index'])->name('attestations.index');
+Route::post('/attestations/verify', [AttestationController::class, 'verify'])->name('attestations.verify');
+Route::get('/attestations/{key}', [AttestationController::class, 'show'])->name('attestations.show');
 
 // Public Glenride standards
 Route::get('/standards', [StandardsController::class, 'show'])->name('standards.show');
@@ -53,6 +59,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/manuscripts/intake', [ManuscriptController::class, 'create'])->name('manuscripts.create');
     Route::post('/manuscripts/intake', [ManuscriptController::class, 'store'])->name('manuscripts.store');
     Route::get('/manuscripts', [ManuscriptController::class, 'index'])->name('manuscripts.index');
+
+    // Glenride Attestations — issue, challenge, revoke
+    Route::post('/manuscripts/{manuscript}/attestations', [AttestationController::class, 'store'])->name('attestations.store');
+    Route::post('/attestations/{attestation}/challenges', [AttestationController::class, 'challenge'])->name('attestations.challenge');
+    Route::post('/attestations/{attestation}/revoke', [AttestationController::class, 'revoke'])->name('attestations.revoke');
 
     // Internal Standard Operating Procedures (Fellow Access Only)
     Route::get('/sops', [SopController::class, 'index'])->name('sops.index');

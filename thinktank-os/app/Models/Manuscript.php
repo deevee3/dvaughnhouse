@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Manuscript extends Model
 {
@@ -81,5 +82,40 @@ class Manuscript extends Model
         return $this->compliance_ethics_verified
             && $this->compliance_transparency_verified
             && $this->compliance_citations_verified;
+    }
+
+    /**
+     * Attestations issued for this manuscript.
+     */
+    public function attestations(): MorphMany
+    {
+        return $this->morphMany(Attestation::class, 'attestable');
+    }
+
+    /**
+     * The most recent attestation for this manuscript, if any.
+     */
+    public function latestAttestation(): ?Attestation
+    {
+        return $this->attestations()->latest('issued_at')->first();
+    }
+
+    /**
+     * The current in-force attestation (issued or challenged), if any.
+     */
+    public function activeAttestation(): ?Attestation
+    {
+        return $this->attestations()
+            ->whereIn('status', ['issued', 'challenged'])
+            ->latest('issued_at')
+            ->first();
+    }
+
+    /**
+     * Whether this manuscript carries an attestation in good standing.
+     */
+    public function isAttested(): bool
+    {
+        return $this->attestations()->where('status', 'issued')->exists();
     }
 }

@@ -56,4 +56,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(Manuscript::class);
     }
+
+    /**
+     * Attestations this user has issued as a verifier.
+     */
+    public function attestations(): HasMany
+    {
+        return $this->hasMany(Attestation::class, 'verifier_id');
+    }
+
+    /**
+     * Check if user can issue or revoke Glenride attestations.
+     */
+    public function canIssueAttestations(): bool
+    {
+        return $this->canPolishManuscripts();
+    }
 }
