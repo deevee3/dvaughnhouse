@@ -1,9 +1,19 @@
 # Attestations in ThinkTank OS — Witness v1 / v2
 
-**Status:** V1 shipped 2026-10-22 (commit `551fcd1`). V2 built, working tree only (not yet committed, pushed, or deployed).
-**Concept source:** `~/workspace/your_files/attestation-layer/concept.md` (2026-10-13).
+**Status:** V1 shipped 2026-10-22 (commit `551fcd1`). V2 shipped 2026-10-22 (commit `dcaef87`).
+**Concept source:** `~/workspace/your_files/attestation-layer/concept.md` (2026-10-13; model settled 2026-10-22, see below).
 **Owner direction (2026-10-22):** attestation is a main feature of ThinkTank OS, not a side concept.
 **Owner direction (v2, 2026-10-22):** attestation must be embedded in the manuscript process, authorized users must be able to manually enter information and attest (pipeline and standalone subjects), and attestations must be able to get on chain via Pearls.
+
+## The model (settled by the owner, 2026-10-22)
+
+1. **Publishing is a permanent record.** When a user publishes, they are permanently recording their submission on **SpinWave, a project of Glenride**. Publication is the act of recording, not a reversible draft state.
+2. **SpinWave is the database.** Manuscripts and attestation certificates are stored physically on SpinWave — the permanent store of record. ThinkTank OS is the working surface; SpinWave is where the records live.
+3. **STANZA is the on-Base representation.** The records are verifiable and represented by **STANZA on Base**. The Pearls AttestationRegistry anchors the hashes on Base; STANZA is the public representation of that proof layer. (Exact mechanic — registry under the STANZA identity vs. certificate-as-token — pending the owner's pick.)
+4. **Attestations are prepaid from budgets.** A study's or project's budget pays for its attestations up front. Attestation is a budgeted line item.
+5. **Vendor requirement.** Attestation is positioned to be a likely vendor requirement of study design — sponsors will require it as part of the study's vendor setup.
+
+Queued build implications: publish-time immutable record snapshot (the SpinWave record) in ThinkTank OS; a per-project attestation budget/credit module; the STANZA representation mechanic per the owner's pick.
 
 ## What it is
 
