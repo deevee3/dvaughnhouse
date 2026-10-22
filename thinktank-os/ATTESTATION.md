@@ -9,7 +9,7 @@
 
 1. **Publishing is a permanent record.** When a user publishes, they are permanently recording their submission on **SpinWave, a project of Glenride**. Publication is the act of recording, not a reversible draft state.
 2. **SpinWave is the database.** Manuscripts and attestation certificates are stored physically on SpinWave — the permanent store of record. ThinkTank OS is the working surface; SpinWave is where the records live.
-3. **STANZA is the on-Base representation.** The records are verifiable and represented by **STANZA on Base**. The Pearls AttestationRegistry anchors the hashes on Base; STANZA is the public representation of that proof layer. (Exact mechanic — registry under the STANZA identity vs. certificate-as-token — pending the owner's pick.)
+3. **STANZA is the on-Base representation.** The records are verifiable and represented by **STANZA on Base**. The Pearls AttestationRegistry anchors the hashes on Base; STANZA is the public representation of that proof layer. **Mechanic decided 2026-10-22: STANZA represents via the Pearls registry** — the registry deploys with the STANZA treasury Safe (`0x0f166D7631350dE1F9c4190dEA4fAE9565B19231`) as its on-chain `ISSUER`, so anchors are made by the STANZA Safe. No certificate tokens are minted per attestation at launch; they remain a possible later layer.
 4. **Attestations are prepaid from budgets.** A study's or project's budget pays for its attestations up front. Attestation is a budgeted line item.
 5. **Vendor requirement.** Attestation is positioned to be a likely vendor requirement of study design — sponsors will require it as part of the study's vendor setup.
 
