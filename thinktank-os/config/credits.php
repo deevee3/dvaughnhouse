@@ -55,6 +55,13 @@ return [
 
     'attestation_price_credits' => 75,
 
+    // Restocking fee deducted from STANZA refunds, in percent (owner
+    // policy, 2026-10-22: penalize refunds, encourage holding). Refunds
+    // are also capped at the original STANZA quantity attributable to the
+    // refunded TTOS, so a deposit-funded refund pays (100 − fee)% of the
+    // original quantity regardless of price movement.
+    'restocking_fee_percent' => env('CREDITS_RESTOCKING_FEE_PERCENT', 25),
+
     // When true, issuing an attestation for a manuscript linked to a credit
     // account debits the account, and an insufficient balance aborts the
     // issuance. Manuscripts with no credit account are never debited.

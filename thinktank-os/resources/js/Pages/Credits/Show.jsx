@@ -35,10 +35,13 @@ function RefundForm({ account }) {
             <p className="text-xs text-ink-soft">
                 Refund policy: unused TTOS convert back to STANZA at the
                 lower of this account's original deposit price and the
-                current market price. A refund tied to an attestation is
-                eligible only after midnight (New York time) following the
-                attestation day. The STANZA payout is sent from the treasury
-                Safe outside this app — record its tx hash here when sent.
+                current market price, but never more than the original
+                STANZA quantity. A 25% restocking fee is deducted, so
+                refunds return 75% of the original quantity. A refund tied
+                to an attestation is eligible only after midnight (New York
+                time) following the attestation day. The STANZA payout is
+                sent from the treasury Safe outside this app — record its
+                tx hash here when sent.
             </p>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div>

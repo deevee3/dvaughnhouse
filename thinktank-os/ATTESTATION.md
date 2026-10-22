@@ -282,11 +282,24 @@ recent activity) and `/credits/{account}` (full ledger) are restricted to
   the account's weighted-average deposit price (priced `deposit` ledger
   rows, weighted by STANZA amount). Accounts with no priced deposits
   (grant-funded) refund at the **current** price as the basis — no
-  gain/loss adjustment. `STANZA out = TTOS / 75 / basis`.
-  Worked example: refunding 150 TTOS with an original average price of
-  $0.002 and a current price of $0.003 → basis $0.002 → 150 / 75 / 0.002
-  = **1,000 STANZA out**. (If the current price had fallen to $0.001, the
-  basis would be $0.001 and the refund would pay 2,000 STANZA.)
+  gain/loss adjustment. `Quantity at basis = TTOS / 75 / basis`.
+- **Original-quantity cap:** a refund never pays more STANZA than the
+  original quantity attributable to the refunded TTOS
+  (`TTOS / 75 / original price`). Because the basis is the *lower* price,
+  the quantity at basis only exceeds the original quantity when the price
+  fell — the cap binds exactly then. Grant-funded accounts have no
+  original quantity and are not capped.
+- **Restocking fee (owner policy: penalize refunds, encourage
+  holding):** `config('credits.restocking_fee_percent')` (default **25%**)
+  is deducted from the capped quantity. Net effect for deposit-funded
+  accounts: **a refund pays exactly 75% of the original STANZA quantity
+  attributable to the refunded TTOS, regardless of price movement.**
+  Worked examples — refund 150 TTOS, original average price $0.002:
+  current price $0.003 → quantity at basis 1,000, capped at 1,000, fee
+  applied → **750 STANZA out**; current price $0.001 → quantity at basis
+  2,000, capped at 1,000, fee applied → **750 STANZA out**. (Grant-funded
+  example: refund 150 TTOS at a current price of $0.004 → quantity 500,
+  no cap, fee applied → 375 STANZA out.)
 - **Eligibility:** a refund tied to an attestation becomes eligible only
   **after midnight (America/New_York) on the day of that attestation** —
   i.e. from 00:00 the following day, New York time. `CreditService::refund()`
@@ -298,7 +311,9 @@ recent activity) and `/credits/{account}` (full ledger) are restricted to
   `POST /credits/{account}/refund` (`credits.refund`) with the current
   price, the optional attestation public ID, and the payout tx hash when
   sent. The ledger row is `type = refund`, `amount = −TTOS`,
-  `token_amount = STANZA out`, `token_price_usd = basis`. A refund at an
+  `token_amount = STANZA out` (after the original-quantity cap and the
+  restocking fee), `token_price_usd = basis`, and the `reference` notes
+  that the restocking fee was applied. A refund at an
   unknown (zero/missing) current price is refused — the system never
   refunds at an invented price.
 

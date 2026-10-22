@@ -133,17 +133,29 @@ class CreditService
     }
 
     /**
-     * Refund unused TTOS back to STANZA (owner policy, decided 2026-10-22).
+     * Refund unused TTOS back to STANZA (owner policy, decided 2026-10-22;
+     * penalty refinement added the same day).
      *
      * The STANZA quantity is computed at the LOWER of the original price
-     * basis and the current market price:
+     * basis and the current market price, then capped at the original
+     * quantity, then reduced by the restocking fee:
      *
      *   original = weighted-average token_price_usd across the account's
      *              priced deposit transactions (weighted by token_amount).
      *              Accounts with no priced deposits (grant-funded) use the
      *              current price as the original — no gain/loss adjustment.
      *   basis    = min(original, current)
-     *   STANZA out = TTOS / credits_per_usd / basis
+     *   qty      = TTOS / credits_per_usd / basis
+     *   cap      = qty never exceeds the original quantity attributable
+     *              to the refunded TTOS: (TTOS / credits_per_usd) /
+     *              original. Applies to deposit-funded accounts only;
+     *              grant-funded accounts have no original quantity.
+     *   STANZA out = capped qty × (1 − restocking fee)
+     *
+     * Net effect for deposit-funded accounts: a refund pays exactly
+     * (1 − fee) of the original STANZA quantity attributable to the
+     * refunded TTOS — 75% at the default 25% fee — regardless of price
+     * movement. The fee exists to penalize refunds and encourage holding.
      *
      * Eligibility: when the refund is tied to an attestation, it becomes
      * eligible only after midnight (America/New_York) on the day of that
@@ -202,10 +214,39 @@ class CreditService
                 );
             }
 
-            $original = $this->weightedAverageDepositPrice($locked) ?? $currentPriceUsd;
+            $weightedAverage = $this->weightedAverageDepositPrice($locked);
+            $original = $weightedAverage ?? $currentPriceUsd;
             $basis = min($original, $currentPriceUsd);
 
-            $stanzaOut = round($credits / $creditsPerUsd / $basis, 10);
+            if ($basis <= 0) {
+                throw new DomainException('A current STANZA price is required to refund — never refund at an unknown price.');
+            }
+
+            // Quantity at the basis price.
+            $qtyAtBasis = $credits / $creditsPerUsd / $basis;
+
+            // Cap: never refund more STANZA than the original quantity
+            // attributable to the refunded TTOS. Since basis =
+            // min(original, current), $qtyAtBasis >= $origQty always, so
+            // the cap binds exactly when the price fell. Grant-funded
+            // accounts have no original quantity — no cap.
+            $qtyCapped = $qtyAtBasis;
+
+            if ($weightedAverage !== null && $weightedAverage > 0) {
+                $origQty = ($credits / $creditsPerUsd) / $weightedAverage;
+                $qtyCapped = min($qtyAtBasis, $origQty);
+            }
+
+            // Restocking fee (owner policy: penalize refunds, encourage
+            // holding). Net effect for deposit-funded accounts: a refund
+            // pays exactly (1 − fee) of the original STANZA quantity
+            // attributable to the refunded TTOS, regardless of price
+            // movement.
+            $feePercent = (float) config('credits.restocking_fee_percent', 25);
+            $stanzaOut = round($qtyCapped * (1 - $feePercent / 100), 10);
+
+            $feeNote = 'refund ('.sprintf('%g', $feePercent).'% restocking fee applied)';
+            $reference = $attestation ? $attestation->public_id.' · '.$feeNote : $feeNote;
 
             $transaction = $locked->transactions()->create([
                 'amount' => -$credits,
@@ -213,7 +254,7 @@ class CreditService
                 'blockchain_tx_hash' => $payoutTxHash,
                 'token_amount' => $stanzaOut,
                 'token_price_usd' => round($basis, 8),
-                'reference' => $attestation?->public_id ?? 'refund',
+                'reference' => $reference,
                 'created_by' => $by->id,
             ]);
 
