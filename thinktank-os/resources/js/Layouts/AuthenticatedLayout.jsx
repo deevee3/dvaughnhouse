@@ -7,6 +7,8 @@ import { useState } from 'react';
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
 
+    const canManageCredits = ['orchestrator', 'admin'].includes(user?.role);
+
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
@@ -55,6 +57,14 @@ export default function AuthenticatedLayout({ header, children }) {
                                 >
                                     SOPs
                                 </NavLink>
+                                {canManageCredits && (
+                                    <NavLink
+                                        href={route('credits.index')}
+                                        active={route().current('credits.*')}
+                                    >
+                                        Credits
+                                    </NavLink>
+                                )}
                             </div>
                         </div>
 
@@ -177,6 +187,14 @@ export default function AuthenticatedLayout({ header, children }) {
                         >
                             SOPs
                         </ResponsiveNavLink>
+                        {canManageCredits && (
+                            <ResponsiveNavLink
+                                href={route('credits.index')}
+                                active={route().current('credits.*')}
+                            >
+                                Credits
+                            </ResponsiveNavLink>
+                        )}
                     </div>
 
                     <div className="border-t border-line pb-1 pt-4">

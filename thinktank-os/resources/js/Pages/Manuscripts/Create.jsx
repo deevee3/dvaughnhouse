@@ -6,7 +6,7 @@ import TextInput from '@/Components/TextInput';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import { useEffect, useState, useRef } from 'react';
 
-export default function Create({ recentManuscripts = [], submittedId = null }) {
+export default function Create({ recentManuscripts = [], submittedId = null, creditAccounts = [] }) {
     const user = usePage().props.auth.user;
     const [manuscripts, setManuscripts] = useState(recentManuscripts);
     const [dragOver, setDragOver] = useState(false);
@@ -16,6 +16,7 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
     const { data, setData, post, processing, errors, reset, progress } = useForm({
         title: '',
         abstract: '',
+        credit_account_id: '',
         manuscript_file: null,
         compliance_ethics: false,
         compliance_transparency: false,
@@ -192,6 +193,41 @@ export default function Create({ recentManuscripts = [], submittedId = null }) {
                                             placeholder="Core methodology, empirical dataset description, and institutional findings..."
                                         />
                                         <InputError message={errors.abstract} className="mt-2" />
+                                    </div>
+
+                                    <div>
+                                        <InputLabel
+                                            htmlFor="credit_account_id"
+                                            value="Credit Account (study/project budget) — optional"
+                                        />
+                                        <select
+                                            id="credit_account_id"
+                                            className="mt-1 block w-full rounded-md border-line shadow-sm focus:border-sienna-deep focus:ring-sienna-deep text-sm"
+                                            value={data.credit_account_id}
+                                            onChange={(e) =>
+                                                setData('credit_account_id', e.target.value)
+                                            }
+                                        >
+                                            <option value="">
+                                                No budget account — attestation will not draw credits
+                                            </option>
+                                            {creditAccounts.map((account) => (
+                                                <option key={account.id} value={account.id}>
+                                                    {account.name} — balance{' '}
+                                                    {Number(account.balance).toLocaleString()}{' '}
+                                                    credits
+                                                </option>
+                                            ))}
+                                        </select>
+                                        <p className="mt-1 text-xs text-ink-soft">
+                                            When this manuscript is attested, the attestation
+                                            price is drawn from the selected account's prepaid
+                                            STANZA credit balance.
+                                        </p>
+                                        <InputError
+                                            message={errors.credit_account_id}
+                                            className="mt-2"
+                                        />
                                     </div>
                                 </div>
 

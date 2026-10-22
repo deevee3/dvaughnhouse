@@ -22,6 +22,7 @@ class Manuscript extends Model
      */
     protected $fillable = [
         'user_id',
+        'credit_account_id',
         'title',
         'abstract',
         'raw_file_path',
@@ -58,6 +59,15 @@ class Manuscript extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * The study/project credit account that funds this manuscript's
+     * attestation, if one has been assigned.
+     */
+    public function creditAccount(): BelongsTo
+    {
+        return $this->belongsTo(CreditAccount::class);
     }
 
     /**

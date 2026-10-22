@@ -3,9 +3,12 @@
 namespace App\Services\Attestation;
 
 use App\Models\Attestation;
+use App\Models\CreditAccount;
 use App\Models\Manuscript;
 use App\Models\User;
+use App\Services\Credits\CreditService;
 use DomainException;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -81,8 +84,38 @@ class AttestationService
      *
      * Idempotent per subject hash: if an active attestation already covers
      * this exact subject, it is returned instead of issuing a duplicate.
+     *
+     * Credit debit: issuance and the budget debit are one transaction.
+     * When the manuscript is linked to a credit account and
+     * config('credits.enforce_balance') is on, the account is charged the
+     * attestation price for a NEWLY created attestation; an insufficient
+     * balance throws and rolls the attestation back with it. Idempotent
+     * re-issuance (existing record returned) is never charged, and
+     * manuscripts with no credit account are never debited or blocked.
      */
     public function issue(Manuscript $manuscript, User $verifier, ?string $claim = null, array $evidenceExtra = []): Attestation
+    {
+        return DB::transaction(function () use ($manuscript, $verifier, $claim, $evidenceExtra) {
+            $attestation = $this->createAttestation($manuscript, $verifier, $claim, $evidenceExtra);
+
+            if ($attestation->wasRecentlyCreated
+                && $manuscript->credit_account_id
+                && config('credits.enforce_balance')) {
+                $account = CreditAccount::find($manuscript->credit_account_id);
+
+                if ($account) {
+                    app(CreditService::class)->debitForAttestation($account, $attestation, $verifier);
+                }
+            }
+
+            return $attestation;
+        });
+    }
+
+    /**
+     * Create the attestation record itself (the pre-credit issuance body).
+     */
+    private function createAttestation(Manuscript $manuscript, User $verifier, ?string $claim = null, array $evidenceExtra = []): Attestation
     {
         if ($manuscript->status !== 'published') {
             throw new DomainException('Only published manuscripts can be attested.');

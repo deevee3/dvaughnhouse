@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\SynthesizeManuscript;
+use App\Models\CreditAccount;
 use App\Models\Manuscript;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -41,9 +42,15 @@ class ManuscriptController extends Controller
             ->take(5)
             ->get();
 
+        $creditAccounts = CreditAccount::orderBy('name')
+            ->get(['id', 'name', 'balance'])
+            ->map(fn ($a) => ['id' => $a->id, 'name' => $a->name, 'balance' => $a->balance])
+            ->values();
+
         return Inertia::render('Manuscripts/Create', [
             'recentManuscripts' => $activeManuscripts,
             'submittedId' => $request->query('submitted_id'),
+            'creditAccounts' => $creditAccounts,
         ]);
     }
 
@@ -60,6 +67,7 @@ class ManuscriptController extends Controller
             'compliance_ethics' => 'accepted',
             'compliance_transparency' => 'accepted',
             'compliance_citations' => 'accepted',
+            'credit_account_id' => 'nullable|uuid|exists:credit_accounts,id',
         ], [
             'compliance_ethics.accepted' => 'You must certify compliance with research ethics and human subjects protocols.',
             'compliance_transparency.accepted' => 'You must confirm data transparency and methodology reproducibility.',
@@ -73,6 +81,7 @@ class ManuscriptController extends Controller
         // Create manuscript record
         $manuscript = $request->user()->manuscripts()->create([
             'title' => $validated['title'],
+            'credit_account_id' => $validated['credit_account_id'] ?? null,
             'abstract' => $validated['abstract'] ?? null,
             'raw_file_path' => $storedPath,
             'compliance_ethics_verified' => true,

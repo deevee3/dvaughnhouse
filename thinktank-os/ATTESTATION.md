@@ -4,6 +4,7 @@
 **Concept source:** `~/workspace/your_files/attestation-layer/concept.md` (2026-10-13; model settled 2026-10-22, see below).
 **Owner direction (2026-10-22):** attestation is a main feature of ThinkTank OS, not a side concept.
 **Owner direction (v2, 2026-10-22):** attestation must be embedded in the manuscript process, authorized users must be able to manually enter information and attest (pipeline and standalone subjects), and attestations must be able to get on chain via Pearls.
+**Credits v1 (2026-10-22, built — working tree):** STANZA-backed credit ledger per the owner's blueprint — see "Credits (STANZA)" below.
 
 ## The model (settled by the owner, 2026-10-22)
 
@@ -182,6 +183,101 @@ that permanence a system property, not a policy:
   brief page prints "Recorded on SpinWave · v{n} · {date} · {short hash}"
   under the attestation seal; the landing page appends
   "SpinWave record v{n}" to a featured brief's meta line when present.
+
+## Credits (STANZA) — the prepaid budget ledger
+
+Per the settled model, **attestations are prepaid from budgets**: a study's
+or project's budget pays for its attestations up front. The credit system
+(owner blueprint, adopted 2026-10-22) makes that real: credits **are**
+STANZA-backed service credits, held in an off-chain relational ledger that
+syncs with on-chain STANZA deposits — on-chain microtransactions per
+service call would be cost-prohibitive and slow.
+
+### Peg and formulas
+
+- **Fixed internal peg:** `1 Credit = $0.01 USD` (`config('credits.peg_usd')`).
+  The peg isolates the ledger from token volatility: STANZA's price is
+  dynamic (paired with wTAO on Base), but once a deposit is converted, the
+  credit balance does not float.
+- **Deposit allocation:**
+  `Credits Allocated = (STANZA Deposited × STANZA Price USD) / V_cr`,
+  with `V_cr = $0.01`. Example: 250,000 STANZA at $0.0004 = $100 → 10,000 credits.
+- **Service cost:** `Cost_cr = C_op / V_cr`, where `C_op` is the raw
+  operational cost of one service execution (compute/API + hosting
+  overhead). The **attestation price** is
+  `config('credits.attestation_price_credits') = 100` credits ($1.00 at
+  the peg) — a launch placeholder, owner-adjustable.
+
+### Accounts and ledger (migration `2026_10_22_000004`)
+
+- **`credit_accounts`** — a study/project budget: `name`, optional owner
+  `user_id`, optional `wallet_address` (the deposit sender this budget is
+  matched by), and a `balance` column kept in sync **inside the same
+  transaction** as every ledger write (never recomputed from a sum on read).
+- **`credit_transactions`** — the append-only ledger: signed `amount`
+  (+ in / − out), `type`
+  (`deposit|grant|attestation|adjustment|refund`), and for deposits the
+  chain evidence (`blockchain_tx_hash`, `log_index`, `token_amount`,
+  `token_price_usd`). `UNIQUE(blockchain_tx_hash, log_index)` — a chain
+  deposit can be credited exactly once; manual rows carry a null hash.
+- **`manuscripts.credit_account_id`** — a manuscript may link to one
+  account (set at intake; the intake form offers an optional account
+  select). `App\Services\Credits\CreditService` is the only writer:
+  `grant()`, `recordDeposit()` (idempotent per tx + log index), and
+  `debitForAttestation()` all lock the account row and round to 2
+  decimals at every write.
+
+### Attestation debit semantics
+
+`AttestationService::issue()` wraps record creation and the debit in **one
+database transaction**. When the manuscript has a `credit_account_id` and
+`config('credits.enforce_balance')` is `true` (the default), a **newly
+created** attestation debits the account the attestation price
+(`type = attestation`, `reference = <public_id>`); an insufficient balance
+throws `DomainException` — the attestation rolls back with it and the
+issuer sees the 422/error through the existing store path. Idempotent
+re-issuance (an existing active attestation returned for the same subject
+hash) is **never** charged. Manuscripts with **no** credit account are
+never debited or blocked — the existing flow, including already-published
+briefs, is unaffected. Manual standalone attestations
+(`issueManual()`) are not debited in v1.
+
+### Deposit paths
+
+1. **Manual record (today's prepaid-study path):** the study sends STANZA
+   to the deposit address (`config('credits.deposit_address')`, default
+   the STANZA treasury Safe) and an orchestrator records the confirmed
+   deposit on `/credits` with the tx hash, STANZA amount, and the USD
+   price used — `recordDeposit()` allocates the credits.
+2. **Watcher pipeline (built, off by default):** `App\Jobs\WatchStanzaDeposits`
+   (run via `php artisan credits:watch-deposits`, or dispatch the job)
+   polls `eth_getLogs` on Base for STANZA `Transfer` events **to** the
+   deposit address, matches senders to accounts by `wallet_address`, and
+   credits through the same idempotent `recordDeposit()`. It keeps its
+   block cursor in the cache (database store) with a 12-block reorg
+   buffer, and is defensive: RPC failure is logged, never fatal. The
+   price source is **manual** (`config('credits.stanza_price_usd')`,
+   env `CREDITS_STANZA_PRICE_USD`) until the STANZA pool has real
+   liquidity — when no price is configured the watcher skips crediting
+   and logs a warning rather than inventing one. Enable with
+   `CREDITS_WATCHER_ENABLED=true`.
+3. **Grants:** orchestrators can also grant credits directly
+   (`POST /credits/{account}/grant`) for operator-funded budgets.
+
+### Administration
+
+`/credits` (index: balances, account creation, grant + deposit forms,
+recent activity) and `/credits/{account}` (full ledger) are restricted to
+**orchestrator/admin** roles (403 otherwise), enforced in
+`CreditController`; the nav link renders only for those roles.
+
+### Open: refunds and withdrawals
+
+**Refund/withdrawal policy is NOT defined yet — an open owner decision.**
+V1 has no withdrawal path: credits are prepaid service balances, STANZA
+deposits are converted at deposit time and not redeemable through the
+system, and ledger `refund`/`adjustment` types exist as vocabulary only.
+Nothing in v1 moves tokens back out of the deposit address.
 
 ## Data model
 

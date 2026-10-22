@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AttestationController;
+use App\Http\Controllers\CreditController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ManuscriptController;
 use App\Http\Controllers\PortfolioMatrixController;
@@ -69,6 +70,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/manuscripts/intake', [ManuscriptController::class, 'create'])->name('manuscripts.create');
     Route::post('/manuscripts/intake', [ManuscriptController::class, 'store'])->name('manuscripts.store');
     Route::get('/manuscripts', [ManuscriptController::class, 'index'])->name('manuscripts.index');
+
+    // STANZA Credit Ledger (orchestrator/admin only, enforced in controller)
+    Route::get('/credits', [CreditController::class, 'index'])->name('credits.index');
+    Route::post('/credits', [CreditController::class, 'store'])->name('credits.store');
+    Route::get('/credits/{account}', [CreditController::class, 'show'])->name('credits.show');
+    Route::post('/credits/{account}/grant', [CreditController::class, 'grant'])->name('credits.grant');
+    Route::post('/credits/{account}/deposit', [CreditController::class, 'deposit'])->name('credits.deposit');
 
     // Glenride Attestations — issue, challenge, revoke
     Route::post('/manuscripts/{manuscript}/attestations', [AttestationController::class, 'store'])->name('attestations.store');
