@@ -10,7 +10,7 @@ export default function Index({ documents = [], auth }) {
             {/* Banner hero — full-bleed image */}
             <section aria-hidden="true" className="relative h-[48vh] min-h-[300px] overflow-hidden bg-ink">
                 <img
-                    src="/images/heroes/hero-ship-risk.jpg"
+                    src="/images/heroes/hero-digital-twin.jpg"
                     alt=""
                     className="absolute inset-0 h-full w-full object-cover object-[center_60%]"
                 />

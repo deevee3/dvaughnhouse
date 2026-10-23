@@ -1,4 +1,5 @@
 import HeroCarousel from '@/Components/HeroCarousel';
+import ImageBandCarousel from '@/Components/ImageBandCarousel';
 import InstitutionalHeader from '@/Components/InstitutionalHeader';
 import SiteFooter from '@/Components/SiteFooter';
 import { Head, Link } from '@inertiajs/react';
@@ -33,6 +34,42 @@ const HERO_SLIDES = [
         ctaLabel: 'Visit the store',
         ctaHref: route('store.index'),
     },
+    {
+        image: '/images/heroes/hero-trucks.jpg',
+        headline: 'Every mile, accounted for.',
+        line: 'Ports, rails, roads, and runways are one chain. Glenride reads it whole — and publishes what it finds.',
+        ctaLabel: 'Enter the Library',
+        ctaHref: route('library.index'),
+    },
+    {
+        image: '/images/heroes/hero-air-sea.jpg',
+        headline: "Modes change. The record doesn't.",
+        line: 'Air to sea to road, critical cargo keeps its evidence — every handoff timed, signed, and open to challenge.',
+        ctaLabel: 'See the attestations',
+        ctaHref: route('attestations.index'),
+    },
+    {
+        image: '/images/heroes/hero-cold-chain.jpg',
+        headline: 'The cold chain, held to the degree.',
+        line: 'Temperature, humidity, shock — the conditions a medicine travels in are part of its record, not a footnote.',
+        ctaLabel: 'Read the Thesis',
+        ctaHref: route('thesis.index'),
+    },
+    {
+        image: '/images/heroes/hero-control-room.jpg',
+        headline: 'Watched, end to end.',
+        line: 'A chain you can see is a chain you can fix. Exceptions surface early — and so do the people answering for them.',
+        ctaLabel: 'Read the Essays',
+        ctaHref: route('essays.index'),
+    },
+];
+
+// Body band carousel — the chain at work, below the opening sections.
+const BODY_BAND_IMAGES = [
+    '/images/heroes/hero-jit.jpg',
+    '/images/heroes/hero-retail.jpg',
+    '/images/heroes/hero-last-mile.jpg',
+    '/images/heroes/hero-resilience.jpg',
 ];
 
 const RESEARCH_AREAS = [
@@ -146,6 +183,13 @@ export default function Landing({
                     </dl>
                 </div>
             </section>
+
+            {/* The chain, end to end — rotating body band */}
+            <ImageBandCarousel
+                images={BODY_BAND_IMAGES}
+                overlayLine="The chain, end to end."
+                label="The supply chain, end to end"
+            />
 
             {/* The proof layer */}
             <section className="border-b border-line bg-paper-deep dark:border-line-dark dark:bg-night-card">

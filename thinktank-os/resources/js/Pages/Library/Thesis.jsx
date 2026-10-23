@@ -1,3 +1,4 @@
+import ImageBand from '@/Components/ImageBand';
 import InstitutionalHeader from '@/Components/InstitutionalHeader';
 import { Head, Link } from '@inertiajs/react';
 
@@ -15,7 +16,7 @@ export default function Thesis({ auth }) {
             {/* Banner hero — full-bleed image */}
             <section aria-hidden="true" className="relative h-[48vh] min-h-[300px] overflow-hidden bg-ink">
                 <img
-                    src="/images/heroes/hero-port-sunset.jpg"
+                    src="/images/heroes/hero-storm.jpg"
                     alt=""
                     className="absolute inset-0 h-full w-full object-cover object-[center_30%]"
                 />
@@ -23,7 +24,7 @@ export default function Thesis({ auth }) {
             </section>
 
             {/* Main Thesis Content */}
-            <main className="mx-auto max-w-3xl px-6 py-20 sm:py-28">
+            <main className="mx-auto max-w-3xl px-6 pt-20 sm:pt-28">
                 {/* Header Banner */}
                 <div className="border-b border-line dark:border-line-dark pb-12 mb-16 text-center">
                     <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-ink dark:text-cream leading-[1.15]">
@@ -39,7 +40,12 @@ export default function Thesis({ auth }) {
                         <span>Glenride Foundational Monographs</span>
                     </div></div>
                 </div>
+            </main>
 
+            {/* Supporting image band — port congestion heatmap */}
+            <ImageBand src="/images/heroes/hero-congestion.jpg" />
+
+            <main className="mx-auto max-w-3xl px-6 pt-16 pb-20 sm:pb-28">
                 {/* Essay 1: The Power-Wisdom Gap */}
                 <article className="border-b border-line dark:border-line-dark pb-20 mb-20 space-y-6">
                     <h2 className="font-display text-3xl sm:text-4xl font-bold text-ink dark:text-cream leading-tight">

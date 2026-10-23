@@ -1,6 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 import { useState } from 'react';
 import SiteFooter from '@/Components/SiteFooter';
+import ImageBand from '@/Components/ImageBand';
 
 const STATUS_STYLES = {
     available: 'border-sienna-deep/40 bg-sienna/10 text-sienna-deep dark:border-sienna/40 dark:bg-sienna/10 dark:text-sienna',
@@ -210,7 +211,7 @@ export default function Index({ categories = [], stripeKey = '' }) {
             {/* Hero Section — full-bleed image, flat ink scrim */}
             <section className="relative overflow-hidden border-b border-ink bg-ink py-20 text-cream">
                 <img
-                    src="/images/heroes/hero-port-lanes.jpg"
+                    src="/images/heroes/hero-arrival.jpg"
                     alt=""
                     className="absolute inset-0 h-full w-full object-cover object-[center_70%]"
                 />
@@ -273,6 +274,9 @@ export default function Index({ categories = [], stripeKey = '' }) {
                     </p>
                 </div>
             </section>
+
+            {/* Supporting image band — green corridor ship */}
+            <ImageBand src="/images/heroes/hero-green-corridor.jpg" />
 
             {/* Checkout Modal */}
             {selectedProduct && (

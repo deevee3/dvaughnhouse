@@ -1,3 +1,4 @@
+import ImageBand from '@/Components/ImageBand';
 import InstitutionalHeader from '@/Components/InstitutionalHeader';
 import SiteFooter from '@/Components/SiteFooter';
 import { Head, Link, useForm } from '@inertiajs/react';
@@ -27,14 +28,14 @@ export default function Index({ attestations = [], stats = {}, canIssue = false,
             {/* Banner hero — full-bleed image */}
             <section aria-hidden="true" className="relative h-[48vh] min-h-[300px] overflow-hidden bg-ink">
                 <img
-                    src="/images/heroes/hero-global-network.jpg"
+                    src="/images/heroes/hero-documents.jpg"
                     alt=""
                     className="absolute inset-0 h-full w-full object-cover object-[center_70%]"
                 />
                 <div className="absolute inset-0 bg-ink/50" />
             </section>
 
-            <main className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
+            <main className="mx-auto max-w-7xl px-6 pt-16 lg:px-8">
                 <div className="max-w-3xl">
                     <h1 className="font-display text-4xl font-bold tracking-tight text-ink dark:text-cream sm:text-5xl">
                         Proof, not promises.
@@ -77,7 +78,12 @@ export default function Index({ attestations = [], stats = {}, canIssue = false,
                         </div>
                     ))}
                 </div>
+            </main>
 
+            {/* Supporting image band — predictive forecast globe */}
+            <ImageBand src="/images/heroes/hero-forecast.jpg" />
+
+            <main className="mx-auto max-w-7xl px-6 pb-16 lg:px-8">
                 {/* Verify a record */}
                 <section className="mt-12 rounded-2xl border border-line bg-paper-deep p-6 dark:border-line-dark dark:bg-night-deep sm:p-8">
                     <h2 className="font-display text-2xl font-bold text-ink dark:text-cream">

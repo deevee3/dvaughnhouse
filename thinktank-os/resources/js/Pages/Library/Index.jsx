@@ -1,3 +1,4 @@
+import ImageBand from '@/Components/ImageBand';
 import InstitutionalHeader from '@/Components/InstitutionalHeader';
 import { Head, Link } from '@inertiajs/react';
 import { useState, useMemo } from 'react';
@@ -46,7 +47,7 @@ export default function Index({ briefs = [], auth }) {
             {/* Hero Section — full-bleed image, flat ink scrim */}
             <section className="relative overflow-hidden border-b border-ink bg-ink text-paper dark:border-line-dark dark:text-cream">
                 <img
-                    src="/images/heroes/hero-ship-risk.jpg"
+                    src="/images/heroes/hero-warehouse.jpg"
                     alt=""
                     className="absolute inset-0 h-full w-full object-cover object-[center_25%]"
                 />
@@ -185,6 +186,9 @@ export default function Index({ briefs = [], auth }) {
                     )}
                 </div>
             </main>
+
+            {/* Supporting image band — intermodal rail yard */}
+            <ImageBand src="/images/heroes/hero-intermodal.jpg" />
 
             {/* Institutional Thesis Callout Banner */}
             <section className="border-t border-line dark:border-line-dark bg-paper-deep dark:bg-night-deep py-16">
