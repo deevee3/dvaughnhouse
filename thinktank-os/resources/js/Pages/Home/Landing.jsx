@@ -1,6 +1,39 @@
+import HeroCarousel from '@/Components/HeroCarousel';
 import InstitutionalHeader from '@/Components/InstitutionalHeader';
 import SiteFooter from '@/Components/SiteFooter';
 import { Head, Link } from '@inertiajs/react';
+
+// Gateway hero slides — full-bleed images, each with its own overlay copy.
+const HERO_SLIDES = [
+    {
+        image: '/images/heroes/hero-port-sunset.jpg',
+        headline: 'Supply chains, seen clearly.',
+        line: 'Glenride tracks how critical supply chains fail, where they bend, and what keeps them running.',
+        ctaLabel: 'Enter the Vanguard Library',
+        ctaHref: route('library.index'),
+    },
+    {
+        image: '/images/heroes/hero-global-network.jpg',
+        headline: 'Research that signs its work.',
+        line: 'Every brief carries its evidence, its verifier, and its date — attested, and open to challenge.',
+        ctaLabel: 'View the attestations',
+        ctaHref: route('attestations.index'),
+    },
+    {
+        image: '/images/heroes/hero-ship-risk.jpg',
+        headline: 'Shortages, measured — not guessed.',
+        line: 'U.S. drug shortages, tracked and published in the open from FDA and ASHP data.',
+        ctaLabel: 'Read the thesis',
+        ctaHref: route('thesis.index'),
+    },
+    {
+        image: '/images/heroes/hero-port-lanes.jpg',
+        headline: 'Built to be checked.',
+        line: 'Briefs, standards, and a store where everything has a price and nothing is promised.',
+        ctaLabel: 'Visit the store',
+        ctaHref: route('store.index'),
+    },
+];
 
 const RESEARCH_AREAS = [
     {
@@ -47,7 +80,7 @@ export default function Landing({
 
     return (
         <div className="min-h-screen bg-paper font-serif text-ink selection:bg-sienna selection:text-ink dark:bg-night dark:text-cream">
-            <Head title="Glenride — Independent, AI-Native Think Tank" />
+            <Head title="Glenride Gateway — Independent, AI-Native Think Tank" />
 
             <InstitutionalHeader
                 auth={auth}
@@ -55,46 +88,23 @@ export default function Landing({
                 subtitle="Independent, AI-Native Think Tank"
             />
 
-            {/* Hero — flat ink band, image-led system has no photographic
-                asset for the institution yet, so the wordmark carries it. */}
-            <section className="bg-ink text-paper dark:bg-night-deep dark:text-cream">
-                <div className="animate-rise mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
-                    <h1 className="font-display text-6xl font-extrabold leading-none tracking-tight sm:text-7xl lg:text-8xl">
-                        Glenride
-                    </h1>
-                    <p className="mt-8 max-w-2xl text-xl leading-relaxed text-paper/85 dark:text-cream-soft sm:text-2xl">
-                        An independent, AI-native think tank. Glenride turns deep
-                        research into short, checkable policy briefs — and signs its
-                        work, so every claim carries its evidence, its verifier, and
-                        its date.
+            {/* Gateway — this landing page is the site's Routing Hub.
+                Hero: full-bleed rotating image carousel with a flat ink
+                scrim; the Glenride wordmark stays the persistent H1 and
+                each slide carries its own headline, line, and CTA. */}
+            <HeroCarousel slides={HERO_SLIDES}>
+                {!auth?.user && (
+                    <p className="mt-10 font-mono text-xs uppercase tracking-widest text-paper/60 dark:text-cream-soft">
+                        Fellows and scholars —{' '}
+                        <Link
+                            href={route('login')}
+                            className="font-semibold text-paper underline decoration-sienna decoration-2 underline-offset-4 transition hover:text-sienna dark:text-cream"
+                        >
+                            Scholar sign in
+                        </Link>
                     </p>
-                    <div className="mt-10 flex flex-wrap items-center gap-4">
-                        <Link
-                            href={route('library.index')}
-                            className="inline-flex items-center rounded-lg bg-sienna px-6 py-3 text-sm font-semibold text-ink shadow-sm transition hover:bg-sienna-deep hover:text-paper"
-                        >
-                            Enter the Vanguard Library
-                        </Link>
-                        <Link
-                            href={route('thesis.index')}
-                            className="inline-flex items-center rounded-lg border border-paper/40 px-6 py-3 text-sm font-semibold text-paper transition hover:border-paper hover:bg-paper hover:text-ink dark:border-line-dark dark:text-cream dark:hover:bg-cream dark:hover:text-night"
-                        >
-                            Read the thesis
-                        </Link>
-                    </div>
-                    {!auth?.user && (
-                        <p className="mt-8 font-mono text-xs uppercase tracking-widest text-paper/60 dark:text-cream-soft">
-                            Fellows and scholars —{' '}
-                            <Link
-                                href={route('login')}
-                                className="font-semibold text-paper underline decoration-sienna decoration-2 underline-offset-4 transition hover:text-sienna dark:text-cream"
-                            >
-                                Scholar sign in
-                            </Link>
-                        </p>
-                    )}
-                </div>
-            </section>
+                )}
+            </HeroCarousel>
 
             {/* What Glenride is */}
             <section className="border-b border-line dark:border-line-dark">

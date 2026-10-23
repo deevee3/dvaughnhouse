@@ -24,6 +24,16 @@ export default function Index({ attestations = [], stats = {}, canIssue = false,
 
             <InstitutionalHeader auth={auth} active="attestations" subtitle="Glenride Attestations" />
 
+            {/* Banner hero — full-bleed image */}
+            <section aria-hidden="true" className="relative h-[48vh] min-h-[300px] overflow-hidden bg-ink">
+                <img
+                    src="/images/heroes/hero-global-network.jpg"
+                    alt=""
+                    className="absolute inset-0 h-full w-full object-cover object-[center_70%]"
+                />
+                <div className="absolute inset-0 bg-ink/50" />
+            </section>
+
             <main className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
                 <div className="max-w-3xl">
                     <h1 className="font-display text-4xl font-bold tracking-tight text-ink dark:text-cream sm:text-5xl">

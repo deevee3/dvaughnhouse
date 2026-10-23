@@ -207,9 +207,15 @@ export default function Index({ categories = [], stripeKey = '' }) {
                 </div>
             </header>
 
-            {/* Hero Section */}
-            <section className="relative border-b border-ink bg-ink py-20 text-cream">
-                <div className="mx-auto max-w-7xl px-6 lg:px-8 text-center">
+            {/* Hero Section — full-bleed image, flat ink scrim */}
+            <section className="relative overflow-hidden border-b border-ink bg-ink py-20 text-cream">
+                <img
+                    src="/images/heroes/hero-port-lanes.jpg"
+                    alt=""
+                    className="absolute inset-0 h-full w-full object-cover object-[center_70%]"
+                />
+                <div className="absolute inset-0 bg-ink/60" aria-hidden="true" />
+                <div className="relative mx-auto max-w-7xl px-6 lg:px-8 text-center">
                     <h1 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tight text-cream max-w-3xl mx-auto leading-tight">
                         Everything has a price. Nothing is promised.
                     </h1>
@@ -222,7 +228,7 @@ export default function Index({ categories = [], stripeKey = '' }) {
                     <p className="mt-4 text-[11px] font-mono uppercase tracking-widest text-cream-soft">
                         Prices as of October 2026 · Updated October 19, 2026
                     </p>
-                    <div className="mt-6"><div className="inline-flex items-center space-x-2 rounded-full border border-line-dark bg-night-card px-3.5 py-1 text-xs font-mono text-cream mb-6">
+                    <div className="mt-6"><div className="inline-flex items-center space-x-2 rounded-full border border-paper/40 px-3.5 py-1 text-xs font-mono text-cream mb-6">
                         <span className="h-1.5 w-1.5 rounded-full bg-sienna"></span>
                         <span>Secure checkout · Stripe PCI Level 1</span>
                     </div></div>

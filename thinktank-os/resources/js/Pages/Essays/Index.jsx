@@ -7,6 +7,16 @@ export default function Index({ documents = [], auth }) {
             <Head title="Essays - Glenride" />
             <InstitutionalHeader auth={auth} active="essays" />
 
+            {/* Banner hero — full-bleed image */}
+            <section aria-hidden="true" className="relative h-[48vh] min-h-[300px] overflow-hidden bg-ink">
+                <img
+                    src="/images/heroes/hero-ship-risk.jpg"
+                    alt=""
+                    className="absolute inset-0 h-full w-full object-cover object-[center_60%]"
+                />
+                <div className="absolute inset-0 bg-ink/50" />
+            </section>
+
             <main className="mx-auto max-w-7xl px-6 lg:px-8 py-16">
                 <div className="max-w-3xl">
                     <h1 className="mt-4 font-display text-4xl font-bold tracking-tight text-ink dark:text-cream sm:text-5xl">

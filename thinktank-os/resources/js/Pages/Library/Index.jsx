@@ -43,17 +43,23 @@ export default function Index({ briefs = [], auth }) {
 
             <InstitutionalHeader auth={auth} active="library" />
 
-            {/* Hero Section */}
-            <section className="relative border-b border-line dark:border-line-dark bg-paper dark:bg-night-card py-20">
-                <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            {/* Hero Section — full-bleed image, flat ink scrim */}
+            <section className="relative overflow-hidden border-b border-ink bg-ink text-paper dark:border-line-dark dark:text-cream">
+                <img
+                    src="/images/heroes/hero-ship-risk.jpg"
+                    alt=""
+                    className="absolute inset-0 h-full w-full object-cover object-[center_25%]"
+                />
+                <div className="absolute inset-0 bg-ink/60" aria-hidden="true" />
+                <div className="relative mx-auto max-w-7xl px-6 py-20 lg:px-8">
                     <div className="max-w-3xl">
-                        <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-ink dark:text-cream leading-tight">
+                        <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-paper leading-tight">
                             The Vanguard Library
                         </h1>
-                        <p className="mt-4 text-lg text-ink-soft dark:text-cream-soft font-serif leading-relaxed">
+                        <p className="mt-4 text-lg text-paper/85 font-serif leading-relaxed">
                             Peer-reviewed empirical research distilled into actionable, four-page executive policy briefs. Synthesized autonomously through ContextForge and curated by institutional fellows.
                         </p>
-                        <div className="mt-6"><div className="inline-flex items-center space-x-2 rounded-full border border-line dark:border-line-dark bg-paper-deep dark:bg-night-deep px-3 py-1 text-xs font-mono text-ink-soft dark:text-cream-soft mb-6">
+                        <div className="mt-6"><div className="inline-flex items-center space-x-2 rounded-full border border-paper/40 px-3 py-1 text-xs font-mono text-paper mb-6">
                             <span className="h-1.5 w-1.5 rounded-full bg-sienna"></span>
                             <span>The Glenride Monograph Series</span>
                         </div></div>
@@ -67,10 +73,10 @@ export default function Index({ briefs = [], auth }) {
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 placeholder="Search policy briefs by keyword, topic, or author..."
-                                className="w-full rounded-xl border-line dark:border-line-dark bg-paper-deep dark:bg-night-deep pl-11 pr-4 py-3 text-sm focus:border-sienna-deep focus:bg-paper dark:focus:bg-night-card focus:ring-sienna-deep transition shadow-sm"
+                                className="w-full rounded-xl border border-paper/30 bg-paper pl-11 pr-4 py-3 text-sm text-ink placeholder:text-ink-soft focus:border-sienna focus:bg-paper focus:ring-sienna-deep transition shadow-sm"
                             />
                             <svg
-                                className="absolute left-3.5 top-3.5 h-5 w-5 text-ink-soft dark:text-cream-soft"
+                                className="absolute left-3.5 top-3.5 h-5 w-5 text-ink-soft"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="currentColor"
@@ -83,7 +89,7 @@ export default function Index({ briefs = [], auth }) {
                                 />
                             </svg>
                         </div>
-                        <span className="text-xs font-mono text-ink-soft dark:text-cream-soft">
+                        <span className="text-xs font-mono text-paper/70">
                             Showing {filteredBriefs.length} Monographs
                         </span>
                     </div>

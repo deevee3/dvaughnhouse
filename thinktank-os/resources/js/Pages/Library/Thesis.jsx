@@ -12,6 +12,16 @@ export default function Thesis({ auth }) {
                 subtitle="Foundational Intellectual Thesis"
             />
 
+            {/* Banner hero — full-bleed image */}
+            <section aria-hidden="true" className="relative h-[48vh] min-h-[300px] overflow-hidden bg-ink">
+                <img
+                    src="/images/heroes/hero-port-sunset.jpg"
+                    alt=""
+                    className="absolute inset-0 h-full w-full object-cover object-[center_30%]"
+                />
+                <div className="absolute inset-0 bg-ink/50" />
+            </section>
+
             {/* Main Thesis Content */}
             <main className="mx-auto max-w-3xl px-6 py-20 sm:py-28">
                 {/* Header Banner */}
