@@ -12,6 +12,10 @@ import {LaunchLocker} from "../src/LaunchLocker.sol";
 import {VestingVault} from "../src/VestingVault.sol";
 import {AirdropDistributor} from "../src/AirdropDistributor.sol";
 import {PearlHookCore} from "../src/PearlHookCore.sol";
+import {PoolKey} from "@uniswap/v4-core/src/types/PoolKey.sol";
+import {PoolId} from "@uniswap/v4-core/src/types/PoolId.sol";
+import {Currency} from "@uniswap/v4-core/src/types/Currency.sol";
+import {IHooks} from "@uniswap/v4-core/src/interfaces/IHooks.sol";
 import {MockQuoteAsset, MockLPPosition} from "./Mocks.sol";
 
 /// @notice Core suite: factory launches, distribution, certificate, token
@@ -190,6 +194,65 @@ contract PearlsTest is Test {
         vm.prank(alice);
         vm.expectRevert(LaunchCertificate.NotFactory.selector);
         cert.mint(alice, rec);
+    }
+
+    function test_fee_tier_hygiene_and_validation() public {
+        // Canonical tiers return expected canonical tick spacings
+        assertEq(factory.getTickSpacing(100), 1);
+        assertEq(factory.getTickSpacing(500), 10);
+        assertEq(factory.getTickSpacing(3000), 60);
+        assertEq(factory.getTickSpacing(10000), 200);
+
+        // Invalid tiers revert
+        vm.expectRevert(abi.encodeWithSelector(LaunchFactory.InvalidPoolFeeTier.selector, 0));
+        factory.getTickSpacing(0);
+
+        vm.expectRevert(abi.encodeWithSelector(LaunchFactory.InvalidPoolFeeTier.selector, 2500));
+        factory.getTickSpacing(2500);
+
+        // Launch with invalid fee tier reverts
+        LaunchFactory.LaunchParams memory p = _baseParams();
+        p.poolFeeTier = 2500;
+        vm.expectRevert(abi.encodeWithSelector(LaunchFactory.InvalidPoolFeeTier.selector, 2500));
+        _launch(p, 0.0194 ether);
+
+        // Launch with valid fee tier (500) succeeds and populates poolId
+        p.poolFeeTier = 500;
+        LaunchFactory.LaunchResult memory r = _launch(p, 0.0194 ether);
+        assertTrue(PoolId.unwrap(r.poolId) != bytes32(0));
+    }
+
+    function test_single_canonical_pool_guarantee() public {
+        LaunchFactory.LaunchParams memory p = _baseParams();
+        p.poolFeeTier = 3000;
+        LaunchFactory.LaunchResult memory r = _launch(p, 0.0194 ether);
+
+        int24 expectedTickSpacing = factory.getTickSpacing(3000);
+        assertEq(expectedTickSpacing, 60);
+
+        (Currency c0, Currency c1) = p.quoteIsCurrency0
+            ? (Currency.wrap(p.quoteAsset), Currency.wrap(r.token))
+            : (Currency.wrap(r.token), Currency.wrap(p.quoteAsset));
+
+        PoolKey memory expectedKey = PoolKey({
+            currency0: c0,
+            currency1: c1,
+            fee: 3000,
+            tickSpacing: 60,
+            hooks: IHooks(r.hook)
+        });
+
+        assertEq(PoolId.unwrap(r.poolId), PoolId.unwrap(expectedKey.toId()), "poolId must match canonical PoolKey");
+
+        // Any attempt to create a different pool (e.g. different fee or different hook) has a different PoolId
+        PoolKey memory nonCanonicalKey = PoolKey({
+            currency0: c0,
+            currency1: c1,
+            fee: 500,
+            tickSpacing: 10,
+            hooks: IHooks(r.hook)
+        });
+        assertTrue(PoolId.unwrap(r.poolId) != PoolId.unwrap(nonCanonicalKey.toId()), "alternate fee tier yields different poolId");
     }
 
     // ---------------------------------------------------------------------

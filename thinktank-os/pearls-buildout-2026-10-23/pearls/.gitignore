@@ -5,3 +5,4 @@ broadcast/
 
 # Env (never commit keys — testnet keys included)
 .env
+__pycache__/

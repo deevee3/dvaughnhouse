@@ -13,6 +13,7 @@ evm_version = "cancun"
 # viaIR: the launch() configuration struct is wide (24 fields); the legacy
 # codegen hits stack-too-deep without the IR pipeline.
 via_ir = true
+ast = true
 
 # Remappings for dependencies.
 remappings = [

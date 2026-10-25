@@ -11,6 +11,7 @@ import {Hooks} from "@uniswap/v4-core/src/libraries/Hooks.sol";
 import {TickMath} from "@uniswap/v4-core/src/libraries/TickMath.sol";
 import {Currency} from "@uniswap/v4-core/src/types/Currency.sol";
 import {PoolKey} from "@uniswap/v4-core/src/types/PoolKey.sol";
+import {PoolId} from "@uniswap/v4-core/src/types/PoolId.sol";
 import {ModifyLiquidityParams, SwapParams} from "@uniswap/v4-core/src/types/PoolOperation.sol";
 import {BalanceDelta, toBalanceDelta} from "@uniswap/v4-core/src/types/BalanceDelta.sol";
 import {BeforeSwapDelta, BeforeSwapDeltaLibrary} from "@uniswap/v4-core/src/types/BeforeSwapDelta.sol";
@@ -666,7 +667,7 @@ contract PearlHookForkTest is Test {
         p.totalSupply = 1_000_000_000e18;
         p.creator = makeAddr("creator");
         p.quoteAsset = address(quote);
-        p.poolFeeTier = POOL_FEE;
+        p.poolFeeTier = 3000;
         p.volumeThresholdQuote = GATE_THRESHOLD;
         p.usdGate = 10_000_000e6;
         p.lockMode = LaunchCertificate.LockMode.Abyssal;
@@ -694,10 +695,11 @@ contract PearlHookForkTest is Test {
         PoolKey memory key = PoolKey({
             currency0: c0,
             currency1: c1,
-            fee: POOL_FEE,
+            fee: 3000,
             tickSpacing: TICK_SPACING,
             hooks: IHooks(r.hook)
         });
+        assertEq(PoolId.unwrap(r.poolId), PoolId.unwrap(key.toId()), "launch poolId must equal key.toId()");
 
         POOL_MANAGER.initialize(key, SQRT_PRICE_1_1);
 

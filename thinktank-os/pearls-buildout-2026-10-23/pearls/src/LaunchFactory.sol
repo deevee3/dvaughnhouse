@@ -4,6 +4,10 @@ pragma solidity ^0.8.24;
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {IPoolManager} from "@uniswap/v4-core/src/interfaces/IPoolManager.sol";
+import {PoolKey} from "@uniswap/v4-core/src/types/PoolKey.sol";
+import {PoolId} from "@uniswap/v4-core/src/types/PoolId.sol";
+import {Currency} from "@uniswap/v4-core/src/types/Currency.sol";
+import {IHooks} from "@uniswap/v4-core/src/interfaces/IHooks.sol";
 
 import {LaunchToken} from "./LaunchToken.sol";
 import {LaunchCertificate} from "./LaunchCertificate.sol";
@@ -91,6 +95,7 @@ contract LaunchFactory {
         address hookCore;
         address hook;
         uint256 certificateId;
+        PoolId poolId;
     }
 
     event Launched(
@@ -104,7 +109,10 @@ contract LaunchFactory {
         address hook,
         address quoteAsset,
         uint256 totalSupply,
-        uint256 volumeThresholdQuote
+        uint256 volumeThresholdQuote,
+        uint24 poolFeeTier,
+        int24 tickSpacing,
+        PoolId poolId
     );
 
     error ZeroAddress();
@@ -118,6 +126,17 @@ contract LaunchFactory {
     error VestingBadSchedule();
     error AirdropNeedsRoot();
     error WrongLaunchValue(uint256 sent, uint256 required);
+    error InvalidPoolFeeTier(uint24 feeTier);
+
+    /// @notice Returns canonical tick spacing for standard Uniswap v4 fee tiers.
+    /// @dev Supported: 100 -> 1, 500 -> 10, 3000 -> 60, 10000 -> 200.
+    function getTickSpacing(uint24 feeTier) public pure returns (int24) {
+        if (feeTier == 100) return 1;
+        if (feeTier == 500) return 10;
+        if (feeTier == 3000) return 60;
+        if (feeTier == 10000) return 200;
+        revert InvalidPoolFeeTier(feeTier);
+    }
 
     constructor(address treasury_) {
         if (treasury_ == address(0)) revert ZeroAddress();
@@ -224,6 +243,21 @@ contract LaunchFactory {
         // --- Liquidity tranche ------------------------------------------------
         IERC20(address(token)).safeTransfer(params.liquidityAllocation, liquidityAmount);
 
+        // --- Canonical v4 pool parameters -----------------------------------
+        int24 tickSpacing = getTickSpacing(params.poolFeeTier);
+        (Currency c0, Currency c1) = params.quoteIsCurrency0
+            ? (Currency.wrap(params.quoteAsset), Currency.wrap(address(token)))
+            : (Currency.wrap(address(token)), Currency.wrap(params.quoteAsset));
+
+        PoolKey memory canonicalPoolKey = PoolKey({
+            currency0: c0,
+            currency1: c1,
+            fee: params.poolFeeTier,
+            tickSpacing: tickSpacing,
+            hooks: IHooks(address(hook))
+        });
+        result.poolId = canonicalPoolKey.toId();
+
         // --- Certificate: the pearl -------------------------------------------
         LaunchCertificate.CertificateRecord memory record = LaunchCertificate.CertificateRecord({
             token: address(token),
@@ -259,7 +293,10 @@ contract LaunchFactory {
             address(hook),
             params.quoteAsset,
             params.totalSupply,
-            params.volumeThresholdQuote
+            params.volumeThresholdQuote,
+            params.poolFeeTier,
+            tickSpacing,
+            result.poolId
         );
     }
 
@@ -269,6 +306,7 @@ contract LaunchFactory {
         if (p.creator == address(0) || p.quoteAsset == address(0) || p.liquidityAllocation == address(0)) {
             revert ZeroAddress();
         }
+        getTickSpacing(p.poolFeeTier);
         uint256 sum = uint256(p.vestingBps) + uint256(p.airdropBps) + uint256(p.liquidityBps);
         if (sum != 10_000) revert BadBpsSplit(sum);
         if (p.volumeThresholdQuote == 0) revert BadThreshold();
