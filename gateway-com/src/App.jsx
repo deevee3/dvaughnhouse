@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import heroBanner from "./assets/hero-collab.jpg";
 import heroDonate from "./assets/hero-donate.jpg";
+import heroSupplyNetwork from "./assets/hero-supply-network.webp";
 import workResearch from "./assets/work-research.webp";
 import workAi from "./assets/work-ai-systems.webp";
 import workAdvisory from "./assets/work-advisory.webp";
@@ -478,6 +479,30 @@ function Work() {
       body: "Everything for sale lives in one store — the Den. Field guides that get you outside and stronger, trail gear and apparel, plus the wider house's tools, digests, and briefings. One shelf, one checkout, nothing scattered.",
       link: "https://den.dvaughnhouse.com",
       cta: "Visit the store",
+    },
+    {
+      title: "Dispatch",
+      img: heroSupplyNetwork,
+      imgAlt: "Dark world map lit by glowing amber supply routes",
+      body: "The blog. Plain-language investigations — drug shortages, supply chains, the systems that seek to harm you. Published free, verified before asserted.",
+      link: "https://blog.dvaughnhouse.com",
+      cta: "Read Dispatch",
+    },
+    {
+      title: "Bot HQ",
+      img: workAi,
+      imgAlt: "Interlocking AI circuit nodes with flowing amber data pathways",
+      body: "The bot team, live. A public status board for the bots that run the work — what they're doing, what they've done, and the receipts.",
+      link: "https://bots.dvaughnhouse.com/public",
+      cta: "See the bots",
+    },
+    {
+      title: "ThinkTank OS",
+      img: workResearch,
+      imgAlt: "Glowing laboratory flask dissolving into data points",
+      body: "The operating system for the think tank — the public library, the attestation registry, and the scholar commons. Proof, not promises.",
+      link: ORG_URL,
+      cta: "Visit ThinkTank OS",
     },
   ];
   return (
@@ -1219,7 +1244,7 @@ function Footer({ base = "" }) {
           Token and market content is educational only.
         </p>
         <p className="mt-2 text-[11px] leading-relaxed text-ink-soft dark:text-cream-soft">
-          Content updated: October 21, 2026.
+          Content updated: October 25, 2026.
         </p>
       </div>
     </footer>
