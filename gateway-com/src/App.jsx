@@ -324,7 +324,7 @@ function AboutPage() {
           agentic systems that run on hardware I own, publish research
           through an independent think tank, and build in public so the
           receipts are visible. Human judgment stays at the top of every
-          system I ship &mdash; the machine proposes, the person decides.
+          system I ship &mdash; the machine proposes, the Human decides.
         </p>
       </div>
 
@@ -336,16 +336,16 @@ function AboutPage() {
         />
         <div>
           <p className="font-mono text-xs uppercase tracking-widest text-sienna-deep dark:text-sienna">
-            Mission statement
+            About Glenride
           </p>
           <p className="mt-4 font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl dark:text-cream">
-            Combat systems that seek to harm you.
+            Glenride is an independent, AI-native think tank. We find where critical systems break before the break becomes harm &mdash; and we publish a record anyone can check.
           </p>
           <p className="mt-4 max-w-3xl text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
-            Three motions: <strong className="font-semibold text-ink dark:text-cream">understand</strong> the
-            system, <strong className="font-semibold text-ink dark:text-cream">build</strong> the
-            alternative, <strong className="font-semibold text-ink dark:text-cream">compel</strong> the
-            change. Less bureaucracy. More breakthroughs.
+            We study supply chains, pharmaceutical data, and the software systems modern life quietly depends on. We measure what others guess at, we show our sources, and we sign our work. When a finding is strong enough to change a rule, we carry it to the people who write the rules. When an answer can become a tool, we build the tool.
+          </p>
+          <p className="mt-4 max-w-3xl text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
+            Our money comes from our work, so our conclusions answer to evidence, not to a sponsor. &mdash; D&rsquo;Vaughn House, Founder
           </p>
         </div>
       </div>
@@ -460,7 +460,7 @@ function Work() {
       title: "Glenride",
       img: workResearch,
       imgAlt: "Glowing laboratory flask dissolving into data points",
-      body: "An independent think tank built to combat systems that seek to harm you. Now the attestation authority: signed proof that work happened as claimed. Understand. Build. Compel. Prove.",
+      body: "Glenride is an independent, AI-native think tank. We find where critical systems break before the break becomes harm — and we publish a record anyone can check.",
       link: ORG_URL,
       cta: "Visit Glenride",
     },

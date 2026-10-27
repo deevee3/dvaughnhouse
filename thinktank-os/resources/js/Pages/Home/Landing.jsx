@@ -152,17 +152,23 @@ export default function Landing({
                         </h2>
                         <div className="mt-6 space-y-5 text-lg leading-relaxed text-ink-soft dark:text-cream-soft">
                             <p>
-                                Algorithmic velocity now expands exponentially while
-                                institutional wisdom remains bounded by human
-                                cognition. Glenride exists to close that gap:
-                                autonomous synthesis does the distillation, and human
-                                orchestrators keep the moral responsibility.
+                                Glenride is an independent, AI-native think tank. We
+                                find where critical systems break before the break
+                                becomes harm — and we publish a record anyone can
+                                check.
                             </p>
                             <p>
-                                Machines provide analytical velocity. Humans provide
-                                the judgment. No brief is published, and no claim is
-                                attested, without decisive human verification.
+                                We study supply chains, pharmaceutical data, and the
+                                software systems modern life quietly depends on. We
+                                measure what others guess at, we show our sources,
+                                and we sign our work. When a finding is strong
+                                enough to change a rule, we carry it to the people
+                                who write the rules. When an answer can become a
+                                tool, we build the tool. Our money comes from our
+                                work, so our conclusions answer to evidence, not to
+                                a sponsor.
                             </p>
+                            <p>— D'Vaughn House, Founder</p>
                         </div>
                     </div>
 
@@ -336,7 +342,7 @@ export default function Landing({
                                 Contact
                             </span>
                             <span className="text-sm text-ink-soft dark:text-cream-soft">
-                                Reach the institute through the routing hub →
+                                Reach Glenride through the routing hub →
                             </span>
                         </a>
                     </div>
