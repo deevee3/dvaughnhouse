@@ -142,47 +142,20 @@ contract ERC6909ClaimsTest is Test {
         assertEq(token.balanceOf(receiver, 1337), 70);
     }
 
-    function test_revertMintBalanceOverflow() public {
+    function testFailMintBalanceOverflow() public {
         token.mint(address(0xDEAD), 1337, type(uint256).max);
-        vm.expectRevert();
         token.mint(address(0xDEAD), 1337, 1);
     }
 
-    function test_revertTransferBalanceUnderflow() public {
+    function testFailTransferBalanceUnderflow() public {
         address sender = address(0xABCD);
         address receiver = address(0xBEEF);
 
-        vm.expectRevert();
         vm.prank(sender);
         token.transferFrom(sender, receiver, 1337, 1);
     }
 
-    function test_revertTransferBalanceOverflow() public {
-        address sender = address(0xABCD);
-        address receiver = address(0xBEEF);
-
-        token.mint(sender, 1337, type(uint256).max);
-
-        vm.prank(sender);
-        token.transferFrom(sender, receiver, 1337, type(uint256).max);
-
-        token.mint(sender, 1337, 1);
-
-        vm.expectRevert();
-        vm.prank(sender);
-        token.transferFrom(sender, receiver, 1337, 1);
-    }
-
-    function test_revertTransferFromBalanceUnderflow() public {
-        address sender = address(0xABCD);
-        address receiver = address(0xBEEF);
-
-        vm.expectRevert();
-        vm.prank(sender);
-        token.transferFrom(sender, receiver, 1337, 1);
-    }
-
-    function test_revertTransferFromBalanceOverflow() public {
+    function testFailTransferBalanceOverflow() public {
         address sender = address(0xABCD);
         address receiver = address(0xBEEF);
 
@@ -193,18 +166,39 @@ contract ERC6909ClaimsTest is Test {
 
         token.mint(sender, 1337, 1);
 
-        vm.expectRevert();
         vm.prank(sender);
         token.transferFrom(sender, receiver, 1337, 1);
     }
 
-    function test_revertTransferFromNotAuthorized() public {
+    function testFailTransferFromBalanceUnderflow() public {
+        address sender = address(0xABCD);
+        address receiver = address(0xBEEF);
+
+        vm.prank(sender);
+        token.transferFrom(sender, receiver, 1337, 1);
+    }
+
+    function testFailTransferFromBalanceOverflow() public {
+        address sender = address(0xABCD);
+        address receiver = address(0xBEEF);
+
+        token.mint(sender, 1337, type(uint256).max);
+
+        vm.prank(sender);
+        token.transferFrom(sender, receiver, 1337, type(uint256).max);
+
+        token.mint(sender, 1337, 1);
+
+        vm.prank(sender);
+        token.transferFrom(sender, receiver, 1337, 1);
+    }
+
+    function testFailTransferFromNotAuthorized() public {
         address sender = address(0xABCD);
         address receiver = address(0xBEEF);
 
         token.mint(sender, 1337, 100);
 
-        vm.expectRevert();
         token.transferFrom(sender, receiver, 1337, 100);
     }
 
@@ -336,16 +330,14 @@ contract ERC6909ClaimsTest is Test {
         }
     }
 
-    function test_revertTransferBalanceUnderflow(address sender, address receiver, uint256 id, uint256 amount) public {
+    function testFailTransferBalanceUnderflow(address sender, address receiver, uint256 id, uint256 amount) public {
         amount = bound(amount, 1, type(uint256).max);
 
-        vm.expectRevert();
         vm.prank(sender);
         token.transfer(receiver, id, amount);
     }
 
-    function test_revertTransferBalanceOverflow(address sender, address receiver, uint256 id, uint256 amount) public {
-        if (sender == receiver) return;
+    function testFailTransferBalanceOverflow(address sender, address receiver, uint256 id, uint256 amount) public {
         amount = bound(amount, 1, type(uint256).max);
         uint256 overflowAmount = type(uint256).max - amount + 1;
 
@@ -356,25 +348,20 @@ contract ERC6909ClaimsTest is Test {
 
         token.mint(sender, id, overflowAmount);
 
-        vm.expectRevert();
         vm.prank(sender);
         token.transfer(receiver, id, overflowAmount);
     }
 
-    function test_revertTransferFromBalanceUnderflow(address sender, address receiver, uint256 id, uint256 amount)
+    function testFailTransferFromBalanceUnderflow(address sender, address receiver, uint256 id, uint256 amount)
         public
     {
         amount = bound(amount, 1, type(uint256).max);
 
-        vm.expectRevert();
         vm.prank(sender);
         token.transferFrom(sender, receiver, id, amount);
     }
 
-    function test_revertTransferFromBalanceOverflow(address sender, address receiver, uint256 id, uint256 amount)
-        public
-    {
-        if (sender == receiver) return;
+    function testFailTransferFromBalanceOverflow(address sender, address receiver, uint256 id, uint256 amount) public {
         amount = bound(amount, 1, type(uint256).max);
         uint256 overflowAmount = type(uint256).max - amount + 1;
 
@@ -385,20 +372,16 @@ contract ERC6909ClaimsTest is Test {
 
         token.mint(sender, id, overflowAmount);
 
-        vm.expectRevert();
         vm.prank(sender);
         token.transferFrom(sender, receiver, id, overflowAmount);
     }
 
-    function test_revertTransferFromNotAuthorized(address sender, address receiver, uint256 id, uint256 amount)
-        public
-    {
+    function testFailTransferFromNotAuthorized(address sender, address receiver, uint256 id, uint256 amount) public {
         amount = bound(amount, 1, type(uint256).max);
 
         token.mint(sender, id, amount);
 
         vm.assume(sender != address(this));
-        vm.expectRevert();
         token.transferFrom(sender, receiver, id, amount);
     }
 }

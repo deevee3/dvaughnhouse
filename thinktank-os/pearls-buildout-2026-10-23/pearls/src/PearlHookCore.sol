@@ -2,7 +2,7 @@
 pragma solidity ^0.8.24;
 
 import {PoolKey} from "@uniswap/v4-core/src/types/PoolKey.sol";
-import {SwapParams} from "@uniswap/v4-core/src/types/PoolOperation.sol";
+import {IPoolManager} from "@uniswap/v4-core/src/interfaces/IPoolManager.sol";
 import {BalanceDelta} from "@uniswap/v4-core/src/types/BalanceDelta.sol";
 import {BeforeSwapDelta} from "@uniswap/v4-core/src/types/BeforeSwapDelta.sol";
 
@@ -153,7 +153,7 @@ contract PearlHookCore is IPearlHook {
     // the PearlHook adapter. These stubs exist only so the core formally
     // satisfies IPearlHook's full surface for type-checking consumers —
     // they revert unconditionally and must never be wired to a PoolManager.
-    function beforeSwap(address, PoolKey calldata, SwapParams calldata, bytes calldata)
+    function beforeSwap(address, PoolKey calldata, IPoolManager.SwapParams calldata, bytes calldata)
         external
         pure
         returns (bytes4, BeforeSwapDelta, uint24)
@@ -161,7 +161,7 @@ contract PearlHookCore is IPearlHook {
         revert("core: callbacks live on the adapter");
     }
 
-    function afterSwap(address, PoolKey calldata, SwapParams calldata, BalanceDelta, bytes calldata)
+    function afterSwap(address, PoolKey calldata, IPoolManager.SwapParams calldata, BalanceDelta, bytes calldata)
         external
         pure
         returns (bytes4, int128)

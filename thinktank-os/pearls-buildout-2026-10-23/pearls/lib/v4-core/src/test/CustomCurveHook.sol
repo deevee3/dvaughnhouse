@@ -5,7 +5,6 @@ import {Hooks} from "../libraries/Hooks.sol";
 import {IHooks} from "../interfaces/IHooks.sol";
 import {IPoolManager} from "../interfaces/IPoolManager.sol";
 import {PoolKey} from "../types/PoolKey.sol";
-import {ModifyLiquidityParams, SwapParams} from "../types/PoolOperation.sol";
 import {BeforeSwapDelta, toBeforeSwapDelta} from "../types/BeforeSwapDelta.sol";
 import {BalanceDelta} from "../types/BalanceDelta.sol";
 import {Currency} from "../types/Currency.sol";
@@ -33,7 +32,7 @@ contract CustomCurveHook is BaseTestHooks {
     function beforeSwap(
         address, /* sender **/
         PoolKey calldata key,
-        SwapParams calldata params,
+        IPoolManager.SwapParams calldata params,
         bytes calldata /* hookData **/
     ) external override onlyPoolManager returns (bytes4, BeforeSwapDelta, uint24) {
         (Currency inputCurrency, Currency outputCurrency, uint256 amount) = _getInputOutputAndAmount(key, params);
@@ -51,7 +50,7 @@ contract CustomCurveHook is BaseTestHooks {
     function afterAddLiquidity(
         address, /* sender **/
         PoolKey calldata, /* key **/
-        ModifyLiquidityParams calldata, /* params **/
+        IPoolManager.ModifyLiquidityParams calldata, /* params **/
         BalanceDelta, /* delta **/
         BalanceDelta, /* feeDelta **/
         bytes calldata /* hookData **/
@@ -59,7 +58,7 @@ contract CustomCurveHook is BaseTestHooks {
         revert AddLiquidityDirectToHook();
     }
 
-    function _getInputOutputAndAmount(PoolKey calldata key, SwapParams calldata params)
+    function _getInputOutputAndAmount(PoolKey calldata key, IPoolManager.SwapParams calldata params)
         internal
         pure
         returns (Currency input, Currency output, uint256 amount)

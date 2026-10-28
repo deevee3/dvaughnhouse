@@ -5,7 +5,6 @@ import {Hooks} from "../libraries/Hooks.sol";
 import {SafeCast} from "../libraries/SafeCast.sol";
 import {IHooks} from "../interfaces/IHooks.sol";
 import {IPoolManager} from "../interfaces/IPoolManager.sol";
-import {ModifyLiquidityParams} from "../types/PoolOperation.sol";
 import {PoolKey} from "../types/PoolKey.sol";
 import {BalanceDelta, toBalanceDelta} from "../types/BalanceDelta.sol";
 import {Currency} from "../types/Currency.sol";
@@ -32,7 +31,7 @@ contract LPFeeTakingHook is BaseTestHooks {
     function afterRemoveLiquidity(
         address, /* sender **/
         PoolKey calldata key,
-        ModifyLiquidityParams calldata, /* params **/
+        IPoolManager.ModifyLiquidityParams calldata, /* params **/
         BalanceDelta,
         BalanceDelta feeDelta,
         bytes calldata /* hookData **/
@@ -49,7 +48,7 @@ contract LPFeeTakingHook is BaseTestHooks {
     function afterAddLiquidity(
         address, /* sender **/
         PoolKey calldata key,
-        ModifyLiquidityParams calldata, /* params **/
+        IPoolManager.ModifyLiquidityParams calldata, /* params **/
         BalanceDelta,
         BalanceDelta feeDelta,
         bytes calldata /* hookData **/

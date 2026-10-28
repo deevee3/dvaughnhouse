@@ -5,7 +5,6 @@ import {Hooks} from "../libraries/Hooks.sol";
 import {BaseTestHooks} from "./BaseTestHooks.sol";
 import {IHooks} from "../interfaces/IHooks.sol";
 import {IPoolManager} from "../interfaces/IPoolManager.sol";
-import {ModifyLiquidityParams, SwapParams} from "../types/PoolOperation.sol";
 import {PoolKey} from "../types/PoolKey.sol";
 import {BalanceDelta, BalanceDeltaLibrary} from "../types/BalanceDelta.sol";
 import {Currency} from "../types/Currency.sol";
@@ -47,7 +46,7 @@ contract SkipCallsTestHook is BaseTestHooks, Test {
     function beforeAddLiquidity(
         address,
         PoolKey calldata key,
-        ModifyLiquidityParams calldata params,
+        IPoolManager.ModifyLiquidityParams calldata params,
         bytes calldata hookData
     ) external override returns (bytes4) {
         counter++;
@@ -58,7 +57,7 @@ contract SkipCallsTestHook is BaseTestHooks, Test {
     function afterAddLiquidity(
         address,
         PoolKey calldata key,
-        ModifyLiquidityParams calldata params,
+        IPoolManager.ModifyLiquidityParams calldata params,
         BalanceDelta,
         BalanceDelta,
         bytes calldata hookData
@@ -71,7 +70,7 @@ contract SkipCallsTestHook is BaseTestHooks, Test {
     function beforeRemoveLiquidity(
         address,
         PoolKey calldata key,
-        ModifyLiquidityParams calldata params,
+        IPoolManager.ModifyLiquidityParams calldata params,
         bytes calldata hookData
     ) external override returns (bytes4) {
         counter++;
@@ -82,7 +81,7 @@ contract SkipCallsTestHook is BaseTestHooks, Test {
     function afterRemoveLiquidity(
         address,
         PoolKey calldata key,
-        ModifyLiquidityParams calldata params,
+        IPoolManager.ModifyLiquidityParams calldata params,
         BalanceDelta,
         BalanceDelta,
         bytes calldata hookData
@@ -92,7 +91,7 @@ contract SkipCallsTestHook is BaseTestHooks, Test {
         return (IHooks.afterRemoveLiquidity.selector, BalanceDeltaLibrary.ZERO_DELTA);
     }
 
-    function beforeSwap(address, PoolKey calldata key, SwapParams calldata params, bytes calldata hookData)
+    function beforeSwap(address, PoolKey calldata key, IPoolManager.SwapParams calldata params, bytes calldata hookData)
         external
         override
         returns (bytes4, BeforeSwapDelta, uint24)
@@ -102,11 +101,13 @@ contract SkipCallsTestHook is BaseTestHooks, Test {
         return (IHooks.beforeSwap.selector, BeforeSwapDeltaLibrary.ZERO_DELTA, 0);
     }
 
-    function afterSwap(address, PoolKey calldata key, SwapParams calldata params, BalanceDelta, bytes calldata hookData)
-        external
-        override
-        returns (bytes4, int128)
-    {
+    function afterSwap(
+        address,
+        PoolKey calldata key,
+        IPoolManager.SwapParams calldata params,
+        BalanceDelta,
+        bytes calldata hookData
+    ) external override returns (bytes4, int128) {
         counter++;
         _swap(key, params, hookData);
         return (IHooks.afterSwap.selector, 0);
@@ -138,7 +139,7 @@ contract SkipCallsTestHook is BaseTestHooks, Test {
         IPoolManager(manager).initialize(key, sqrtPriceX96);
     }
 
-    function _swap(PoolKey calldata key, SwapParams memory params, bytes calldata hookData) public {
+    function _swap(PoolKey calldata key, IPoolManager.SwapParams memory params, bytes calldata hookData) public {
         IPoolManager(manager).swap(key, params, hookData);
         address payer = abi.decode(hookData, (address));
         int256 delta0 = IPoolManager(manager).currencyDelta(address(this), key.currency0);
@@ -149,7 +150,11 @@ contract SkipCallsTestHook is BaseTestHooks, Test {
         key.currency1.take(manager, payer, uint256(delta1), false);
     }
 
-    function _addLiquidity(PoolKey calldata key, ModifyLiquidityParams memory params, bytes calldata hookData) public {
+    function _addLiquidity(
+        PoolKey calldata key,
+        IPoolManager.ModifyLiquidityParams memory params,
+        bytes calldata hookData
+    ) public {
         IPoolManager(manager).modifyLiquidity(key, params, hookData);
         address payer = abi.decode(hookData, (address));
         int256 delta0 = IPoolManager(manager).currencyDelta(address(this), key.currency0);
@@ -162,12 +167,14 @@ contract SkipCallsTestHook is BaseTestHooks, Test {
         key.currency1.settle(manager, payer, uint256(-delta1), false);
     }
 
-    function _removeLiquidity(PoolKey calldata key, ModifyLiquidityParams memory params, bytes calldata hookData)
-        public
-    {
+    function _removeLiquidity(
+        PoolKey calldata key,
+        IPoolManager.ModifyLiquidityParams memory params,
+        bytes calldata hookData
+    ) public {
         // first hook needs to add liquidity for itself
-        ModifyLiquidityParams memory newParams =
-            ModifyLiquidityParams({tickLower: -120, tickUpper: 120, liquidityDelta: 1e18, salt: 0});
+        IPoolManager.ModifyLiquidityParams memory newParams =
+            IPoolManager.ModifyLiquidityParams({tickLower: -120, tickUpper: 120, liquidityDelta: 1e18, salt: 0});
         IPoolManager(manager).modifyLiquidity(key, newParams, hookData);
         // hook removes liquidity
         IPoolManager(manager).modifyLiquidity(key, params, hookData);

@@ -1,19 +1,25 @@
 # Pearls — Build-Out Report
 
-**Date:** 2026-10-23  
-**Scope:** Priority 1 (`PearlHook` Uniswap v4 Integration + Spec §7.3 Base Sepolia Fork-Test Matrix) and Priority 2 (Slither + Aderyn + Halmos Verification & Triage).  
-**Status:** Complete. All 50 Foundry tests (43 unit/fuzz + 7 Base Sepolia fork matrix) and all 5 Halmos symbolic proofs pass with 0 failures against the canonical `@uniswap/v4-core` `v4.0.0` release (`59d3ecf53afa9264a16bba0e38f4c5d2231f80bc`). Nothing has been deployed to any network.
+**Date:** 2026-10-23 (Updated 2026-10-28)  
+**Scope:** Priority 1 (`PearlHook` Uniswap v4 Integration + Spec §7.3 Base Sepolia Fork-Test Matrix), Priority 2 (Slither + Aderyn + Halmos Verification & Triage), and Phase 0 (True Uniswap v4.0.0 Pin Restoration).  
+**Status:** Complete. All 59 Foundry tests (45 unit/fuzz + 14 Base Sepolia fork matrix), all 5 Halmos symbolic proofs, and all 3 off-chain token list generator tests pass with 0 failures against the true canonical `@uniswap/v4-core` `v4.0.0` release tag (`e50237c43811bd9b526eff40f26772152a42daba`). Nothing has been deployed to any network.
 
 ---
 
 ## 1. What Was Built & Changed
 
 ### 1.1 Pinned Uniswap v4 Dependencies (`foundry.toml`, `foundry.lock`, `lib/`)
-- **`lib/v4-core`**: Pinned to canonical Uniswap v4 release tag `v4.0.0` (commit `59d3ecf53afa9264a16bba0e38f4c5d2231f80bc`).
-- **`lib/v4-periphery`**: Pinned to commit `3779387e5d296f39df543d23524b050f89a62917`.
+- **`lib/v4-core`**: Pinned to the true canonical Uniswap v4 release tag `v4.0.0` (commit `e50237c43811bd9b526eff40f26772152a42daba`).
+  - Key interface blob hashes at `v4.0.0` (`e50237c`):
+    - `src/interfaces/IPoolManager.sol`: `85703ef79d0271f9a8816cfd7cf7a5c63e28a706`
+    - `src/PoolManager.sol`: `c24fbc0ea6c31791617b3e15ce21d585ebd5fdf2`
+- **`lib/v4-periphery`**: Pinned to commit `3779387e5d296f39df543d23524b050f89a62917` (untouched).
 - Added explicit remappings in [`foundry.toml`](./foundry.toml) (`@uniswap/v4-core/=lib/v4-core/`, `v4-core/=lib/v4-core/src/`, `v4-periphery/=lib/v4-periphery/`) and locked both commits in [`foundry.lock`](./foundry.lock).
-- **Addendum (2026-10-23 — True `v4.0.0` Pin Restoration & `PoolOperation.sol` Type Alignment):**
-  The initial shallow clone of `lib/v4-core` had checked out the upstream `main` branch tip (`e50237c43811bd9b526eff40f26772152a42daba`, a pre-release snapshot where `SwapParams` and `ModifyLiquidityParams` were nested inside `IPoolManager`). On 2026-10-23, `lib/v4-core` was fetched and checked out to the exact `v4.0.0` tag commit `59d3ecf53afa9264a16bba0e38f4c5d2231f80bc` (`lib/v4-periphery` confirmed at `3779387e5d296f39df543d23524b050f89a62917`), all `IPoolManager.SwapParams` / `IPoolManager.ModifyLiquidityParams` references across `src/IPearlHook.sol`, `src/PearlHook.sol`, `src/PearlHookCore.sol`, and `test/PearlHook.t.sol` were updated to import `SwapParams` and `ModifyLiquidityParams` from `@uniswap/v4-core/src/types/PoolOperation.sol`, and the entire build, unit/fuzz suite (43/43), Base Sepolia fork suite (7/7), Halmos symbolic suite (5/5), and Slither/Aderyn static analysis passes were re-verified against `59d3ecf53afa9264a16bba0e38f4c5d2231f80bc`.
+- **Addendum (2026-10-28 — True `v4.0.0` Pin Restoration & Retraction of False Pin Claim):**
+  The earlier 2026-10-23 pin-fix prompt was mistaken about which commit was the official release tag vs. the post-v4.0.0 development commit; that addendum and its claims regarding commit `59d3ecf53afa9264a16bba0e38f4c5d2231f80bc` are formally retracted and superseded.
+  Commit `e50237c43811bd9b526eff40f26772152a42daba` is the true, canonical Uniswap `v4.0.0` release tag (Jan 21, 2025). The commit `59d3ecf` was a subsequent post-v4.0.0 commit where `SwapParams` and `ModifyLiquidityParams` were moved into a separate `src/types/PoolOperation.sol`.
+  In true `v4.0.0` (`e50237c`), `PoolOperation.sol` does not exist; `SwapParams` and `ModifyLiquidityParams` reside directly inside `interface IPoolManager` in `src/interfaces/IPoolManager.sol`.
+  On 2026-10-28 (per the 2026-10-28 Work Order), `lib/v4-core` was restored to tag `v4.0.0` (`e50237c43811bd9b526eff40f26772152a42daba`), all references across `src/IPearlHook.sol`, `src/PearlHook.sol`, `src/PearlHookCore.sol`, `test/PearlHook.t.sol`, and `test/PearlHookRouterFork.t.sol` were aligned to `IPoolManager.SwapParams` and `IPoolManager.ModifyLiquidityParams`, and `foundry.lock` was updated accordingly.
 
 ### 1.2 CREATE2 Hook Permission Mining ([`src/HookMiner.sol`](./src/HookMiner.sol), [`src/PearlsConstants.sol`](./src/PearlsConstants.sol))
 - Created [`src/HookMiner.sol`](./src/HookMiner.sol) to deterministically mine a CREATE2 salt whose deployed address has low 14 bits (`Hooks.ALL_HOOK_MASK = 0x3FFF`) equal to `PEARL_HOOK_FLAGS = 0x00CC`:
@@ -25,7 +31,7 @@
 - Added `BASE_SEPOLIA_POOL_MANAGER = 0x05E73354cFDd6745C338b50BcFDfA3Aa6fA03408` and `PEARL_HOOK_FLAGS = 0x00CC` to [`src/PearlsConstants.sol`](./src/PearlsConstants.sol).
 
 ### 1.3 Canonical v4 Hook Adapter & Quote-Only Fee Settlement ([`src/PearlHook.sol`](./src/PearlHook.sol), [`src/IPearlHook.sol`](./src/IPearlHook.sol), [`src/PearlHookCore.sol`](./src/PearlHookCore.sol))
-- Replaced the mirrored primitive callback signatures in [`src/IPearlHook.sol`](./src/IPearlHook.sol), [`src/PearlHook.sol`](./src/PearlHook.sol), and [`src/PearlHookCore.sol`](./src/PearlHookCore.sol) with canonical `@uniswap/v4-core` `v4.0.0` types (`IHooks`, `IPoolManager`, `PoolKey`, `SwapParams`, `ModifyLiquidityParams`, `BalanceDelta`, `BeforeSwapDelta`, with `SwapParams` and `ModifyLiquidityParams` imported from `@uniswap/v4-core/src/types/PoolOperation.sol`).
+- Replaced the mirrored primitive callback signatures in [`src/IPearlHook.sol`](./src/IPearlHook.sol), [`src/PearlHook.sol`](./src/PearlHook.sol), and [`src/PearlHookCore.sol`](./src/PearlHookCore.sol) with canonical `@uniswap/v4-core` `v4.0.0` types (`IHooks`, `IPoolManager`, `PoolKey`, `BalanceDelta`, `BeforeSwapDelta`, with `SwapParams` and `ModifyLiquidityParams` sourced from `IPoolManager`).
 - Enforced `Hooks.validateHookPermissions(IHooks(address(this)), getHookPermissions())` in `PearlHook`'s constructor and gated `beforeSwap` / `afterSwap` with `onlyPoolManager`.
 - **Architectural Note — Uniswap v4 Specified vs. Unspecified Delta Split across the 4 Swap Directions:**
   In Uniswap v4's [`Hooks.sol`](./lib/v4-core/src/libraries/Hooks.sol) (`lines 294–312`), `afterSwap` returns a single `int128` that `PoolManager` applies **exclusively** to the swap's **unspecified** currency (`hookDeltaUnspecified`), whereas `hookDeltaSpecified` is sourced **exclusively** from `beforeSwap`'s `BeforeSwapDelta.getSpecifiedDelta()`. Because Pearls charges the post-gate 30 bps fee **strictly in the quote asset** across all 4 swap directions (and never in the launched token):
@@ -43,14 +49,15 @@
 
 ## 2. Test Counts & Verification Results
 
-### 2.1 Foundry Suite (`forge test -vv`) — **50 Passed, 0 Failed**
+### 2.1 Foundry Suite (`forge test -vv`) — **59 Passed, 0 Failed**
 | Suite | File | Passing | Failing | Notes |
 |---|---|---:|---:|---|
-| `PearlsTest` | [`test/Pearls.t.sol`](./test/Pearls.t.sol) | 22 | 0 | Factory launch, bps splits, certificate, wallet cap, locker (Abyssal & Timed ≥180d), vesting vault, airdrop distributor (0.0194 ETH fee + Merkle claims). |
+| `PearlsTest` | [`test/Pearls.t.sol`](./test/Pearls.t.sol) | 24 | 0 | Factory launch, bps splits, certificate, wallet cap, locker (Abyssal & Timed ≥180d), vesting vault, airdrop distributor (0.0194 ETH fee + Merkle claims), fee tier validation, canonical pool guarantee. |
 | `AttestationRegistryTest` | [`test/AttestationRegistry.t.sol`](./test/AttestationRegistry.t.sol) | 8 | 0 | Content-hash anchoring, issuer gate, duplicate protection, reverse lookup. |
 | `PearlHookTest` | [`test/PearlHook.t.sol`](./test/PearlHook.t.sol) | 13 | 0 | Gate math, crossing-swap zero fee, fuzz monotonicity (256 runs), launch guard, `HookMiner` CREATE2 permission validation, `onlyPoolManager`, 4-case delta resolution. |
 | `PearlHookForkTest` | [`test/PearlHook.t.sol`](./test/PearlHook.t.sol) | 7 | 0 | **Spec §7.3 Base Sepolia Fork Matrix** (block `49,250,000`, chain ID `84532`) against live `PoolManager` (`0x05E73354cFDd6745C338b50BcFDfA3Aa6fA03408`): all 4 direction cases × pre-gate / crossing / post-gate (`quoteIsCurrency0 = false` and `true`), launch guard enforcement & expiry across all 4 directions, and end-to-end `LaunchFactory.launch()` -> pool init -> liquidity -> swaps. |
-| **Total** | | **50** | **0** | **43 unit/fuzz + 7 Base Sepolia fork tests** |
+| `PearlHookRouterForkTest` | [`test/PearlHookRouterFork.t.sol`](./test/PearlHookRouterFork.t.sol) | 7 | 0 | Router-path quotability & execution proofs (`V4Quoter`, `UniversalRouter`, `Permit2`) on Base Sepolia: all 4 directions, guard window, and quote-competitiveness benchmark. |
+| **Total** | | **59** | **0** | **45 unit/fuzz + 14 Base Sepolia fork tests** |
 
 ### 2.2 Symbolic Verification (`halmos --contract PearlHalmosTest`) — **5 Passed, 0 Failed**
 Full output in [`docs/halmos-2026-10-23.txt`](./docs/halmos-2026-10-23.txt); triage in [`docs/audit-triage-2026-10-23.md`](./docs/audit-triage-2026-10-23.md).
@@ -94,7 +101,7 @@ Full output in [`docs/halmos-2026-10-23.txt`](./docs/halmos-2026-10-23.txt); tri
 
 ### 4.2 Exact Test Counts (Before vs. After)
 
-All tests execute against canonical `@uniswap/v4-core` `v4.0.0` at commit `59d3ecf53afa9264a16bba0e38f4c5d2231f80bc`.
+All tests execute against canonical `@uniswap/v4-core` `v4.0.0` at release tag commit `e50237c43811bd9b526eff40f26772152a42daba`.
 
 | Test Category | Before | After | Change | Notes |
 |:---|---:|---:|:---:|:---|

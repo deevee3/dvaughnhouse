@@ -8,7 +8,6 @@ import {IPoolManager} from "@uniswap/v4-core/src/interfaces/IPoolManager.sol";
 import {PoolKey} from "@uniswap/v4-core/src/types/PoolKey.sol";
 import {Currency} from "@uniswap/v4-core/src/types/Currency.sol";
 import {IHooks} from "@uniswap/v4-core/src/interfaces/IHooks.sol";
-import {ModifyLiquidityParams} from "@uniswap/v4-core/src/types/PoolOperation.sol";
 import {PoolModifyLiquidityTest} from "@uniswap/v4-core/src/test/PoolModifyLiquidityTest.sol";
 
 import {PearlHook} from "../src/PearlHook.sol";
@@ -137,7 +136,7 @@ contract PearlHookRouterForkTest is Test {
 
         MODIFY_LIQUIDITY_ROUTER.modifyLiquidity(
             env.key,
-            ModifyLiquidityParams({
+            IPoolManager.ModifyLiquidityParams({
                 tickLower: -600,
                 tickUpper: 600,
                 liquidityDelta: 10_000_000e18,
@@ -180,7 +179,7 @@ contract PearlHookRouterForkTest is Test {
 
         MODIFY_LIQUIDITY_ROUTER.modifyLiquidity(
             key,
-            ModifyLiquidityParams({
+            IPoolManager.ModifyLiquidityParams({
                 tickLower: -600,
                 tickUpper: 600,
                 liquidityDelta: 10_000_000e18,

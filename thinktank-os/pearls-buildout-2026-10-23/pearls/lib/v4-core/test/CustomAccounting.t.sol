@@ -11,7 +11,6 @@ import {IHooks} from "../src/interfaces/IHooks.sol";
 import {Hooks} from "../src/libraries/Hooks.sol";
 import {PoolSwapTest} from "../src/test/PoolSwapTest.sol";
 import {PoolId} from "../src/types/PoolId.sol";
-import {SwapParams} from "../src/types/PoolOperation.sol";
 import {IPoolManager} from "../src/interfaces/IPoolManager.sol";
 import {Currency} from "../src/types/Currency.sol";
 import {BalanceDelta} from "../src/types/BalanceDelta.sol";
@@ -78,8 +77,11 @@ contract CustomAccountingTest is Test, Deployers {
         uint256 amountToSwap = 1000;
         PoolSwapTest.TestSettings memory testSettings =
             PoolSwapTest.TestSettings({takeClaims: false, settleUsingBurn: false});
-        SwapParams memory params =
-            SwapParams({zeroForOne: true, amountSpecified: -int256(amountToSwap), sqrtPriceLimitX96: SQRT_PRICE_1_2});
+        IPoolManager.SwapParams memory params = IPoolManager.SwapParams({
+            zeroForOne: true,
+            amountSpecified: -int256(amountToSwap),
+            sqrtPriceLimitX96: SQRT_PRICE_1_2
+        });
         swapRouter.swap(key, params, testSettings, ZERO_BYTES);
         vm.snapshotGasLastCall("swap CA fee on unspecified");
 
@@ -98,8 +100,11 @@ contract CustomAccountingTest is Test, Deployers {
         uint256 amountToSwap = 1000;
         PoolSwapTest.TestSettings memory testSettings =
             PoolSwapTest.TestSettings({takeClaims: false, settleUsingBurn: false});
-        SwapParams memory params =
-            SwapParams({zeroForOne: true, amountSpecified: int256(amountToSwap), sqrtPriceLimitX96: SQRT_PRICE_1_2});
+        IPoolManager.SwapParams memory params = IPoolManager.SwapParams({
+            zeroForOne: true,
+            amountSpecified: int256(amountToSwap),
+            sqrtPriceLimitX96: SQRT_PRICE_1_2
+        });
         swapRouter.swap(key, params, testSettings, ZERO_BYTES);
 
         // input is 1002 for output of 1000 with this much liquidity available
@@ -121,8 +126,11 @@ contract CustomAccountingTest is Test, Deployers {
         uint256 amountToSwap = 123456;
         PoolSwapTest.TestSettings memory testSettings =
             PoolSwapTest.TestSettings({takeClaims: false, settleUsingBurn: false});
-        SwapParams memory params =
-            SwapParams({zeroForOne: true, amountSpecified: -int256(amountToSwap), sqrtPriceLimitX96: SQRT_PRICE_1_2});
+        IPoolManager.SwapParams memory params = IPoolManager.SwapParams({
+            zeroForOne: true,
+            amountSpecified: -int256(amountToSwap),
+            sqrtPriceLimitX96: SQRT_PRICE_1_2
+        });
         swapRouter.swap(key, params, testSettings, ZERO_BYTES);
         vm.snapshotGasLastCall("swap CA custom curve + swap noop");
 
@@ -144,8 +152,11 @@ contract CustomAccountingTest is Test, Deployers {
         uint256 amountToSwap = 123456;
         PoolSwapTest.TestSettings memory testSettings =
             PoolSwapTest.TestSettings({takeClaims: false, settleUsingBurn: false});
-        SwapParams memory params =
-            SwapParams({zeroForOne: true, amountSpecified: int256(amountToSwap), sqrtPriceLimitX96: SQRT_PRICE_1_2});
+        IPoolManager.SwapParams memory params = IPoolManager.SwapParams({
+            zeroForOne: true,
+            amountSpecified: int256(amountToSwap),
+            sqrtPriceLimitX96: SQRT_PRICE_1_2
+        });
         swapRouter.swap(key, params, testSettings, ZERO_BYTES);
 
         // the custom curve hook is 1-1 linear
@@ -185,7 +196,7 @@ contract CustomAccountingTest is Test, Deployers {
         // setup swap variables
         PoolSwapTest.TestSettings memory testSettings =
             PoolSwapTest.TestSettings({takeClaims: false, settleUsingBurn: false});
-        SwapParams memory params = SwapParams({
+        IPoolManager.SwapParams memory params = IPoolManager.SwapParams({
             zeroForOne: zeroForOne,
             amountSpecified: amountSpecified,
             sqrtPriceLimitX96: (zeroForOne ? MIN_PRICE_LIMIT : MAX_PRICE_LIMIT)

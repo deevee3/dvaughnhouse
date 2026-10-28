@@ -7,7 +7,6 @@ import {Hooks} from "@uniswap/v4-core/src/libraries/Hooks.sol";
 import {SafeCast} from "@uniswap/v4-core/src/libraries/SafeCast.sol";
 import {Currency} from "@uniswap/v4-core/src/types/Currency.sol";
 import {PoolKey} from "@uniswap/v4-core/src/types/PoolKey.sol";
-import {ModifyLiquidityParams, SwapParams} from "@uniswap/v4-core/src/types/PoolOperation.sol";
 import {BalanceDelta} from "@uniswap/v4-core/src/types/BalanceDelta.sol";
 import {BeforeSwapDelta, BeforeSwapDeltaLibrary, toBeforeSwapDelta} from "@uniswap/v4-core/src/types/BeforeSwapDelta.sol";
 
@@ -148,7 +147,7 @@ contract PearlHook is IHooks, IPearlHook {
 
     /// @notice True when the swap's `amountSpecified` is denominated in the
     ///         pool's quote currency (Buy exact-in and Sell exact-out).
-    function isQuoteSpecified(SwapParams calldata params) public view returns (bool) {
+    function isQuoteSpecified(IPoolManager.SwapParams calldata params) public view returns (bool) {
         bool specifiedIs0 = (params.amountSpecified < 0) == params.zeroForOne;
         return quoteIsCurrency0 == specifiedIs0;
     }
@@ -190,7 +189,7 @@ contract PearlHook is IHooks, IPearlHook {
     function beforeSwap(
         address,
         PoolKey calldata key,
-        SwapParams calldata params,
+        IPoolManager.SwapParams calldata params,
         bytes calldata
     ) external override(IHooks, IPearlHook) onlyPoolManager returns (bytes4, BeforeSwapDelta, uint24) {
         if (isQuoteSpecified(params) && core.feeActive()) {
@@ -211,7 +210,7 @@ contract PearlHook is IHooks, IPearlHook {
     function afterSwap(
         address,
         PoolKey calldata key,
-        SwapParams calldata params,
+        IPoolManager.SwapParams calldata params,
         BalanceDelta delta,
         bytes calldata
     ) external override(IHooks, IPearlHook) onlyPoolManager returns (bytes4, int128) {
@@ -264,7 +263,7 @@ contract PearlHook is IHooks, IPearlHook {
     }
 
     /// @inheritdoc IHooks
-    function beforeAddLiquidity(address, PoolKey calldata, ModifyLiquidityParams calldata, bytes calldata)
+    function beforeAddLiquidity(address, PoolKey calldata, IPoolManager.ModifyLiquidityParams calldata, bytes calldata)
         external
         pure
         returns (bytes4)
@@ -276,7 +275,7 @@ contract PearlHook is IHooks, IPearlHook {
     function afterAddLiquidity(
         address,
         PoolKey calldata,
-        ModifyLiquidityParams calldata,
+        IPoolManager.ModifyLiquidityParams calldata,
         BalanceDelta,
         BalanceDelta,
         bytes calldata
@@ -288,7 +287,7 @@ contract PearlHook is IHooks, IPearlHook {
     function beforeRemoveLiquidity(
         address,
         PoolKey calldata,
-        ModifyLiquidityParams calldata,
+        IPoolManager.ModifyLiquidityParams calldata,
         bytes calldata
     ) external pure returns (bytes4) {
         revert HookNotImplemented();
@@ -298,7 +297,7 @@ contract PearlHook is IHooks, IPearlHook {
     function afterRemoveLiquidity(
         address,
         PoolKey calldata,
-        ModifyLiquidityParams calldata,
+        IPoolManager.ModifyLiquidityParams calldata,
         BalanceDelta,
         BalanceDelta,
         bytes calldata

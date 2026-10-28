@@ -8,7 +8,6 @@ import {LPFeeLibrary} from "./LPFeeLibrary.sol";
 import {BalanceDelta, toBalanceDelta, BalanceDeltaLibrary} from "../types/BalanceDelta.sol";
 import {BeforeSwapDelta, BeforeSwapDeltaLibrary} from "../types/BeforeSwapDelta.sol";
 import {IPoolManager} from "../interfaces/IPoolManager.sol";
-import {ModifyLiquidityParams, SwapParams} from "../types/PoolOperation.sol";
 import {ParseBytes} from "./ParseBytes.sol";
 import {CustomRevert} from "./CustomRevert.sol";
 
@@ -195,7 +194,7 @@ library Hooks {
     function beforeModifyLiquidity(
         IHooks self,
         PoolKey memory key,
-        ModifyLiquidityParams memory params,
+        IPoolManager.ModifyLiquidityParams memory params,
         bytes calldata hookData
     ) internal noSelfCall(self) {
         if (params.liquidityDelta > 0 && self.hasPermission(BEFORE_ADD_LIQUIDITY_FLAG)) {
@@ -209,7 +208,7 @@ library Hooks {
     function afterModifyLiquidity(
         IHooks self,
         PoolKey memory key,
-        ModifyLiquidityParams memory params,
+        IPoolManager.ModifyLiquidityParams memory params,
         BalanceDelta delta,
         BalanceDelta feesAccrued,
         bytes calldata hookData
@@ -245,7 +244,7 @@ library Hooks {
     }
 
     /// @notice calls beforeSwap hook if permissioned and validates return value
-    function beforeSwap(IHooks self, PoolKey memory key, SwapParams memory params, bytes calldata hookData)
+    function beforeSwap(IHooks self, PoolKey memory key, IPoolManager.SwapParams memory params, bytes calldata hookData)
         internal
         returns (int256 amountToSwap, BeforeSwapDelta hookReturn, uint24 lpFeeOverride)
     {
@@ -285,7 +284,7 @@ library Hooks {
     function afterSwap(
         IHooks self,
         PoolKey memory key,
-        SwapParams memory params,
+        IPoolManager.SwapParams memory params,
         BalanceDelta swapDelta,
         bytes calldata hookData,
         BeforeSwapDelta beforeSwapHookReturn

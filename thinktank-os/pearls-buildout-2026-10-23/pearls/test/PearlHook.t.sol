@@ -12,7 +12,6 @@ import {TickMath} from "@uniswap/v4-core/src/libraries/TickMath.sol";
 import {Currency} from "@uniswap/v4-core/src/types/Currency.sol";
 import {PoolKey} from "@uniswap/v4-core/src/types/PoolKey.sol";
 import {PoolId} from "@uniswap/v4-core/src/types/PoolId.sol";
-import {ModifyLiquidityParams, SwapParams} from "@uniswap/v4-core/src/types/PoolOperation.sol";
 import {BalanceDelta, toBalanceDelta} from "@uniswap/v4-core/src/types/BalanceDelta.sol";
 import {BeforeSwapDelta, BeforeSwapDeltaLibrary} from "@uniswap/v4-core/src/types/BeforeSwapDelta.sol";
 import {PoolSwapTest} from "@uniswap/v4-core/src/test/PoolSwapTest.sol";
@@ -196,7 +195,7 @@ contract PearlHookTest is Test {
     function test_callbacks_only_poolManager() public {
         PearlHook hook = _deployMinedHook(IPoolManager(address(mockPm)), treasury, false, THRESHOLD, 0, 0);
         PoolKey memory key = _dummyKey();
-        SwapParams memory params = SwapParams({zeroForOne: true, amountSpecified: -100, sqrtPriceLimitX96: 0});
+        IPoolManager.SwapParams memory params = IPoolManager.SwapParams({zeroForOne: true, amountSpecified: -100, sqrtPriceLimitX96: 0});
 
         vm.prank(stranger);
         vm.expectRevert(PearlHook.NotPoolManager.selector);
@@ -256,9 +255,9 @@ contract PearlHookTest is Test {
         assertEq(c.poolReporter(), address(hook));
 
         PoolKey memory key = _dummyKey();
-        SwapParams memory buyExactIn = SwapParams({zeroForOne: false, amountSpecified: -900_000e6, sqrtPriceLimitX96: 0});
-        SwapParams memory crossSwap = SwapParams({zeroForOne: false, amountSpecified: -200_000e6, sqrtPriceLimitX96: 0});
-        SwapParams memory sellExactIn = SwapParams({zeroForOne: true, amountSpecified: -10, sqrtPriceLimitX96: 0});
+        IPoolManager.SwapParams memory buyExactIn = IPoolManager.SwapParams({zeroForOne: false, amountSpecified: -900_000e6, sqrtPriceLimitX96: 0});
+        IPoolManager.SwapParams memory crossSwap = IPoolManager.SwapParams({zeroForOne: false, amountSpecified: -200_000e6, sqrtPriceLimitX96: 0});
+        IPoolManager.SwapParams memory sellExactIn = IPoolManager.SwapParams({zeroForOne: true, amountSpecified: -10, sqrtPriceLimitX96: 0});
 
         // Below the gate: records volume, no fee claim.
         vm.prank(address(mockPm));
@@ -283,7 +282,7 @@ contract PearlHookTest is Test {
 
     function test_core_callbacks_revert_by_design() public {
         PoolKey memory key = _dummyKey();
-        SwapParams memory params = SwapParams({zeroForOne: true, amountSpecified: -1, sqrtPriceLimitX96: 0});
+        IPoolManager.SwapParams memory params = IPoolManager.SwapParams({zeroForOne: true, amountSpecified: -1, sqrtPriceLimitX96: 0});
         vm.expectRevert();
         core.beforeSwap(address(this), key, params, "");
     }
@@ -374,7 +373,7 @@ contract PearlHookForkTest is Test {
 
         MODIFY_LIQUIDITY_ROUTER.modifyLiquidity(
             env.key,
-            ModifyLiquidityParams({
+            IPoolManager.ModifyLiquidityParams({
                 tickLower: -600,
                 tickUpper: 600,
                 liquidityDelta: 5_000_000e18,
@@ -400,7 +399,7 @@ contract PearlHookForkTest is Test {
         vm.prank(trader);
         delta = SWAP_ROUTER.swap(
             key,
-            SwapParams({zeroForOne: zeroForOne, amountSpecified: amountSpecified, sqrtPriceLimitX96: priceLimit}),
+            IPoolManager.SwapParams({zeroForOne: zeroForOne, amountSpecified: amountSpecified, sqrtPriceLimitX96: priceLimit}),
             PoolSwapTest.TestSettings({takeClaims: false, settleUsingBurn: false}),
             ""
         );
@@ -710,7 +709,7 @@ contract PearlHookForkTest is Test {
 
         MODIFY_LIQUIDITY_ROUTER.modifyLiquidity(
             key,
-            ModifyLiquidityParams({
+            IPoolManager.ModifyLiquidityParams({
                 tickLower: -600,
                 tickUpper: 600,
                 liquidityDelta: 100_000_000e18,

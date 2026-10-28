@@ -4,7 +4,6 @@ pragma solidity ^0.8.24;
 import {CurrencyLibrary, Currency} from "../types/Currency.sol";
 import {IPoolManager} from "../interfaces/IPoolManager.sol";
 import {BalanceDelta} from "../types/BalanceDelta.sol";
-import {ModifyLiquidityParams} from "../types/PoolOperation.sol";
 import {PoolKey} from "../types/PoolKey.sol";
 import {PoolTestBase} from "./PoolTestBase.sol";
 import {IHooks} from "../interfaces/IHooks.sol";
@@ -22,23 +21,23 @@ contract PoolModifyLiquidityTestNoChecks is PoolTestBase {
     struct CallbackData {
         address sender;
         PoolKey key;
-        ModifyLiquidityParams params;
+        IPoolManager.ModifyLiquidityParams params;
         bytes hookData;
         bool settleUsingBurn;
         bool takeClaims;
     }
 
-    function modifyLiquidity(PoolKey memory key, ModifyLiquidityParams memory params, bytes memory hookData)
-        external
-        payable
-        returns (BalanceDelta delta)
-    {
+    function modifyLiquidity(
+        PoolKey memory key,
+        IPoolManager.ModifyLiquidityParams memory params,
+        bytes memory hookData
+    ) external payable returns (BalanceDelta delta) {
         delta = modifyLiquidity(key, params, hookData, false, false);
     }
 
     function modifyLiquidity(
         PoolKey memory key,
-        ModifyLiquidityParams memory params,
+        IPoolManager.ModifyLiquidityParams memory params,
         bytes memory hookData,
         bool settleUsingBurn,
         bool takeClaims
