@@ -6,9 +6,7 @@
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=bricolage-grotesque:700,800|newsreader:400,400i,500,500i,600,600i&amp;display=swap" rel="stylesheet" />
+        <!-- Fonts: self-hosted (see @font-face in resources/css/app.css) -->
 
         <!-- Scripts -->
         @routes
@@ -22,6 +20,10 @@
     </head>
     <body class="bg-paper font-serif text-ink antialiased dark:bg-night dark:text-cream">
         @inertia
+        {{-- Global Mission Control backlink — every ThinkTank OS page carries a visible link back to Mission Control. --}}
+        <footer style="border-top:1px solid #3a352a;background:#171410;color:#e8e0cf;text-align:center;padding:14px 20px;font-family:ui-monospace,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;">
+            <a href="https://mission.dvaughnhouse.com" style="color:#e8e0cf;text-decoration:underline;text-underline-offset:3px;">Mission Control</a>
+        </footer>
         {{-- AEO: plain-text catalog summary for crawlers that don't run JS.
              Same offers and prices as the interactive storefront — no cloaking. --}}
         @if(isset($storeSeo) && ($page['component'] ?? null) === 'Store/Index')
