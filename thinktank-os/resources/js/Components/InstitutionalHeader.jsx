@@ -139,16 +139,16 @@ export default function InstitutionalHeader({
                             <div className="flex items-center space-x-3">
                                 <Link
                                     href={route('login')}
-                                    className="text-xs font-mono font-medium px-3 py-1.5 text-ink-soft transition hover:text-ink dark:text-cream-soft dark:hover:text-cream"
-                                >
-                                    Fellow Sign In
-                                </Link>
-                                <Link
-                                    href={route('login')}
                                     className="inline-flex items-center rounded-lg bg-sienna px-4 py-2 text-xs font-mono font-semibold uppercase tracking-wider text-ink shadow-sm transition hover:bg-sienna-deep hover:text-paper"
                                 >
                                     ThinkTank OS
                                 </Link>
+                                <a
+                                    href={`${GATEWAY_URL}/donate`}
+                                    className="rounded-full bg-sienna px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-sienna-deep hover:text-paper"
+                                >
+                                    Donate
+                                </a>
                             </div>
                         )}
                     </div>
@@ -181,9 +181,17 @@ export default function InstitutionalHeader({
                                 ThinkTank OS Portal →
                             </ResponsiveNavLink>
                         ) : (
-                            <ResponsiveNavLink href={route('login')}>
-                                Fellow Sign In
-                            </ResponsiveNavLink>
+                            <>
+                                <ResponsiveNavLink href={route('login')}>
+                                    ThinkTank OS
+                                </ResponsiveNavLink>
+                                <a
+                                    href={`${GATEWAY_URL}/donate`}
+                                    className="mt-2 inline-block rounded-full bg-sienna px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-sienna-deep hover:text-paper"
+                                >
+                                    Donate
+                                </a>
+                            </>
                         )}
                     </div>
                 </nav>
