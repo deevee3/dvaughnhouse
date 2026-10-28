@@ -20,8 +20,31 @@ const NAV = [
   { label: "Contact", href: "#contact" },
 ];
 
+const AUTH_ERROR_TEXT = {
+  workos_rejected: "The sign-in was declined. Try again.",
+  invalid_state: "The sign-in expired before it finished. Try again.",
+  not_owner: "That account isn't on the owner list. Sign in with dvaughnhouse@gmail.com.",
+  workos_unreachable: "The sign-in service couldn't be reached. Try again.",
+  not_configured: "Sign-in isn't configured right now. Try again in a bit.",
+};
+
 function Header({ base = "" }) {
   const [open, setOpen] = useState(false);
+  const [sessionEmail, setSessionEmail] = useState(null);
+  const [authError, setAuthError] = useState(null);
+  useEffect(() => {
+    fetch("/api/me")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && data.email) setSessionEmail(data.email);
+      })
+      .catch(() => {});
+    const match = window.location.hash.match(/^#auth_error=([^&]+)/);
+    if (match) {
+      setAuthError(decodeURIComponent(match[1]));
+      window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+  }, []);
   const homeHref = base === "/" ? "/" : "#top";
   // Absolute paths (e.g. /about) must not be prefixed with base, or "/" + "/about" becomes "//about" (a hostname, not a page).
   const navHref = (href) => (href.startsWith("/") ? href : `${base}${href}`);
@@ -52,6 +75,26 @@ function Header({ base = "" }) {
           >
             Donate
           </a>
+          {sessionEmail ? (
+            <>
+              <span className="text-sm font-medium text-ink-soft dark:text-cream-soft">
+                Signed in
+              </span>
+              <a
+                href="/auth/logout"
+                className="text-sm font-medium text-ink-soft underline-offset-4 transition-colors hover:text-ink hover:underline dark:text-cream-soft dark:hover:text-cream"
+              >
+                Sign out
+              </a>
+            </>
+          ) : (
+            <a
+              href="/auth/login"
+              className="text-sm font-medium text-ink-soft underline-offset-4 transition-colors hover:text-ink hover:underline dark:text-cream-soft dark:hover:text-cream"
+            >
+              Sign in
+            </a>
+          )}
         </nav>
         <button
           className="rounded-full p-2 text-ink transition-colors hover:bg-paper-deep md:hidden dark:text-cream dark:hover:bg-night-card"
@@ -87,8 +130,37 @@ function Header({ base = "" }) {
                 Donate
               </a>
             </li>
+            <li>
+              {sessionEmail ? (
+                <>
+                  <span className="block text-base font-medium text-ink dark:text-cream">
+                    Signed in
+                  </span>
+                  <a
+                    href="/auth/logout"
+                    onClick={() => setOpen(false)}
+                    className="mt-1 block text-base font-medium text-ink dark:text-cream"
+                  >
+                    Sign out
+                  </a>
+                </>
+              ) : (
+                <a
+                  href="/auth/login"
+                  onClick={() => setOpen(false)}
+                  className="block text-base font-medium text-ink dark:text-cream"
+                >
+                  Sign in
+                </a>
+              )}
+            </li>
           </ul>
         </nav>
+      )}
+      {authError && AUTH_ERROR_TEXT[authError] && (
+        <div className="border-t border-line px-6 py-2 text-center text-sm text-ink-soft dark:border-line-dark dark:text-cream-soft">
+          {AUTH_ERROR_TEXT[authError]}
+        </div>
       )}
     </header>
   );
