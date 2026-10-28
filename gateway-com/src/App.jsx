@@ -23,6 +23,8 @@ const NAV = [
 function Header({ base = "" }) {
   const [open, setOpen] = useState(false);
   const homeHref = base === "/" ? "/" : "#top";
+  // Absolute paths (e.g. /about) must not be prefixed with base, or "/" + "/about" becomes "//about" (a hostname, not a page).
+  const navHref = (href) => (href.startsWith("/") ? href : `${base}${href}`);
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-paper/95 dark:border-line-dark dark:bg-night/95">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6 lg:px-8">
@@ -38,7 +40,7 @@ function Header({ base = "" }) {
           {NAV.map((item) => (
             <a
               key={item.href}
-              href={`${base}${item.href}`}
+              href={navHref(item.href)}
               className="text-sm font-medium text-ink-soft underline-offset-4 transition-colors hover:text-ink hover:underline dark:text-cream-soft dark:hover:text-cream"
             >
               {item.label}
@@ -68,7 +70,7 @@ function Header({ base = "" }) {
             {NAV.map((item) => (
               <li key={item.href}>
                 <a
-                  href={`${base}${item.href}`}
+                  href={navHref(item.href)}
                   onClick={() => setOpen(false)}
                   className="block text-base font-medium text-ink dark:text-cream"
                 >
@@ -1189,6 +1191,7 @@ function LegalPage({ doc }) {
 }
 
 function Footer({ base = "" }) {
+  const navHref = (href) => (href.startsWith("/") ? href : `${base}${href}`);
   return (
     <footer className="border-t border-line bg-paper dark:border-line-dark dark:bg-night">
       <div className="mx-auto max-w-6xl px-6 py-10 lg:px-8">
@@ -1200,7 +1203,7 @@ function Footer({ base = "" }) {
             {NAV.map((item) => (
               <a
                 key={item.href}
-                href={`${base}${item.href}`}
+                href={navHref(item.href)}
                 className="text-sm text-ink-soft underline-offset-4 transition-colors hover:text-ink hover:underline dark:text-cream-soft dark:hover:text-cream"
               >
                 {item.label}
