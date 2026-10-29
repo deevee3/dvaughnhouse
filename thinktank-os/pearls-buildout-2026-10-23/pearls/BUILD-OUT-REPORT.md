@@ -1,8 +1,8 @@
 # Pearls — Build-Out Report
 
-**Date:** 2026-10-23 (Updated 2026-10-29)  
-**Scope:** Priority 1 (`PearlHook` Uniswap v4 Integration + Spec §7.3 Base Sepolia Fork-Test Matrix), Priority 2 (Slither + Aderyn + Halmos Verification & Triage), Phase 0 (True Uniswap v4.0.0 Pin Restoration), and Phase 1 (Toolchain, Periphery Pinning & PearlHook Completion).  
-**Status:** Complete. All 59 Foundry tests (45 unit/fuzz + 14 Base Sepolia fork matrix), all 5 Halmos symbolic proofs, and all 3 off-chain token list generator tests pass with 0 failures against the true canonical `@uniswap/v4-core` `v4.0.0` release tag (`e50237c43811bd9b526eff40f26772152a42daba`) and pinned `@uniswap/v4-periphery` `v1.0.3` (`3779387e5d296f39df543d23524b050f89a62917`). Nothing has been deployed to any network.
+**Date:** 2026-10-23 (Updated 2026-10-29 — Phase 2 Security Complete)  
+**Scope:** Priority 1 (`PearlHook` Uniswap v4 Integration + Spec §7.3 Base Sepolia Fork-Test Matrix), Priority 2 (Slither + Aderyn + Halmos Verification & Triage), Phase 0 (True Uniswap v4.0.0 Pin Restoration), Phase 1 (Toolchain, Periphery Pinning & PearlHook Completion), and Phase 2 (Aderyn Pass, Halmos Invariant Expansion, & Adversarial Fork Matrix).  
+**Status:** Complete. All 75 Foundry tests (45 unit/fuzz + 30 Base Sepolia fork matrix), all 11 Halmos symbolic proofs, and all 3 off-chain token list generator tests pass with 0 failures against the true canonical `@uniswap/v4-core` `v4.0.0` release tag (`e50237c43811bd9b526eff40f26772152a42daba`) and pinned `@uniswap/v4-periphery` `v1.0.3` (`3779387e5d296f39df543d23524b050f89a62917`). Nothing has been deployed to any network. No third-party audit exists or is claimed.
 
 ---
 
@@ -227,5 +227,58 @@ Settlement was verified against the canonical Base Sepolia `PoolManager` (`0x05E
 - **Halmos Invariant Proofs**: **5 passed, 0 failed**
 - **Slither Analysis**: **0 High, 0 Medium**
 - **Token-List Tests**: **3 passed, 0 failed**
+
+---
+
+## 6. Addendum (2026-10-29 — Phase 2: Security Assessment, Halmos Expansion & Adversarial Fork Matrix)
+
+### 6.1 Security Toolchain & Scope
+- **Toolchain Versions**: Aderyn `0.6.8`, Halmos `0.3.3`, Slither `0.11.6`, Forge `1.8.6` on solc `0.8.24` (`via_ir = true`).
+- **Target**: All 12 core smart contracts in `src/` at commit `3cf98d9`.
+- **Disclaimer**: **No third-party audit exists and none is claimed.** All testing and proofs represent internal automated and symbolic verification. Full security documentation is published in [`docs/security-report-2026-10-29.md`](./docs/security-report-2026-10-29.md).
+
+### 6.2 Aderyn Static Analysis Pass
+Executed over all 12 core contracts in `src/` (`docs/aderyn-2026-10-29.md`):
+- **High (2, both False Positives)**:
+  - `H-1` (ETH transferred without address checks): Flagged `AirdropDistributor.claim` and `VestingVault.release`. Neither transfers ETH; both transfer ERC-20 tokens authenticated by Merkle proof or immutable beneficiary state.
+  - `H-2` (State change after external call): Flagged `LaunchLocker.deposit`. External call is a read-only ERC-721 `ownerOf` check; method is protected by OpenZeppelin `nonReentrant` and one-shot `hasPosition` guard.
+- **Medium (0)**: None.
+- **Low (5, all Triaged)**: Large literals (`10_000`), constant definitions, EVM `PUSH0` compatibility, unchecked return in validation helper, pragma floating.
+
+### 6.3 Halmos Formal Invariant Expansion (11/11 Proven)
+Expanded symbolic verification from 5 to 11 formal proofs in [`test/PearlHalmos.t.sol`](./test/PearlHalmos.t.sol) covering lock, fee, and architectural invariants across all symbolic inputs (run output saved in `docs/halmos-2026-10-29.txt`):
+1. `check_locker_abyssal_principal_never_leaves`: Abyssal principal can NEVER be withdrawn at any timestamp by any caller.
+2. `check_locker_timed_principal_never_leaves_before_unlock`: Timed principal can never be withdrawn before unlock, and only by creator after unlock.
+3. `check_locker_deposit_is_one_shot`: Position deposit is strictly one-shot; cannot deposit again once active.
+4. `check_locker_dead_compounded_fees_cannot_be_collected`: DeadCompounded fee collection reverts unconditionally.
+5. `check_vesting_before_cliff_yields_zero`: Vesting yields strictly 0 before cliff timestamp.
+6. `check_vesting_at_or_after_duration_yields_total`: Vesting yields 100% of allocation at/after duration.
+7. `check_vesting_linear_schedule_within_window`: Vesting releases linearly proportional to elapsed time.
+8. `check_hook_quoteFee_bounds`: Hook fee is strictly 0 when gate inactive, exactly 30 bps ($\le$ quoteAmount) when active.
+9. `check_hook_stateful_gate_and_fee_bounds`: Gate crossing swap pays 0 fee; subsequent swaps pay 30 bps.
+10. `check_distributor_pays_leaf_at_most_once`: Single-leaf Merkle airdrop claim paid at most once.
+11. `check_hook_immutability_and_no_admin`: Core terms (`volumeThresholdQuote`, `treasury`, `poolReporter`, `feeBps`) are immutable.
+
+### 6.4 Adversarial Fork-Test Matrix (16/16 Attacks Failed As Intended)
+Implemented 16 attacker-perspective tests on the Base Sepolia fork in [`test/PearlAdversarialFork.t.sol`](./test/PearlAdversarialFork.t.sol) proving all attack vectors fail cleanly:
+- **Fee Bypass Attacks (4)**: Sub-gate extraction blocked, crossing swap not double-counted, quote orientation confusion handled correctly with fee paid strictly in quote currency, fee asset substitution blocked (treasury receives 0 launched token).
+- **Launch Guard Attacks (4)**: Oversize whale buy blocked by `SwapTooLarge`, guard expires cleanly at `launchBlock + maxSwapBlocks + 1`, 2% secondary wallet-cap bypass blocked by `WalletCapExceeded`, exact boundary block enforced.
+- **Locker Attacks (5)**: Abyssal withdrawal reverts with `AbyssalNeverUnlocks`, premature timed withdrawal reverts with `StillLocked`, non-creator timed withdrawal reverts with `NotCreator`, deposit re-entry reverts with `AlreadyHasPosition`, compounded fee collection reverts with `FeesAreDeadCompounded`.
+- **Callback Abuse Attacks (3)**: Direct callback invocation without PoolManager reverts with `NotPoolManager`, unmined hook address deployment reverts with `HookAddressNotValid`, unauthorized `recordSwap` on core reverts with `NotReporter`.
+
+### 6.5 Phase 2 Total Test Surface
+- **Forge Unit & Fuzz Tests**: **45 passed, 0 failed**
+- **Forge Fork Tests (Base Sepolia Chain 84532)**:
+  - `PearlHookForkTest`: **7 passed**
+  - `PearlHookRouterForkTest`: **7 passed**
+  - `PearlAdversarialForkTest`: **16 passed**
+  - **Total Fork Tests**: **30 passed, 0 failed**
+- **Total Forge Suite**: **75 passed, 0 failed, 0 skipped** (6 suites)
+- **Halmos Symbolic Invariants**: **11 passed, 0 failed** (2.79s execution)
+- **Slither Analysis**: **0 High, 0 Medium** (13 Low/Info triaged)
+- **Aderyn Analysis**: **2 High (false positives), 0 Medium, 5 Low** (all triaged)
+- **Token-List Tests**: **3 passed, 0 failed**
+- **Language Check**: **Passed** (0 banned words)
+
 
 
