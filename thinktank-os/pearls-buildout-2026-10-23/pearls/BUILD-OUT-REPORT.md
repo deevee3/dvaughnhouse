@@ -1,8 +1,8 @@
 # Pearls — Build-Out Report
 
-**Date:** 2026-10-23 (Updated 2026-10-28)  
-**Scope:** Priority 1 (`PearlHook` Uniswap v4 Integration + Spec §7.3 Base Sepolia Fork-Test Matrix), Priority 2 (Slither + Aderyn + Halmos Verification & Triage), and Phase 0 (True Uniswap v4.0.0 Pin Restoration).  
-**Status:** Complete. All 59 Foundry tests (45 unit/fuzz + 14 Base Sepolia fork matrix), all 5 Halmos symbolic proofs, and all 3 off-chain token list generator tests pass with 0 failures against the true canonical `@uniswap/v4-core` `v4.0.0` release tag (`e50237c43811bd9b526eff40f26772152a42daba`). Nothing has been deployed to any network.
+**Date:** 2026-10-23 (Updated 2026-10-29)  
+**Scope:** Priority 1 (`PearlHook` Uniswap v4 Integration + Spec §7.3 Base Sepolia Fork-Test Matrix), Priority 2 (Slither + Aderyn + Halmos Verification & Triage), Phase 0 (True Uniswap v4.0.0 Pin Restoration), and Phase 1 (Toolchain, Periphery Pinning & PearlHook Completion).  
+**Status:** Complete. All 59 Foundry tests (45 unit/fuzz + 14 Base Sepolia fork matrix), all 5 Halmos symbolic proofs, and all 3 off-chain token list generator tests pass with 0 failures against the true canonical `@uniswap/v4-core` `v4.0.0` release tag (`e50237c43811bd9b526eff40f26772152a42daba`) and pinned `@uniswap/v4-periphery` `v1.0.3` (`3779387e5d296f39df543d23524b050f89a62917`). Nothing has been deployed to any network.
 
 ---
 
@@ -13,8 +13,8 @@
   - Key interface blob hashes at `v4.0.0` (`e50237c`):
     - `src/interfaces/IPoolManager.sol`: `85703ef79d0271f9a8816cfd7cf7a5c63e28a706`
     - `src/PoolManager.sol`: `c24fbc0ea6c31791617b3e15ce21d585ebd5fdf2`
-- **`lib/v4-periphery`**: Pinned to commit `3779387e5d296f39df543d23524b050f89a62917` (untouched).
-- Added explicit remappings in [`foundry.toml`](./foundry.toml) (`@uniswap/v4-core/=lib/v4-core/`, `v4-core/=lib/v4-core/src/`, `v4-periphery/=lib/v4-periphery/`) and locked both commits in [`foundry.lock`](./foundry.lock).
+- **`lib/v4-periphery`**: Pinned to release tag `v1.0.3` at commit `3779387e5d296f39df543d23524b050f89a62917` (matching `@uniswap/v4-periphery` npm package version `1.0.3`).
+- Added explicit remappings in [`foundry.toml`](./foundry.toml) (`@uniswap/v4-core/=lib/v4-core/`, `v4-core/=lib/v4-core/src/`, `v4-periphery/=lib/v4-periphery/`) and locked both commits with explicit tags in [`foundry.lock`](./foundry.lock).
 - **Addendum (2026-10-28 — True `v4.0.0` Pin Restoration & Retraction of False Pin Claim):**
   The earlier 2026-10-23 pin-fix prompt was mistaken about which commit was the official release tag vs. the post-v4.0.0 development commit; that addendum and its claims regarding commit `59d3ecf53afa9264a16bba0e38f4c5d2231f80bc` are formally retracted and superseded.
   Commit `e50237c43811bd9b526eff40f26772152a42daba` is the true, canonical Uniswap `v4.0.0` release tag (Jan 21, 2025). The commit `59d3ecf` was a subsequent post-v4.0.0 commit where `SwapParams` and `ModifyLiquidityParams` were moved into a separate `src/types/PoolOperation.sol`.
@@ -168,4 +168,64 @@ Uniswap v4 Aggregator routing relies on clean liquidity aggregation without frag
 4. If an external party attempts to deploy a duplicate pool with the same tokens and hook, `PoolManager.initialize()` reverts.
 5. If someone deploys an un-hooked pool or a pool with a non-canonical fee tier, it produces a different `PoolId` and lacks the platform's volume-gated treasury mechanics.
 6. The `Launched` event broadcasts `poolFeeTier`, `tickSpacing`, and `poolId` directly to indexers so that aggregator routers immediately index the single authoritative pool.
+
+---
+
+## 5. Addendum (2026-10-29 — Phase 1: Toolchain, Periphery Pinning & PearlHook Completion)
+
+### 5.1 Toolchain Status on the iMac
+- **Foundry Location & PATH**: Pre-existing Foundry binaries were located in `/home/housedv/.config/.foundry/bin/`. Standard symlinks were established to ensure permanent PATH availability across all interactive and non-interactive shells:
+  - `/home/housedv/.foundry/bin` -> `/home/housedv/.config/.foundry/bin`
+  - `/home/housedv/.local/bin/forge` -> `/home/housedv/.config/.foundry/bin/forge`
+  - `/home/housedv/.local/bin/cast` -> `/home/housedv/.config/.foundry/bin/cast`
+  - `/home/housedv/.local/bin/anvil` -> `/home/housedv/.config/.foundry/bin/anvil`
+  - `/home/housedv/.local/bin/foundryup` -> `/home/housedv/.config/.foundry/bin/foundryup`
+- **Binary Version**: `forge Version: 1.8.6 (Commit SHA: 6bad0a6)`.
+- **Compilation**: Clean `forge build` compiles without errors directly on the iMac in `pearls-buildout-2026-10-23/pearls/`. All tests run directly on this local environment.
+
+### 5.2 Phase 1 Item-by-Item Assessment & Delivery
+
+| Task | Scope | Existing State vs Built | Files Touched / Evidence |
+|:---|:---|:---|:---|
+| **0. Toolchain** | Install and verify Foundry on iMac | **Built**: Symlinks created from `~/.config/.foundry/bin` to `~/.foundry/bin` and `~/.local/bin`. Local `forge --version` confirmed (`1.8.6`). | PATH symlinks in `/home/housedv/.local/bin/` and `/home/housedv/.foundry/bin`. |
+| **1. Pin `v4-periphery`** | Pin `lib/v4-periphery` with release tag + rev in `foundry.lock` | **Built**: Investigated release line; Uniswap distributes `v4-periphery` releases via npm (`@uniswap/v4-periphery@1.0.3`). Verified `package.json` at rev `3779387e5d296f39df543d23524b050f89a62917` is version `1.0.3`. Pinned tag `v1.0.3` and rev `3779387e5d296f39df543d23524b050f89a62917` in `foundry.lock`. No periphery API differences surfaced. | [`foundry.lock`](./foundry.lock) |
+| **2. Interface Alignment** | Replace mirrored callback signatures with canonical v4 interfaces | **Assessed & Verified**: `PearlHook` directly implements canonical `IHooks` (`contract PearlHook is IHooks, IPearlHook`) covering all 10 callbacks. `IPearlHook` aligns accounting views and callback types to canonical v4 structs (`IPoolManager.SwapParams`, `BalanceDelta`, `BeforeSwapDelta`). `PearlHookCore` implements accounting views and keeps callback stubs reverting by design. | [`src/IPearlHook.sol`](./src/IPearlHook.sol), [`src/PearlHook.sol`](./src/PearlHook.sol), [`src/PearlHookCore.sol`](./src/PearlHookCore.sol), [`test/PearlHook.t.sol`](./test/PearlHook.t.sol). |
+| **3. CREATE2 Salt Mining** | Salt mining encodes permission flags into hook address | **Assessed & Verified**: `HookMiner.sol` deterministically mines CREATE2 address with low 14 bits matching `PEARL_HOOK_FLAGS = 0x00CC` (`BEFORE_SWAP`, `AFTER_SWAP`, `BEFORE_SWAP_RETURNS_DELTA`, `AFTER_SWAP_RETURNS_DELTA`). Validated in `PearlHook` constructor via `Hooks.validateHookPermissions`. Validated in `test_hookMiner_mines_valid_permissions_and_rejects_unmined_address()` (mined passes; unmined CREATE reverts with `HookAddressNotValid`). | [`src/HookMiner.sol`](./src/HookMiner.sol), [`src/PearlHook.sol`](./src/PearlHook.sol), [`test/PearlHook.t.sol`](./test/PearlHook.t.sol). |
+| **4. Fee Settlement** | Fee settlement inside unlock context via `PoolManager.take()` | **Assessed & Verified**: Implemented in `PearlHook.sol` via `poolManager.take(quoteCurrency, core.treasury(), fee)`. Quote-only fee routing proven across all 4 direction cases on Base Sepolia fork with real ERC-20 transfers to treasury. | [`src/PearlHook.sol`](./src/PearlHook.sol), [`test/PearlHook.t.sol`](./test/PearlHook.t.sol). |
+| **5. Fork Matrix** | Spec §7.3 matrix on Base Sepolia fork | **Executed & Verified**: 14/14 fork tests pass against `https://sepolia.base.org` at block `49,250,000`. Full suite: 59 passed, 0 failed. Halmos: 5/5 proofs. Slither: 0 High, 0 Medium. Token list: 3/3 passed. | [`test/PearlHook.t.sol`](./test/PearlHook.t.sol), [`test/PearlHookRouterFork.t.sol`](./test/PearlHookRouterFork.t.sol). |
+
+### 5.3 Fee Settlement Proof on Base Sepolia Fork (Spec §7.3 Matrix)
+
+Settlement was verified against the canonical Base Sepolia `PoolManager` (`0x05E73354cFDd6745C338b50BcFDfA3Aa6fA03408`) at fork block `49,250,000`. In every case, the treasury balance of the quote asset and launched token was asserted before and after each swap:
+
+1. **Direction Case 1: Buy, exact-in (`zeroForOne = false`, specified quote in)**
+   - *Pre-gate*: Trader pays quote; treasury quote balance $\Delta = 0$.
+   - *Crossing swap*: Gate reached ($10M); crossing swap pays $\Delta = 0$ fee.
+   - *Post-gate*: `beforeSwap` calls `poolManager.take(quoteCurrency, treasury, fee)` and returns `toBeforeSwapDelta(fee, 0)`. Treasury quote balance increases by exactly 30 bps (`3e18` quote on `1,000e18` input). Launched token to treasury $\Delta = 0$.
+2. **Direction Case 2: Sell, exact-in (`zeroForOne = true`, specified token in)**
+   - *Pre-gate*: Trader pays token, receives quote; treasury quote balance $\Delta = 0$.
+   - *Crossing swap*: Gate crossed; treasury fee $\Delta = 0$.
+   - *Post-gate*: Swap executes through pool; `afterSwap` resolves quote output from `BalanceDelta`, calls `poolManager.take(quoteCurrency, treasury, fee)`, and returns `fee` as `hookDeltaUnspecified`. Treasury quote balance increases by exactly 30 bps of output. Trader receives pool quote output minus fee. Launched token to treasury $\Delta = 0$.
+3. **Direction Case 3: Buy, exact-out (`zeroForOne = false`, specified token out)**
+   - *Pre-gate*: Trader specifies exact token out; treasury quote balance $\Delta = 0$.
+   - *Crossing swap*: Gate crossed; treasury fee $\Delta = 0$.
+   - *Post-gate*: Swap executes; `afterSwap` resolves quote input from `BalanceDelta`, calls `poolManager.take(quoteCurrency, treasury, fee)`, and returns `fee` as `hookDeltaUnspecified`. Treasury receives exactly 30 bps of quote input. Trader pays pool quote input plus fee. Launched token to treasury $\Delta = 0$.
+4. **Direction Case 4: Sell, exact-out (`zeroForOne = true`, specified quote out)**
+   - *Pre-gate*: Trader specifies exact quote out; treasury quote balance $\Delta = 0$.
+   - *Crossing swap*: Gate crossed; treasury fee $\Delta = 0$.
+   - *Post-gate*: `beforeSwap` calls `poolManager.take(quoteCurrency, treasury, fee)` and returns `toBeforeSwapDelta(fee, 0)`. Treasury quote balance increases by exactly 30 bps. Trader receives exact specified quote output. Launched token to treasury $\Delta = 0$.
+5. **Quote Orientation Invariance (`quoteIsCurrency0 = true`)**
+   - Verified that all 4 cases function identically when the quote currency is `currency0` rather than `currency1`.
+
+### 5.4 Exact Suite Counts
+- `PearlsTest`: **24 passed, 0 failed, 0 skipped**
+- `AttestationRegistryTest`: **8 passed, 0 failed, 0 skipped**
+- `PearlHookTest`: **13 passed, 0 failed, 0 skipped**
+- `PearlHookForkTest`: **7 passed, 0 failed, 0 skipped**
+- `PearlHookRouterForkTest`: **7 passed, 0 failed, 0 skipped**
+- **Total Forge Tests**: **59 passed, 0 failed, 0 skipped**
+- **Halmos Invariant Proofs**: **5 passed, 0 failed**
+- **Slither Analysis**: **0 High, 0 Medium**
+- **Token-List Tests**: **3 passed, 0 failed**
+
 
