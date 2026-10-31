@@ -17,6 +17,7 @@ const titles = {
   "/donate": "Donate — D'Vaughn House",
   "/patron": "Become a Patron — D'Vaughn House",
   "/about": "About — D'Vaughn House",
+  "/first-build": "The First Build — D'Vaughn House",
   "/terms": "Terms of Service — D'Vaughn House",
   "/privacy": "Privacy Policy — D'Vaughn House",
 };

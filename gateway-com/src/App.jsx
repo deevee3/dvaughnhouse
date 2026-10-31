@@ -1262,6 +1262,154 @@ function LegalPage({ doc }) {
   );
 }
 
+function FirstBuildPage() {
+  const steps = [
+    {
+      n: "Days 1–2",
+      title: "Map it",
+      body: "I sit with whoever does the work today and map the workflow as it actually runs, messiness included. We pick the one job and agree on what “done” looks like.",
+    },
+    {
+      n: "Days 3–4",
+      title: "Build it",
+      body: "I tighten the process first, then build the automation. Every output comes back with a checklist, so a Human verifies the checklist — not the whole output.",
+    },
+    {
+      n: "Day 5",
+      title: "Hand it over",
+      body: "Working system, walkthrough with your team, and a one-page handover doc. Your team runs it from there.",
+    },
+  ];
+  return (
+    <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:px-8">
+      <p className="font-mono text-xs uppercase tracking-widest text-sienna-deep dark:text-sienna">
+        D&rsquo;Vaughn House — Independent AI Orchestrator, Cincinnati, Ohio
+      </p>
+      <h1 className="mt-4 font-display text-5xl font-extrabold tracking-tight text-ink sm:text-6xl dark:text-cream">
+        The First Build
+      </h1>
+      <p className="mt-6 max-w-3xl font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl dark:text-cream">
+        One week. One workflow. One working system.
+      </p>
+      <p className="mt-6 max-w-3xl text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
+        I take the single most repetitive job in your business — the one your
+        team does the same way every day or every week — and I build the system
+        that runs it, with a Human check at the end. You keep the decision. The
+        machine does the repetition.
+      </p>
+      <div className="mt-8 flex flex-wrap gap-4">
+        <a
+          href="/#contact"
+          className="inline-flex items-center rounded-full bg-sienna px-6 py-3 text-sm font-semibold text-ink transition-colors hover:bg-sienna-deep hover:text-paper"
+        >
+          Start with a fit call
+        </a>
+      </div>
+
+      <h2 className="mt-16 font-display text-4xl font-bold tracking-tight text-ink dark:text-cream">
+        Who it&rsquo;s for
+      </h2>
+      <p className="mt-4 max-w-3xl text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
+        Small businesses and independent operators. If the work lives in
+        inboxes, spreadsheets, forms, or copy-paste between tools, it fits.
+      </p>
+
+      <h2 className="mt-16 font-display text-4xl font-bold tracking-tight text-ink dark:text-cream">
+        What happens in the week
+      </h2>
+      <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
+        {steps.map((s) => (
+          <div key={s.n} className="rounded-2xl border border-line bg-paper p-7 dark:border-line-dark dark:bg-night-card">
+            <p className="font-mono text-xs font-bold tracking-widest text-sienna-deep dark:text-sienna">{s.n}</p>
+            <h3 className="mt-3 font-display text-lg font-bold tracking-tight text-ink dark:text-cream">{s.title}</h3>
+            <p className="mt-3 text-sm leading-relaxed text-ink-soft dark:text-cream-soft">{s.body}</p>
+          </div>
+        ))}
+      </div>
+      <p className="mt-8 max-w-3xl text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
+        Your week: about 15–25 hours of focused work. Your team&rsquo;s time:
+        about 4–6 hours total — the mapping session, a check-in or two, and the
+        handover.
+      </p>
+
+      <div className="mt-16 grid gap-10 md:grid-cols-2">
+        <div>
+          <h2 className="font-display text-3xl font-bold tracking-tight text-ink dark:text-cream">
+            What&rsquo;s included
+          </h2>
+          <ul className="mt-4 list-disc space-y-2 pl-6 text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
+            <li>One workflow, automated end to end</li>
+            <li>A Human check step built into every output — the machine proposes, the Human decides</li>
+            <li>The tightened process, written down — so the work stays clean even if the tool changes</li>
+            <li>A handover call with the team who will run it</li>
+          </ul>
+        </div>
+        <div>
+          <h2 className="font-display text-3xl font-bold tracking-tight text-ink dark:text-cream">
+            What&rsquo;s not included
+          </h2>
+          <ul className="mt-4 list-disc space-y-2 pl-6 text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
+            <li>Ongoing maintenance or monitoring (available as a follow-on)</li>
+            <li>Additional workflows — that&rsquo;s the next build, not this one</li>
+            <li>Software licenses or subscriptions (billed at cost, only if the build needs them)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="mt-16 rounded-2xl border border-line bg-paper-deep p-8 sm:p-10 dark:border-line-dark dark:bg-night-card">
+        <h2 className="font-display text-3xl font-bold tracking-tight text-ink dark:text-cream">
+          Price, fixed scope, quoted up front
+        </h2>
+        <p className="mt-4 text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
+          <strong className="font-bold text-ink dark:text-cream">$126 per hour.</strong>{" "}
+          First three clients:{" "}
+          <strong className="font-bold text-ink dark:text-cream">$75 per hour (founding rate).</strong>{" "}
+          A typical week runs about 20 hours, so roughly{" "}
+          <strong className="font-bold text-ink dark:text-cream">$2,520</strong> at the
+          standard rate,{" "}
+          <strong className="font-bold text-ink dark:text-cream">$1,500</strong> for
+          the first three clients. Quoted up front once the fit call confirms
+          the scope — no surprise hours.
+        </p>
+        <p className="mt-4 text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
+          If the fit call shows the job doesn&rsquo;t fit, I&rsquo;ll say so on
+          that call — no engagement, no charge.
+        </p>
+      </div>
+
+      <h2 className="mt-16 font-display text-4xl font-bold tracking-tight text-ink dark:text-cream">
+        Why me
+      </h2>
+      <p className="mt-4 max-w-3xl text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
+        D&rsquo;Vaughn House is an Independent AI Orchestrator in Cincinnati
+        and founder of Glenride. He previously coordinated pharmaceutical
+        research programs for over a decade — including a contract assignment
+        with ICON Clinical Research at AstraZeneca, where he ran coordination
+        for a Real World Evidence group of 30+ epidemiologists — and now builds
+        AI systems for small operators: agents, automations, and transcription
+        pipelines that run on his own machines.
+      </p>
+
+      <h2 className="mt-16 font-display text-4xl font-bold tracking-tight text-ink dark:text-cream">
+        Next step
+      </h2>
+      <p className="mt-4 max-w-3xl text-[1.0625rem] leading-[1.7] text-ink-soft dark:text-cream-soft">
+        A 20-minute fit call. I ask three questions about the task, and we
+        both know if the First Build fits. Use the contact form and mention
+        “First Build” in your message.
+      </p>
+      <div className="mt-8">
+        <a
+          href="/#contact"
+          className="inline-flex items-center rounded-full bg-sienna px-6 py-3 text-sm font-semibold text-ink transition-colors hover:bg-sienna-deep hover:text-paper"
+        >
+          Start a conversation
+        </a>
+      </div>
+    </div>
+  );
+}
+
 function Footer({ base = "" }) {
   const navHref = (href) => (href.startsWith("/") ? href : `${base}${href}`);
   return (
@@ -1332,6 +1480,7 @@ export default function App({ path: propPath } = {}) {
   const isDonate = path.startsWith("/donate");
   const isPatron = path.startsWith("/patron");
   const isAbout = path.startsWith("/about");
+  const isFirstBuild = path.startsWith("/first-build");
   const isTerms = path.startsWith("/terms");
   const isPrivacy = path.startsWith("/privacy");
   if (isDonate) {
@@ -1362,6 +1511,17 @@ export default function App({ path: propPath } = {}) {
         <Header base="/" />
         <main>
           <AboutPage />
+        </main>
+        <Footer base="/" />
+      </div>
+    );
+  }
+  if (isFirstBuild) {
+    return (
+      <div className="min-h-screen bg-paper font-serif text-ink antialiased dark:bg-night dark:text-cream">
+        <Header base="/" />
+        <main>
+          <FirstBuildPage />
         </main>
         <Footer base="/" />
       </div>
