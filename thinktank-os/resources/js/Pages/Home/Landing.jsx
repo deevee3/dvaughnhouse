@@ -9,23 +9,23 @@ const HERO_SLIDES = [
     {
         image: '/images/heroes/hero-port-sunset.jpg',
         headline: 'Supply chains, seen clearly.',
-        line: 'Glenride tracks how critical supply chains fail, where they bend, and what keeps them running.',
+        line: 'For operators and decision-makers: Glenride tracks how critical supply chains fail, where they bend, and what keeps them running — before the break reaches you.',
         ctaLabel: 'Enter the Vanguard Library',
         ctaHref: route('library.index'),
     },
     {
         image: '/images/heroes/hero-global-network.jpg',
         headline: 'Research that signs its work.',
-        line: 'Every brief carries its evidence, its verifier, and its date — attested, and open to challenge.',
+        line: 'I wish there was a record I could check, not a claim I had to take on trust. Every brief carries its evidence, its verifier, and its date — attested, and open to challenge.',
         ctaLabel: 'View the attestations',
         ctaHref: route('attestations.index'),
     },
     {
         image: '/images/heroes/hero-ship-risk.jpg',
         headline: 'Shortages, measured — not guessed.',
-        line: 'U.S. drug shortages, tracked and published in the open from FDA and ASHP data.',
-        ctaLabel: 'Read the thesis',
-        ctaHref: route('thesis.index'),
+        line: 'I hate finding out a drug is in shortage from a pharmacist. Every Monday, Glenride publishes a weekly U.S. drug shortage digest — what is in shortage, what resolved, and why — from FDA and ASHP data. As of Q3 2026: 225 active U.S. drug shortages, 87 new this year.',
+        ctaLabel: 'Read the weekly digest',
+        ctaHref: route('library.index'),
     },
     {
         image: '/images/heroes/hero-port-lanes.jpg',
@@ -75,11 +75,11 @@ const BODY_BAND_IMAGES = [
 const RESEARCH_AREAS = [
     {
         name: 'Supply-Chain Resilience',
-        line: 'How critical supply chains fail, where they bend, and what keeps them running.',
+        line: 'Supply chain vulnerabilities, in plain language: how critical supply chains fail, where they bend, and what keeps them running.',
     },
     {
         name: 'Pharmaceutical Data Evaluation',
-        line: 'Clinical and regulatory data, evaluated for what it actually shows.',
+        line: 'U.S. drug shortages and pharmaceutical data, evaluated for what they actually show — including where the FDA and ASHP shortage lists disagree.',
     },
     {
         name: 'Applied AI & Enterprise Software Systems',
@@ -117,7 +117,7 @@ export default function Landing({
 
     return (
         <div className="min-h-screen bg-paper font-serif text-ink selection:bg-sienna selection:text-ink dark:bg-night dark:text-cream">
-            <Head title="Glenride Gateway — Independent, AI-Native Think Tank" />
+            <Head title="Weekly U.S. Drug Shortage Digest | Glenride" />
 
             <InstitutionalHeader
                 auth={auth}
@@ -152,17 +152,35 @@ export default function Landing({
                         </h2>
                         <div className="mt-6 space-y-5 text-lg leading-relaxed text-ink-soft dark:text-cream-soft">
                             <p>
-                                Algorithmic velocity now expands exponentially while
-                                institutional wisdom remains bounded by human
-                                cognition. Glenride exists to close that gap:
-                                autonomous synthesis does the distillation, and human
-                                orchestrators keep the moral responsibility.
+                                I hate that most supply-chain failures feel like
+                                surprises. They are not. I wish there was one
+                                place that just told me what is breaking, what
+                                is in shortage, and what changed this week —
+                                with the source and the date on every number,
+                                so I can check it myself.
                             </p>
                             <p>
-                                Machines provide analytical velocity. Humans provide
-                                the judgment. No brief is published, and no claim is
-                                attested, without decisive human verification.
+                                Glenride is an independent, AI-native think tank.
+                                We find where critical systems break before the
+                                break becomes harm — and we publish a record
+                                anyone can check.
                             </p>
+                            <p>
+                                We study supply chain vulnerabilities,
+                                pharmaceutical data, and the software systems
+                                modern life quietly depends on. Every Monday we
+                                publish a weekly U.S. drug shortage digest, and
+                                we show where the FDA and ASHP shortage lists
+                                disagree instead of hiding it. We measure what
+                                others guess at, we show our sources, and we
+                                sign our work. When a finding is strong enough
+                                to change a rule, we carry it to the people who
+                                write the rules. When an answer can become a
+                                tool, we build the tool. Our money comes from
+                                our work, so our conclusions answer to evidence,
+                                not to a sponsor.
+                            </p>
+                            <p>— D'Vaughn House, Founder</p>
                         </div>
                     </div>
 
@@ -328,6 +346,43 @@ export default function Landing({
                                 Commercial work and executive salons →
                             </span>
                         </Link>
+                        <Link
+                            href={route('research.index')}
+                            className="group flex flex-wrap items-baseline justify-between gap-2 border-b border-line py-6 transition dark:border-line-dark"
+                        >
+                            <span className="font-display text-xl font-bold text-ink transition group-hover:text-sienna-deep dark:text-cream dark:group-hover:text-sienna">
+                                Research
+                            </span>
+                            <span className="text-sm text-ink-soft dark:text-cream-soft">
+                                Original statistics from Glenride&apos;s own data →
+                            </span>
+                        </Link>
+                        <div className="border-b border-line py-6 dark:border-line-dark">
+                            <p className="font-display text-xl font-bold text-ink dark:text-cream">
+                                The record, before you reach out
+                            </p>
+                            <ul className="mt-3 space-y-2 text-sm leading-relaxed text-ink-soft dark:text-cream-soft">
+                                <li>
+                                    Published daily — The Dispatch, triple-checked
+                                    before it posts.
+                                </li>
+                                <li>
+                                    Every Monday — a public weekly U.S. drug
+                                    shortage digest, from FDA and ASHP data:
+                                    225 active shortages as of Q3 2026.
+                                </li>
+                                <li>
+                                    Attested — every record in the public registry
+                                    carries its evidence, verifier, and timestamp.{' '}
+                                    <Link
+                                        href={route('attestations.index')}
+                                        className="font-semibold text-sienna-deep transition hover:text-ink dark:text-sienna dark:hover:text-cream"
+                                    >
+                                        Browse the registry →
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
                         <a
                             href="https://dvaughnhouse.com/#contact"
                             className="group flex flex-wrap items-baseline justify-between gap-2 border-b border-line py-6 transition dark:border-line-dark"
@@ -336,7 +391,7 @@ export default function Landing({
                                 Contact
                             </span>
                             <span className="text-sm text-ink-soft dark:text-cream-soft">
-                                Reach the institute through the routing hub →
+                                Reach Glenride through the routing hub →
                             </span>
                         </a>
                     </div>
