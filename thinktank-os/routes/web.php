@@ -14,6 +14,8 @@ use App\Http\Controllers\StoreController;
 use App\Http\Controllers\TradingTerminalController;
 use App\Http\Controllers\TressColumnController;
 use App\Http\Controllers\VanguardLibraryController;
+use App\Http\Controllers\DrugShortageController;
+use App\Http\Controllers\ResearchController;
 use Illuminate\Support\Facades\Route;
 
 // store.dvaughnhouse.com lands on the storefront, not the library
@@ -26,6 +28,16 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/library', [VanguardLibraryController::class, 'index'])->name('library.index');
 Route::get('/briefs/{manuscript}', [VanguardLibraryController::class, 'show'])->name('briefs.show');
 Route::get('/thesis', [VanguardLibraryController::class, 'thesis'])->name('thesis.index');
+
+// Research: original statistics from Glenride's own data.
+Route::get('/research', [ResearchController::class, 'index'])->name('research.index');
+Route::get('/research/attestations', [ResearchController::class, 'attestations'])->name('research.attestations');
+
+// Drug-shortage hub: exact-match pages for the rising queries.
+Route::get('/drug-shortages/current', [DrugShortageController::class, 'current'])->name('drug-shortages.current');
+Route::get('/drug-shortages/list', [DrugShortageController::class, 'list'])->name('drug-shortages.list');
+Route::get('/drug-shortages/fda-list', [DrugShortageController::class, 'fdaList'])->name('drug-shortages.fda-list');
+Route::get('/drug-shortages/ashp-vs-fda', [DrugShortageController::class, 'ashpVsFda'])->name('drug-shortages.ashp-vs-fda');
 
 // Glenride Attestations — manual entry + anchor recording (auth, issuers only).
 // The create route MUST register before the public /attestations/{key} route,
