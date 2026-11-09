@@ -96,10 +96,10 @@ Route::middleware('auth')->group(function () {
 Route::domain('tc.dvaughnhouse.com')->group(function () {
     Route::get('/', [TressColumnController::class, 'index'])->name('tress-column.domain');
 });
-Route::domain('trade.tc.dvaughnhouse.com')->group(function () {
+Route::domain('trade.dvaughnhouse.com')->group(function () {
     Route::get('/', [TradingTerminalController::class, 'index'])->name('trading-terminal.domain');
 });
-Route::domain('ops.tc.dvaughnhouse.com')->group(function () {
+Route::domain('ops.dvaughnhouse.com')->group(function () {
     Route::get('/', [OpsConsoleController::class, 'index'])->name('ops-console.domain');
 });
 

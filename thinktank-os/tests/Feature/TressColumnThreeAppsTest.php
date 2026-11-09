@@ -29,10 +29,10 @@ class TressColumnThreeAppsTest extends TestCase
         $response = $this->get('http://tc.dvaughnhouse.com/');
         $response->assertStatus(200);
 
-        $response = $this->get('http://trade.tc.dvaughnhouse.com/');
+        $response = $this->get('http://trade.dvaughnhouse.com/');
         $response->assertStatus(200);
 
-        $response = $this->get('http://ops.tc.dvaughnhouse.com/');
+        $response = $this->get('http://ops.dvaughnhouse.com/');
         $response->assertStatus(200);
     }
 }

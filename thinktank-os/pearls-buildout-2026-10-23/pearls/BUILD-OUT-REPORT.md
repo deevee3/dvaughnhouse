@@ -327,63 +327,152 @@ Per `TRESS-COLUMN-WORK-ORDER-TEST-SAFE-2026-11-02.md`:
    - `getOwners()`: Returns `[0x110457a15C0bed907ECa3BB5730f86D646F2430B]` (throwaway test owner generated on iMac only; key in 0600 gitignored file `.secret-safe-owner.json`).
    - Initial balance: `0 ETH`.
    - Creation gas fee: `~0.0000013 ETH`.
-4. **Approval Gate Status**:
-   - **GATED**: This address is **NOT** wired into `Deploy.s.sol` or any deploy script. It awaits D'Vaughn's explicit one-tap approval naming `0xC0132b5782F129c6d552c6aB725D2341349a084d`.
+4. **Approval Gate Status (Separate-Safes-Per-App Rule)**:
+   - **TEST SAFE / PENDING PER-APP ASSIGNMENT**: `0xC0132b5782F129c6d552c6aB725D2341349a084d` is wired into the Base Sepolia test factory deployment (`deployments/base-sepolia.json`), while per D'Vaughn's separate-Safes-per-app rule it is **NOT** approved as a shared multi-app treasury; UI surfaces label it as `Test Safe (Pending Per-App Assignment Approval)` awaiting D'Vaughn's call on whether `0xC0132b5782F129c6d552c6aB725D2341349a084d` is assigned to one specific app or remains test-only.
 
-### 7.4 Remaining Open Gate: EIP-170 Code Size Limit
-- `forge build --sizes` reports `LaunchFactory` runtime size is **27,495 bytes**, exceeding the EIP-170 limit of **24,576 bytes** by 2,919 bytes.
-- Root Cause: `LaunchFactory` embeds the complete creation bytecodes of `LaunchToken`, `LaunchLocker`, `VestingVault`, `AirdropDistributor`, and `TCHook`.
-- Per locked rules ("no redesign, no behavior change; report findings, do not soften them"), this structural finding is held for D'Vaughn's decision.
+### 7.4 EIP-170 Code Size Limit Resolved — Part 1 / Part 2 Factory Split & `TCHook` Rename (2026-11-05 / 2026-11-08)
+- **Contract Rename Completed (`88d1097`)**: `PearlHook` $\rightarrow$ `TCHook`, `PearlHookCore` $\rightarrow$ `TCCore`, `IPearlHook` $\rightarrow$ `ITCHook`, `PEARL_HOOK_FLAGS` $\rightarrow$ `TC_HOOK_FLAGS`.
+- **Two-Factory Split Implemented (`5e87aed`)**: Per D'Vaughn's decision, `LaunchFactory` was split into:
+  - **Part 1 (`DistributionFactory`)**: Deploys `LaunchToken`, `LaunchLocker`, and optional `VestingVault` + `AirdropDistributor` (`17,984` bytes runtime — well under the `24,576`-byte EIP-170 limit).
+  - **Part 2 (`HookCertificateFactory`)**: Mines and deploys `TCHook` + `TCCore`, distributes token allocations, and mints the immutable `LaunchCertificate` (`17,798` bytes runtime — well under the `24,576`-byte EIP-170 limit).
 
-### 7.5 Status of Subsequent Phase 3 Tasks
-- **Task 2 (Deploy Factory + Hook to Base Sepolia)**: **HELD** pending D'Vaughn's one-tap approval of Safe `0xC0132b5782F129c6d552c6aB725D2341349a084d` and EIP-170 size resolution.
-- **Task 3 (First Tress Column Launch — Sepolia Dummy)**: **HELD** pending Task 2.
-- **Task 4 (End-to-End Proof: Certificate, Locker, Trust Panel)**: **HELD** pending Task 3.
+### 7.5 Base Sepolia Split Factory Deployment (`eb41482`, 2026-11-08)
+- Recorded in [`pearls/deployments/base-sepolia.json`](./pearls/deployments/base-sepolia.json) (Base Sepolia Block `56205845`):
+  - **Part 1 (`DistributionFactory`)**: `0x458CfD3df75Af034C1218412E8F2489F9e9C9289` (`17,984` bytes, tx `0x6f6bcdd03c8c0b7a06eb7c7e0499412e5f72f3adcc3bfccb89268c402357de32`).
+  - **Part 2 (`HookCertificateFactory`)**: `0x41422D19640660fb85739394b110C02622b397F9` (`17,798` bytes, tx `0xbc912fffa74b25bed3ceac62d71bc3f9d771a22fb0e8f7ed5c2f621169ba1e23`).
+  - **`LaunchCertificate` (ERC-721)**: `0xD32F1F5B18B6419CeeEe0eEDE2f74DbbF035dC84` (`4,870` bytes, deployed by Part 2 constructor).
+- **Task 3 (First Tress Column Launch — Sepolia Dummy)**: **HELD** (Spec Step 4 is a separate gated step; no token has been launched on Base Sepolia yet).
 
 ---
 
-## 8. Three Mutually Exclusive, Yet Interlocking Applications Architecture (2026-11-03)
+## 8. Phase 4 Build-Out Report: Trading Terminal & Back-Office Ops Console (2026-11-02 Work Orders, Updated 2026-11-09)
 
-In accordance with D'Vaughn's directive ("Tress Column, back office ops console, and trading terminal must be three mutually exclusive, yet interlocking apps"), the frontend and operational layer has been partitioned into three distinct applications sharing design tokens, canonical contract constants, and architectural invariants.
+In accordance with `TRESS-COLUMN-WORK-ORDER-TRADING-TERMINAL-2026-11-02.md`, `TRESS-COLUMN-WORK-ORDER-OPS-CONSOLE-2026-11-02.md`, and D'Vaughn's directive (*"Tress Column, back office ops console, and trading terminal must be three mutually exclusive, yet interlocking apps"*), the Trading Terminal and Back-Office Ops Console have been built, verified against the Base Sepolia fork at block `49,250,000`, and bound to their flat subdomains.
 
-### 8.1 Architecture Matrix
+### 8.1 Task 0 Inventory (Trading Terminal & Ops Console)
 
-| Dimension | App 1: Tress Column Launchpad | App 2: Trading Terminal | App 3: Back Office Ops Console |
+1. **`PEARLS-PRD-2026-10-23.md` § Phase 4 Design Notes**:
+   - **Phase 4 Item 2 (Back-Office Ops Console)**: One-line design note (*"Admin dashboard for Plus+ subscriptions, airdrop campaigns, launch monitoring, certificate issuance, treasury fee accounting"*). No standalone Ops Console source existed inside `pearls-buildout-2026-10-23/pearls/`; the application surface resides in the ThinkTank OS Laravel + Inertia + React application (`app/Http/Controllers/OpsConsoleController.php`, `resources/js/Pages/OpsConsole/Index.jsx`).
+   - **Phase 4 Item 4 (Trading Terminal)**: One-line design note (*"Non-custodial DEX routing (Uniswap v4 + 1inch/Odos), optional 0.05–0.10% routing fee on non-Pearls swaps"*). The application surface resides in `app/Http/Controllers/TradingTerminalController.php` and `resources/js/Pages/TradingTerminal/Index.jsx`.
+2. **Existing Base Sepolia Fork & `PoolManager` Bindings (`pearls/`)**:
+   - Canonical Base Sepolia `PoolManager`: `0x05E73354cFDd6745C338b50BcFDfA3Aa6fA03408` (`pearls/src/PearlsConstants.sol`).
+   - Deployed Base Sepolia Split Factories (`pearls/deployments/base-sepolia.json`): Part 1 `DistributionFactory` (`0x458CfD3df75Af034C1218412E8F2489F9e9C9289`), Part 2 `HookCertificateFactory` (`0x41422D19640660fb85739394b110C02622b397F9`), `LaunchCertificate` (`0xD32F1F5B18B6419CeeEe0eEDE2f74DbbF035dC84`).
+   - Pinned Verification Fork Block: `49,250,000` (`pearls/test/TCHook.t.sol`, `pearls/test/TCHookRouterFork.t.sol`, `pearls/test/PearlAdversarialFork.t.sol`, and `pearls/test/TerminalAndOpsConsoleFork.t.sol`).
+   - Official Base Sepolia v4 periphery routers verified in fork tests: `V4Quoter` (`0x4A6513c898fe1B2d0E78d3b0e0A4a151589B1cBa`), `UniversalRouter` (`0x8702463e73f74d0b6765aBceb314Ef07aCb92650`), `Permit2` (`0x000000000022D473030F116dDEE9F6B43aC78BA3`).
+3. **Live `tc.dvaughnhouse.com` Inspection**:
+   - Inspected `https://tc.dvaughnhouse.com/`, `https://tc.dvaughnhouse.com/terminal.md`, and `https://tc.dvaughnhouse.com/console.md`.
+   - `terminal.md` and `console.md` describe the non-custodial Trading Terminal (`trade.dvaughnhouse.com`) and the 5-module internal Ops Console (`ops.dvaughnhouse.com`), matching the Nov 2 work orders.
+   - The live `tc.dvaughnhouse.com` static marketing site (`assets/hero-orb.mp4`, `assets/site.css`) is hosted externally (Cloudflare) and its source is not in the iMac `pearls/` tree. Per Task 0 rules, **the live `tc.dvaughnhouse.com` page was NOT touched or overwritten**.
+
+---
+
+### 8.2 Three-App Architecture & Subdomain Matrix
+
+| Dimension | App 1: Tress Column Launchpad | App 2: Trading Terminal | App 3: Back-Office Ops Console |
 | :--- | :--- | :--- | :--- |
-| **Domain** | `tc.dvaughnhouse.com` | `trade.tc.dvaughnhouse.com` | `ops.tc.dvaughnhouse.com` |
-| **Staging Route** | `/staging/tress-column` | `/staging/terminal` | `/staging/ops-console` |
-| **Primary Audience** | Public Creators & Launchers | Public Traders & Liquidity Providers | Staff Operators (Internal Operations) |
-| **Core Functions** | Fair launch deployment wizard, certificate generator, locker verification | Non-custodial DEX routing (Uniswap v4 + TCHook), candlestick chart, volume gate tracker | Plus+ subscription tiers, airdrop campaign tracking, telemetry, fee reconciliation |
-| **Routing Markup Switch** | N/A | Hardcoded OFF / Disabled (0% routing fee) | Monitored (zero custodial take) |
-| **Treasury & Custody** | Non-custodial | Non-custodial | Strict accounting to on-chain Safe `0xC0132b5782F129c6d552c6aB725D2341349a084d` |
-| **Hard Negatives** | No privileged admin keys | No wallet custody, no proprietary execution desk | Zero custody, zero withdrawal approvals, no user freezing, no admin keys |
+| **Production Subdomain** | `tc.dvaughnhouse.com` | `trade.dvaughnhouse.com` | `ops.dvaughnhouse.com` |
+| **Staging Preview Route** | `/staging/tress-column` | `/staging/terminal` | `/staging/ops-console` |
+| **Controller** | `TressColumnController@index` | `TradingTerminalController@index` | `OpsConsoleController@index` |
+| **React Entry** | `resources/js/Pages/TressColumn/Index.jsx` | `resources/js/Pages/TradingTerminal/Index.jsx` | `resources/js/Pages/OpsConsole/Index.jsx` |
+| **Primary Audience** | Public Creators & Launchers | Public Traders & Liquidity Providers | Staff Operators (Internal Only) |
+| **Custody Model** | 100% Non-Custodial | 100% Non-Custodial | Zero Custody / Read & Reconcile Only |
+| **Safe Binding Status** | `0xC013...084d` labeled as Test Safe (Pending Per-App Assignment) | No terminal fee on TC pools; non-TC fee switch OFF (`0.00%`) | Reconciles on-chain receipts only; `0xC013...084d` labeled Pending Per-App Assignment |
 
-### 8.2 Shared Design System & Constants
-- **Tailwind Tokens**: Registered in `tailwind.config.js`:
-  - `pearls-white`: `#FFFFFF`
-  - `nacre-cream`: `#FAF8F5`
-  - `abyssal-gold`: `#D4AF37` (Primary brand accent)
-  - `signal-orange`: `#FF5500` (Gate/warning accent)
-  - `abyssal-black`: `#0A0A0A` (Background depth)
-  - `abyssal-card`: `#121212` (Card surfaces)
-  - `abyssal-line`: `#1F1F1F` (Borders and separators)
-- **Canonical Constants** (`resources/js/TressColumn/contracts.js`):
-  - Base Sepolia PoolManager: `0x05E73354cFDd6745C338b50BcFDfA3Aa6fA03408`
-  - Deployed Real Safe: `0xC0132b5782F129c6d552c6aB725D2341349a084d`
-  - Canonical Volume Gate: `$10,000,000` (10M quote currency)
-  - Canonical Fee: `30 bps` (0.30% quote currency post-gate; 0 bps pre-gate)
-  - Plus+ Subscription Tiers: Sapphire ($7/mo), Emerald ($27/mo), Ruby ($97/mo)
-  - Airdrop Campaign Fee: `0.0194 ETH`
+---
 
-### 8.3 Implementation & Verification
-- **Vite Build**: Successfully compiled 100% cleanly in 1.04s (`npm run build`).
-- **Route Tests**: 2/2 tests passed (6 assertions) via `tests/Feature/TressColumnThreeAppsTest.php`.
-- **Pre-Commit Language Check**: `check-language.sh` passed with 0 banned words.
-- **Architectural Specification**: Saved in `file:///home/housedv/.gemini/antigravity/brain/6a736636-5ef6-4b54-b24b-2e9663c5ee7b/tress_column_three_app_architecture.md`.
+### 8.3 App 2: Trading Terminal (`TRESS-COLUMN-WORK-ORDER-TRADING-TERMINAL-2026-11-02.md`)
 
+#### Files Created / Modified
+- [`resources/js/TressColumn/contracts.js`](../resources/js/TressColumn/contracts.js) — Shared constants (`POOL_MANAGER_ADDRESS`, `DISTRIBUTION_FACTORY_ADDRESS`, `HOOK_CERTIFICATE_FACTORY_ADDRESS`, `LAUNCH_CERTIFICATE_ADDRESS`, `FORK_VERIFICATION_BLOCK = 49_250_000`, `NON_TC_ROUTING_FEE_ENABLED = false`, `LAUNCH_TIERS`, `PLUS_TIERS`, flat subdomains).
+- [`resources/js/Pages/TradingTerminal/Index.jsx`](../resources/js/Pages/TradingTerminal/Index.jsx) — Complete non-custodial Trading Terminal surface.
+- [`app/Http/Controllers/TradingTerminalController.php`](../app/Http/Controllers/TradingTerminalController.php) — Inertia controller serving `TradingTerminal/Index`.
+- [`pearls/test/TerminalAndOpsConsoleFork.t.sol`](./pearls/test/TerminalAndOpsConsoleFork.t.sol) — Base Sepolia fork verification suite at block `49,250,000`.
 
+#### Feature & Invariant Breakdown
+1. **Wallet Connection**: Connects standard injected EIP-1193 wallets (`window.ethereum`) on Base (`8453`) and Base Sepolia (`84532`) with one-click chain switching (`wallet_switchEthereumChain` / `wallet_addEthereumChain`). No user accounts, no email sign-up, no server-stored keys.
+2. **Dual-Mode Non-Custodial Swap Routing**:
+   - **Mode 1 — Tress Column Pools (`TCHook` on Uniswap v4 `PoolManager`)**:
+     - Quotes and routes directly through the launch's canonical Uniswap v4 pool with `TCHook`.
+     - Displays exact volume-gate fee rules: `0.00%` below the `$10M` cumulative quote-volume gate, `0.00%` on the crossing swap itself, and `0.30%` (`30 bps`) in the quote asset only after the gate is crossed (`0` in the launched token).
+     - **Zero extra terminal fee**: The terminal never layers an additional fee on top of Tress Column pools (`0.00%`).
+   - **Mode 2 — Other Base Tokens (Non-TC Base Pairs)**:
+     - Routes through standard non-custodial DEX routers on Base (`Uniswap v4 Universal Router`, `Odos Router v2`, `1inch Aggregation Router v6`) where the trader signs and broadcasts from their own wallet.
+     - **Single Flagged Disabled Routing-Fee Switch**: `NON_TC_ROUTING_FEE_ENABLED = false` in `contracts.js` renders a visible, disabled `OFF — 0.00% (Proposed 0.05%–0.10% Unconfirmed)` switch. No fee is charged on non-TC swaps unless D'Vaughn confirms the rate in writing.
+3. **Live On-Chain Pool & Certificate Inspector**:
+   - Queries Base Sepolia (`https://sepolia.base.org`) or a local Anvil fork (`http://127.0.0.1:8545`) via JSON-RPC (`eth_blockNumber`, `eth_getCode` on `PoolManager`, `TCCore.cumulativeVolumeQuote()`, `volumeThresholdQuote()`, `feeActive()`, and `LaunchCertificate.ownerOf()` at `0xD32F1F5B18B6419CeeEe0eEDE2f74DbbF035dC84`).
+   - Displays an honest empty state (`0 launches on Base Sepolia — Part 1 0x458CfD3d… & Part 2 0x41422D19… deployed; Step 4 dummy launch gated`) when no pool address is loaded, never fabricating fake tickers, volume numbers, or orderbooks.
+   - Displays the Launch Tier doctrine (`Platinum` LOCKED 2026-11-02, `Gold` PROPOSED, `Silver` MODELED/unconfirmed).
 
+---
 
+### 8.4 App 3: Back-Office Ops Console (`TRESS-COLUMN-WORK-ORDER-OPS-CONSOLE-2026-11-02.md`)
 
+#### Files Created / Modified
+- [`resources/js/Pages/OpsConsole/Index.jsx`](../resources/js/Pages/OpsConsole/Index.jsx) — Complete 5-module internal Back-Office Ops Console surface.
+- [`app/Http/Controllers/OpsConsoleController.php`](../app/Http/Controllers/OpsConsoleController.php) — Inertia controller serving `OpsConsole/Index`.
+- [`resources/js/Pages/TressColumn/Index.jsx`](../resources/js/Pages/TressColumn/Index.jsx) — Updated Launchpad preview to label `0xC013...084d` as `Test Safe (Pending Per-App Assignment Approval)` and display Launch Tier statuses.
+- [`routes/web.php`](../routes/web.php) & [`tests/Feature/TressColumnThreeAppsTest.php`](../tests/Feature/TressColumnThreeAppsTest.php) — Updated domain bindings to flat subdomains `tc.dvaughnhouse.com`, `trade.dvaughnhouse.com`, and `ops.dvaughnhouse.com`.
 
+#### Module-by-Module Breakdown & State Source Labeling
+
+| Module # | Module Name | State Source Badge | Data Source & Enforced Rules |
+| :---: | :--- | :--- | :--- |
+| **1** | **Plus+ Subscriptions** | `[SaaS / Off-Chain State]` | Displays active tier definitions (**Sapphire `$7/mo`**, **Emerald `$27/mo`**, **Ruby `$97/mo`**; monthly billing only, no annual discounts, no free trials, no token rewards, no bundle pricing). Shows `0 active subscriptions` in staging and explicitly isolates off-chain SaaS billing from on-chain treasury receipts. |
+| **2** | **Airdrop Campaigns** | `[On-Chain State Only]` | Tracks deployed `AirdropDistributor` campaigns (`0.0194 ETH` flat fee forwarded at launch, Merkle root frozen at deploy, claimed vs. remaining leaves). Enforces the boundary that **snapshot & Merkle tree generation lives in the Creator's Emerald (`$27/mo`) Plus+ workbench** — zero hand-edited lists or CSV uploads exist in the Ops Console. |
+| **3** | **Launch Monitoring** | `[On-Chain State Only]` | Live JSON-RPC reader (`https://sepolia.base.org` or Anvil fork `49,250,000`) inspecting `DistributionFactory` (Part 1) + `HookCertificateFactory` (Part 2) launches: `LaunchToken` (`totalSupply`, 2% wallet cap window), `LaunchLocker` (`Abyssal` permanent lock vs `Timed` $\ge 180$ days countdown & LP fee mode), `VestingVault` (`cliff`, `duration`, `released`), and `TCCore` (`cumulativeVolumeQuote` vs `$10M` gate, `feeActive`, `maxSwap` guard window). Includes Launch Tier reference (`Platinum` locked, `Gold` proposed, `Silver` modeled). |
+| **4** | **Certificate Issuance** | `[On-Chain State Only]` | Read-only viewer of `LaunchCertificate` (`0xD32F1F5B18B6419CeeEe0eEDE2f74DbbF035dC84`: `tokenId`, `ownerOf`, and immutable `CertificateRecord` fields). Explicitly enforces that `LaunchCertificate.mint()` is `onlyFactory` (`HookCertificateFactory`) at launch — **staff cannot mint, edit, or revoke a certificate from the Ops Console**. |
+| **5** | **Treasury-Fee Accounting** | `[On-Chain Receipts Only]` & `[Unreconciled — No Chain Receipt]` | Reconciles strictly to on-chain transfers: (1) post-gate `0.30%` (`30 bps`) quote-asset fees settled via `PoolManager.take` after a pool crosses `$10M` cumulative quote volume, and (2) `0.0194 ETH` flat `AirdropDistributor` campaign fees forwarded at launch. Every row without a verified chain receipt (e.g., Plus+ SaaS billing or pending testnet launches) is visibly tagged **`[Unreconciled — No Chain Receipt]`**. Labels `0xC0132b5782F129c6d552c6aB725D2341349a084d` as `Test Safe (Pending Per-App Assignment Approval)`. |
+
+---
+
+### 8.5 Task 2 End-to-End Verification Results (Base Sepolia Fork Block `49,250,000` & Laravel Suite)
+
+All Task 2 verification items from both work orders were executed against the Base Sepolia fork pinned to block `49,250,000` in [`pearls/test/TerminalAndOpsConsoleFork.t.sol`](./pearls/test/TerminalAndOpsConsoleFork.t.sol) and [`pearls/test/TCHookRouterFork.t.sol`](./pearls/test/TCHookRouterFork.t.sol):
+
+1. **Trading Terminal Fork Verification (`test_trading_terminal_fork_verification_at_block_49250000`) — PASS**:
+   - **Quote $\rightarrow$ Sign $\rightarrow$ Swap Settlement**: Test wallet (`trader`) queries `V4Quoter` (`0x4A6513c898fe1B2d0E78d3b0e0A4a151589B1cBa`) on a `TCHook` pool, signs `Permit2` approval (`0x000000000022D473030F116dDEE9F6B43aC78BA3`), and executes swap through `UniversalRouter` (`0x8702463e73f74d0b6765aBceb314Ef07aCb92650`); trader balance delta matches quoted output to the exact wei.
+   - **Pre-Gate Swap (`8,000e18` quote)**: `core.feeActive() == false`; treasury quote balance = `0`; treasury token balance = `0`.
+   - **Crossing Swap (`4,000e18` quote $\rightarrow$ `12,000e18` cumulative $\ge 10,000e18` gate)**: Latches `core.feeActive() == true`; crossing swap itself pays `0` platform fee (`treasury` quote balance = `0`).
+   - **Post-Gate Swap (`1,000e18` quote)**: Pays exactly `30 bps` (`3e18`) in the quote asset to treasury (`treasury` quote balance = `3e18`), `0` in the launched token (`treasury` token balance = `0`), and `0` extra terminal fee.
+   - **Certificate Link Resolution**: `LaunchCertificate.ownerOf(certificateId)` and `recordOf(certificateId)` resolve the two-step (`DistributionFactory` + `HookCertificateFactory`) test launch's immutable record (`token`, `creator`, `quoteAsset`, `volumeThresholdQuote`, `LockMode.Abyssal`).
+2. **Ops Console Fork Verification (`test_ops_console_fork_verification_at_block_49250000`) — PASS**:
+   - **Launch Monitoring (Abyssal & Timed `LaunchLocker`)**:
+     - Launch #1 (`Abyssal`): `lockMode() == LockMode.Abyssal`, `unlockTime() == type(uint256).max`, and `withdrawPrincipal()` reverts unconditionally with `AbyssalNeverUnlocks()`.
+     - Launch #2 (`Timed`, `180 days`): `lockMode() == LockMode.Timed`, `unlockTime() == block.timestamp + 180 days`, and premature `withdrawPrincipal()` reverts with `StillLocked(unlockTime)`.
+   - **Certificate Issuance**: Surfaces `certificateId == 1` (`unlockTime == 0` for Abyssal) and `certificateId == 2` (`unlockTime == block.timestamp + 180 days` for Timed); non-factory `staff` call to `cert.mint()` reverts with `NotFactory()`.
+   - **Treasury-Fee Accounting**: After Launch #1 (with airdrop campaign) and a post-gate swap of `2,000e18` quote following a `11,000e18` crossing swap, the treasury address holds strictly `0.0194 ether` (`AirdropDistributor` launch fee) and `6e18` quote asset (`30 bps` post-gate swap fee), with `0` launched tokens.
+3. **Laravel Feature & Frontend Build Verification — PASS**:
+   - `php artisan test --filter=TressColumnThreeAppsTest`: **2 passed (6 assertions)** verifying `/staging/tress-column`, `/staging/terminal`, `/staging/ops-console`, `http://tc.dvaughnhouse.com/`, `http://trade.dvaughnhouse.com/`, and `http://ops.dvaughnhouse.com/`.
+   - `npm run build`: **Compiled cleanly (0 errors)**.
+   - `bash check-language.sh`: **PASSED (0 banned terms)**.
+
+---
+
+### 8.6 Hosting Paths & Ops Console Staff Authentication Proposal
+
+#### Hosting Paths
+- **Trading Terminal**:
+  - Production Subdomain: `https://trade.dvaughnhouse.com/` (bound in `routes/web.php` via `Route::domain('trade.dvaughnhouse.com')`).
+  - Staging Preview Path: `/staging/terminal` (`TradingTerminalController@index`).
+- **Back-Office Ops Console**:
+  - Production Subdomain: `https://ops.dvaughnhouse.com/` (bound in `routes/web.php` via `Route::domain('ops.dvaughnhouse.com')`).
+  - Staging Preview Path: `/staging/ops-console` (`OpsConsoleController@index`).
+
+#### Staff Authentication Proposal for `ops.dvaughnhouse.com` (For D'Vaughn's Decision)
+Because `ops.dvaughnhouse.com` is an internal staff-only surface (while `tc.dvaughnhouse.com` and `trade.dvaughnhouse.com` are public, wallet-connected surfaces with zero user accounts), we propose two authentication options before cutting `ops.dvaughnhouse.com` over to production:
+
+1. **Option 1 (Recommended): Reuse ThinkTank OS Auth + Staff Role Gate (`auth`, `verified`, `can:ops-console`)**
+   - **How it works**: Protect `Route::domain('ops.dvaughnhouse.com')` with Laravel's existing session/cookie authentication (`SESSION_DOMAIN=.dvaughnhouse.com`) and an explicit gate restricting access to D'Vaughn's orchestrator/fellow account(s).
+   - **Pros**: Zero duplicate credential stores; leverages existing ThinkTank OS password + session security; immediate revocation from a single user table.
+   - **Trade-offs**: Couples `ops.dvaughnhouse.com` login state to the `.dvaughnhouse.com` session cookie domain.
+2. **Option 2: Standalone Ops Console Auth Guard + Cloudflare Zero Trust Access Policy**
+   - **How it works**: Place `ops.dvaughnhouse.com` behind a Cloudflare Zero Trust Access policy (email OTP / hardware key allowlist for staff emails) plus a dedicated Laravel guard (`auth:ops`) using a separate `ops_operators` table or HTTP Basic/Bearer token in staging.
+   - **Pros**: Complete session isolation between `dvaughnhouse.com` (ThinkTank OS) and `ops.dvaughnhouse.com`; edge-level blocking before requests ever reach PHP-FPM.
+   - **Trade-offs**: Requires managing a separate Cloudflare Access policy or operator credential table.
+
+#### Open Items Held for D'Vaughn's Call
+1. **Per-App Safe Assignment**: Confirm whether `0xC0132b5782F129c6d552c6aB725D2341349a084d` on Base Sepolia is assigned to one specific app or remains test-only, and whether additional per-app test Safes should be deployed.
+2. **Non-TC Routing Fee Rate**: Confirm whether the `0.05%–0.10%` routing fee on non-TC Base swaps in the Trading Terminal should remain `OFF (0.00%)` or be enabled at a specific basis-point rate.
+3. **Gold & Silver Launch Tiers**: Confirm whether Gold (`180-day` Timed lock) and Silver (`180-day` Timed lock + Plus+ Sapphire review) are locked for launch alongside Platinum (`Abyssal`).
+4. **Ops Console Auth Choice**: Select Option 1 (ThinkTank OS shared auth + staff gate) or Option 2 (Standalone guard / Cloudflare Zero Trust) for `ops.dvaughnhouse.com`.
 

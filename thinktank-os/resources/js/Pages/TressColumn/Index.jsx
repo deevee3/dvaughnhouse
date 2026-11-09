@@ -8,6 +8,7 @@ import {
     POST_GATE_FEE_BPS,
     MIN_TIMED_LOCK_DAYS,
     AIRDROP_CAMPAIGN_FEE_ETH,
+    LAUNCH_TIERS,
 } from '@/TressColumn/contracts';
 
 export default function TressColumnIndex() {
@@ -306,9 +307,26 @@ export default function TressColumnIndex() {
                                 </div>
 
                                 <div className="border-t border-abyssal-line/20 pt-3">
-                                    <div className="text-[10px] text-nacre-cream/50 uppercase">Verified Treasury Safe</div>
+                                    <div className="text-[10px] text-nacre-cream/50 uppercase">Launch Tier Doctrine</div>
+                                    <div className="text-[11px] text-nacre-cream/80 space-y-1 mt-1">
+                                        {Object.values(LAUNCH_TIERS).map((tier) => (
+                                            <div key={tier.name} className="flex justify-between">
+                                                <span>{tier.name}:</span>
+                                                <span className={tier.isLocked ? 'text-abyssal-gold' : 'text-nacre-cream/60'}>
+                                                    {tier.status}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="border-t border-abyssal-line/20 pt-3">
+                                    <div className="text-[10px] text-nacre-cream/50 uppercase">Test Safe (Pending Per-App Assignment Approval)</div>
                                     <div className="text-[11px] text-nacre-cream/80 truncate">
                                         {TEST_SAFE_TREASURY_ADDRESS}
+                                    </div>
+                                    <div className="text-[10px] text-amber-300/80 mt-0.5">
+                                        Deployed on Base Sepolia (Block 53833347) — held pending per-app Safe assignment
                                     </div>
                                 </div>
 
