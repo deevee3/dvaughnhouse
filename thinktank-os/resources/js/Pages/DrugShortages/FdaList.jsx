@@ -22,13 +22,6 @@ export default function FdaList({ auth }) {
                 <h1 className="mt-4 font-display text-4xl font-bold tracking-tight text-ink dark:text-cream sm:text-5xl">
                     FDA Drug Shortage List
                 </h1>
-                <p className="mt-6 text-lg leading-relaxed text-ink-soft dark:text-cream-soft">
-                    I wish there was a plain answer to what the FDA list
-                    actually says. It is a public database, updated daily
-                    from what manufacturers report — and it counts fewer
-                    drugs than ASHP&apos;s list. Here is what it says, and
-                    why.
-                </p>
                 <p className="mt-4 font-mono text-xs uppercase tracking-widest text-ink-soft dark:text-cream-soft">
                     Last updated November 7, 2026 · Updated every Monday
                 </p>
