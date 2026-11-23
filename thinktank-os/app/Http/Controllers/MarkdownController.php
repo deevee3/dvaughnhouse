@@ -187,7 +187,7 @@ class MarkdownController extends Controller
             'cite as: '.SiteConfig::name().' — canonical HTML URL of the page cited',
             '',
             '[scope]',
-            'included: /, /library, /briefs/*, /thesis, /attestations, /attestations/*, /standards, /essays, /essays/*, /store, /research, /research/*, /drug-shortages/*',
+            'included: /, /library, /briefs/*, /thesis, /attestations, /attestations/*, /standards, /essays, /essays/*, /store, /research, /research/*',
             'excluded: /dashboard, /profile, /matrix*, /manuscripts, /manuscripts/*, /credits*, /attestations/create, /sops, /sops/*, /register, /login, /forgot-password, /reset-password/*, /verify-email*, /confirm-password, /password, /logout, /api/*, /auth/*',
             'note: keep in sync with /llms.txt and /robots.txt',
             '',

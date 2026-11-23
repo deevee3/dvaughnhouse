@@ -55,4 +55,23 @@ return [
         'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
     ],
 
+    // Albert Pass sign-in. Keys live only in the host environment;
+    // nothing secret is committed. The provider under the hood is
+    // never named in the UI. owner_emails stays a comma-separated
+    // string: WorkosAuthController explodes it itself.
+    // The redirect URI must be the real callback route, /auth/callback,
+    // matching the wildcard registered for this app in the WorkOS
+    // dashboard: https://*.dvaughnhouse.com/auth/callback (his words,
+    // Nov 20). The /auth/workos/callback path does not match that
+    // wildcard and WorkOS rejected every sign-in with redirect-uri-invalid.
+    // The default below builds the real path from APP_URL; a host .env
+    // that still sets the old path must be fixed in the host env, the
+    // default cannot override it.
+    'workos' => [
+        'client_id' => env('WORKOS_CLIENT_ID'),
+        'client_secret' => env('WORKOS_CLIENT_SECRET'),
+        'redirect_uri' => env('WORKOS_REDIRECT_URI', rtrim((string) env('APP_URL', 'https://dvaughnhouse.org'), '/').'/auth/callback'),
+        'owner_emails' => env('WORKOS_OWNER_EMAILS', 'dvaughn@dvaughnhouse.com'),
+    ],
+
 ];

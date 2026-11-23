@@ -1,0 +1,1361 @@
+/* Tress Column logged-in surfaces: design tokens + components.
+   Source: Brand Guidelines & Identity System 2026-11-20 (PDF canonical).
+   It supersedes the ORDER-02 tokens and the earlier brand-book split:
+   ONE palette everywhere, landing and shell alike.
+   Change values only in :root. No hardcoded hex outside this file.
+   Up and down are carried by sign, slope, shape, and labels only.
+   The Dichroic Spectrum gradient is reserved EXCLUSIVELY for
+   cryptographic proof badges (the certificate seal), nowhere else.
+   Fonts are already in the project; nothing was installed. Newsreader
+   500 is the display face. Public Sans stands in for Inter and IBM Plex
+   Mono for JetBrains Mono: neither is in the project (flagged for his
+   tap if he wants the exact faces installed). */
+
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/newsreader-latin-500-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/newsreader-latin-ext-500-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Public Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/tress-column-assets/fonts/public-sans-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Public Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/tress-column-assets/fonts/public-sans-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/tress-column-assets/fonts/ibm-plex-mono-500-latin.woff2') format('woff2');
+}
+
+:root {
+  /* Color: Brand Guidelines 2026-11-20 (PDF canonical) */
+  --tc-bg: #EAE9E5; /* Limestone Mist, primary background */
+  --tc-frost: rgb(245 244 240 / 0.7); /* Frosted Glass / Pearl at 70% */
+  --tc-surface: #FFFFFF; /* Pure Vellum, core content cards */
+  --tc-ink: #111111; /* Architectural Carbon, headlines */
+  --tc-body: #4A4A48; /* Slate Graphite, body + secondary labels */
+  --tc-border: #7A7974; /* Weathered Stone, borders + metadata */
+  --tc-divider: #7A7974;
+  --tc-hover: #F5F4F0;
+  --tc-nav-active: rgb(17 17 17 / 0.06);
+  --tc-meta: #7A7974; /* Weathered Stone, metadata labels */
+
+  /* Accent: Oxidized Terracotta. Verified indicators, focus states. */
+  --tc-accent: #B85D43;
+  --tc-accent-text: #B85D43;
+  --tc-on-accent: #FFFFFF;
+
+  /* Dichroic Spectrum: cryptographic proof badges ONLY, nowhere else. */
+  --tc-dichroic-a: #BCE3D8;
+  --tc-dichroic-b: #D6CBEB;
+
+  /* Body + metadata text. */
+  --tc-muted: #4A4A48;
+  --tc-muted-strong: #4A4A48;
+  --tc-text-muted: #4A4A48;
+
+  /* Typography: Newsreader 500 display 40-56px tracking -0.02em;
+     Public Sans (Inter stand-in) SemiBold 600 section headers 18-22px,
+     Regular 400 body 15-16px line-height 1.5; IBM Plex Mono (JetBrains
+     Mono stand-in) Medium 500 status badges 11-12px +0.08em UPPERCASE. */
+  --tc-font-display: "Newsreader", Georgia, serif;
+  --tc-font: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --tc-mono: "IBM Plex Mono", ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+  --tc-h1-size: 44px;
+  --tc-h1-weight: 500;
+  --tc-h1-line-height: 1.1;
+  --tc-h2-size: 20px;
+  --tc-h2-leading: 1.2;
+  --tc-name-size: 15px;
+  --tc-name-weight: 600;
+  --tc-meta-size: 12px;
+  --tc-ticker-size: 13px;
+  --tc-value-size: 15px;
+  --tc-value-weight: 600;
+  --tc-button-size: 15px;
+  --tc-body-size: 15px;
+  --tc-body-leading: 1.5;
+  --tc-note-size: 13px;
+  --tc-note-leading: 1.5;
+
+  /* Borders */
+  --tc-border-w: 1px;
+
+  /* Depth: flat. No glow, no drop shadows on any surface. */
+  --tc-shadow-card: none;
+  --tc-shadow-menu: none;
+
+  /* Certificate scope: PDF palette. The seal is the proof badge, so it
+     alone carries the Dichroic Spectrum gradient. */
+  --tc-cert-canvas: #EAE9E5;
+  --tc-cert-surface: #FFFFFF;
+  --tc-cert-ink: #111111;
+  --tc-cert-faint: rgb(17 17 17 / 0.12);
+  --tc-cert-line: rgb(17 17 17 / 0.2);
+  --tc-cert-line-soft: rgb(17 17 17 / 0.14);
+  --tc-cert-ink-soft: rgb(17 17 17 / 0.62);
+
+  /* Clear: the transparent keyword lives here, nowhere else. */
+  --tc-clear: transparent;
+
+  /* Shape: tier containers 28px. Primary CTAs carry the chamfered
+     bottom-right 45-degree bevel, 12px (see .tc-button-primary). */
+  --tc-radius-button: 12px;
+  --tc-radius-avatar: 11px;
+  --tc-radius-card: 28px;
+  --tc-radius-row-hover: 12px;
+  --tc-radius-pill: 999px;
+  --tc-radius-badge: 6px;
+  --tc-radius-field: 10px;
+
+  /* Layout */
+  --tc-column: 1150px;
+  --tc-rail: 70px;
+  --tc-section-gap: 40px;
+  --tc-block-gap: 24px;
+  --tc-card-gap: 20px;
+  --tc-avatar-gap: 16px;
+  --tc-row-pitch: 65px;
+  --tc-avatar: 40px;
+  --tc-pair-icon: 16px;
+  --tc-button-w: 150px;
+  --tc-button-h: 44px;
+
+  /* Motion: mechanical, 250ms cubic-bezier(0.22, 1, 0.36, 1). */
+  --tc-motion-fast: 250ms cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Plus+ tier glass: the card alone cannot read as glass on a flat
+     canvas, because backdrop blur has nothing to distort. The wash
+     behind the card is the thing the frost blurs: three hard-edged
+     diagonal streaks (white light band, Oxidized Terracotta band,
+     Weathered Stone band) plus soft pools, all PDF tones only, no
+     Dichroic Spectrum (proof badges only). The streaks cross the
+     whole field so they pass behind the card; the 28px blur softens
+     their edges, which is what reads as frosted glass. Frost is 40%
+     so the wash reads through with 30-40+ RGB units of variation. */
+  --tc-tier-frost: rgb(245 244 240 / 0.4);
+  --tc-tier-wash: linear-gradient(115deg, rgb(255 255 255 / 0) 18%, rgb(255 255 255 / 0.95) 18%, rgb(255 255 255 / 0.95) 30%, rgb(255 255 255 / 0) 30%), linear-gradient(115deg, rgb(184 93 67 / 0) 52%, rgb(184 93 67 / 0.5) 52%, rgb(184 93 67 / 0.5) 66%, rgb(184 93 67 / 0) 66%), linear-gradient(65deg, rgb(122 121 116 / 0) 74%, rgb(122 121 116 / 0.4) 74%, rgb(122 121 116 / 0.4) 86%, rgb(122 121 116 / 0) 86%), radial-gradient(80% 60% at 90% 100%, rgb(184 93 67 / 0.28), rgb(184 93 67 / 0) 60%), radial-gradient(90% 70% at 10% 0%, rgb(255 255 255 / 0.9), rgb(255 255 255 / 0) 55%), linear-gradient(135deg, #F5F4F0, #EAE9E5);
+  --tc-tier-sheen: linear-gradient(180deg, rgb(255 255 255 / 0.95) 0, rgb(255 255 255 / 0.55) 12%, rgb(255 255 255 / 0.18) 28%, rgb(255 255 255 / 0) 45%);
+}
+
+/* Dark mode (PDF): Deep Basalt canvas, Warm Alabaster type, Terracotta
+   Flare accent. Surface, hover, and body values are derived from the
+   PDF tokens; the PDF names no dark surface. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tc-bg: #121211;
+    --tc-frost: rgb(240 239 234 / 0.08);
+    --tc-surface: #1C1C1B;
+    --tc-ink: #F0EFEA;
+    --tc-body: #D8D7D2;
+    --tc-hover: rgb(240 239 234 / 0.06);
+    --tc-nav-active: rgb(240 239 234 / 0.08);
+    --tc-accent: #C96A4E;
+    --tc-accent-text: #C96A4E;
+    --tc-on-accent: #121211;
+    --tc-muted: #D8D7D2;
+    --tc-muted-strong: #D8D7D2;
+    --tc-text-muted: #D8D7D2;
+    --tc-cert-canvas: #121211;
+    --tc-cert-surface: #1C1C1B;
+    --tc-cert-ink: #F0EFEA;
+    --tc-cert-faint: rgb(240 239 234 / 0.12);
+    --tc-cert-line: rgb(240 239 234 / 0.2);
+    --tc-cert-line-soft: rgb(240 239 234 / 0.14);
+    --tc-cert-ink-soft: rgb(240 239 234 / 0.62);
+    --tc-tier-frost: rgb(240 239 234 / 0.1);
+    --tc-tier-wash: linear-gradient(115deg, rgb(240 239 234 / 0) 18%, rgb(240 239 234 / 0.3) 18%, rgb(240 239 234 / 0.3) 30%, rgb(240 239 234 / 0) 30%), linear-gradient(115deg, rgb(201 106 78 / 0) 52%, rgb(201 106 78 / 0.55) 52%, rgb(201 106 78 / 0.55) 66%, rgb(201 106 78 / 0) 66%), linear-gradient(65deg, rgb(240 239 234 / 0) 74%, rgb(240 239 234 / 0.18) 74%, rgb(240 239 234 / 0.18) 86%, rgb(240 239 234 / 0) 86%), radial-gradient(80% 60% at 90% 100%, rgb(201 106 78 / 0.3), rgb(201 106 78 / 0) 60%), radial-gradient(90% 70% at 10% 0%, rgb(240 239 234 / 0.18), rgb(240 239 234 / 0) 55%), linear-gradient(135deg, #1C1C1B, #121211);
+    --tc-tier-sheen: linear-gradient(180deg, rgb(240 239 234 / 0.5) 0, rgb(240 239 234 / 0.25) 12%, rgb(240 239 234 / 0.08) 28%, rgb(240 239 234 / 0) 45%);
+  }
+}
+
+/* Base */
+.tc-shell * { box-sizing: border-box; }
+
+.tc-shell {
+  min-height: 100vh;
+  background: var(--tc-bg);
+  color: var(--tc-ink);
+  font-family: var(--tc-font);
+  -webkit-font-smoothing: antialiased;
+}
+
+.tc-shell a { color: inherit; }
+
+.tc-shell button { font-family: inherit; }
+
+/* Rail */
+.tc-rail {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--tc-rail);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 0;
+  gap: 8px;
+  background: var(--tc-bg);
+  z-index: 20;
+}
+
+.tc-rail-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 12px;
+  border-radius: var(--tc-radius-avatar);
+  background: var(--tc-accent);
+  color: var(--tc-on-accent);
+  font-family: var(--tc-font-display);
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.tc-rail-spacer { flex: 1; }
+
+.tc-rail-divider {
+  width: 32px;
+  height: 1px;
+  margin: 4px 0;
+  background: var(--tc-divider);
+}
+
+.tc-rail-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 62px;
+  min-height: 44px;
+  padding: 6px 2px;
+  border: 0;
+  border-radius: var(--tc-radius-avatar);
+  background: var(--tc-clear);
+  color: var(--tc-ink);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.tc-rail-btn:hover { background: var(--tc-hover); }
+
+.tc-rail-btn[aria-current="page"] { background: var(--tc-nav-active); }
+
+.tc-rail-btn[aria-current="page"]::before {
+  content: "";
+  position: absolute;
+  left: -4px;
+  top: 12px;
+  bottom: 12px;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--tc-accent);
+}
+
+.tc-rail-btn svg { width: 22px; height: 22px; flex: none; }
+
+/* Rail label: visible text under every rail icon. Nov 20, 2026: the
+   icon-only rail left him unable to tell where the other pages were
+   — tooltips do not exist on touch, so the label is always shown. */
+.tc-rail-label {
+  display: block;
+  max-width: 100%;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
+  color: var(--tc-body);
+}
+
+/* Rail tooltip: visual only. The accessible name is the aria-label. */
+.tc-rail-btn[data-tip]:hover::after,
+.tc-rail-btn[data-tip]:focus-visible::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 68px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--tc-ink);
+  color: var(--tc-bg);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  z-index: 30;
+}
+
+/* Surfaces nav: the four live surfaces by name, in the shell so it is
+   on every surface, signed in or not. One tap from anywhere. The rail
+   above already links them; this block names them in plain words with
+   their addresses, for the reader who never learns the icons. */
+.tc-surfaces {
+  margin: var(--tc-section-gap) 0;
+  padding: 20px;
+  border: 1px solid var(--tc-border);
+  border-radius: var(--tc-radius-card);
+  background: var(--tc-surface);
+}
+
+.tc-surfaces-title {
+  margin: 0;
+  font-family: var(--tc-font-display);
+  font-size: var(--tc-h2-size);
+  font-weight: 500;
+  line-height: var(--tc-h2-leading);
+  color: var(--tc-ink);
+}
+
+.tc-surfaces-list {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.tc-surfaces-link {
+  display: block;
+  padding: 12px 14px;
+  border-radius: var(--tc-radius-field);
+  background: var(--tc-hover);
+  text-decoration: none;
+}
+
+.tc-surfaces-link[aria-current="page"] {
+  box-shadow: inset 3px 0 0 var(--tc-accent);
+}
+
+.tc-surfaces-name {
+  display: block;
+  font-size: var(--tc-name-size);
+  font-weight: 600;
+  color: var(--tc-ink);
+}
+
+.tc-surfaces-host {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--tc-mono);
+  font-size: 11px;
+  color: var(--tc-meta);
+  overflow-wrap: anywhere;
+}
+
+.tc-surfaces-note {
+  margin: 12px 0 0;
+  font-size: var(--tc-note-size);
+  line-height: var(--tc-note-leading);
+  color: var(--tc-text-muted);
+}
+
+/* Main column */
+.tc-main {
+  margin-left: var(--tc-rail);
+  padding: 28px 24px 64px;
+}
+
+.tc-column {
+  max-width: var(--tc-column);
+  margin: 0 auto;
+}
+
+.tc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 12px 0 28px;
+}
+
+.tc-h1 {
+  margin: 0;
+  font-family: var(--tc-font-display);
+  font-size: var(--tc-h1-size);
+  font-weight: var(--tc-h1-weight);
+  line-height: var(--tc-h1-line-height);
+  letter-spacing: -0.02em;
+  color: var(--tc-ink);
+}
+
+/* Editorial indexing //0X: every main section, data point, and step
+   carries its mono index before the heading. */
+.tc-index {
+  font-family: var(--tc-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tc-meta);
+  white-space: nowrap;
+}
+
+.tc-h1 .tc-index,
+.tc-h2 .tc-index,
+.tc-module-title .tc-index,
+.tc-step .tc-index {
+  margin-right: 10px;
+}
+
+.tc-h2 {
+  margin: 0 0 12px;
+  font-size: var(--tc-h2-size);
+  font-weight: 600;
+  line-height: var(--tc-h2-leading);
+  letter-spacing: -0.015em;
+  color: var(--tc-ink);
+}
+
+.tc-lede {
+  margin: 0 0 24px;
+  font-size: var(--tc-body-size);
+  line-height: 1.5;
+  color: var(--tc-muted-strong);
+  max-width: 640px;
+}
+
+.tc-section { margin-bottom: var(--tc-section-gap); }
+
+.tc-block-gap-top { margin-top: var(--tc-block-gap); }
+
+.tc-block { display: block; }
+
+.tc-align-right { text-align: right; }
+
+.tc-pill-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tc-footer-note {
+  margin-top: var(--tc-section-gap);
+  padding-top: 20px;
+  border-top: 1px solid var(--tc-divider);
+  font-size: var(--tc-meta-size);
+  line-height: 1.6;
+  color: var(--tc-meta);
+  max-width: 640px;
+}
+
+/* Buttons */
+.tc-button-primary {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--tc-button-w);
+  height: var(--tc-button-h);
+  padding: 0 20px;
+  border: 0;
+  border-radius: var(--tc-radius-button);
+  /* Chamfered CTA signature: bottom-right 45-degree bevel cut, 12px. */
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+  background: var(--tc-accent);
+  color: var(--tc-on-accent);
+  font-size: var(--tc-button-size);
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.tc-button-primary:hover { filter: brightness(0.96); }
+
+/* A disabled primary button keeps the locked accent at full strength:
+   no UA dimming, no translucent veil over #B85D43. */
+.tc-button-primary:disabled {
+  opacity: 1;
+  background: var(--tc-accent);
+  color: var(--tc-on-accent);
+  cursor: default;
+}
+
+.tc-button-quiet {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tc-button-h);
+  padding: 0 18px;
+  border: 1px solid var(--tc-divider);
+  border-radius: var(--tc-radius-button);
+  background: var(--tc-surface);
+  color: var(--tc-ink);
+  font-size: var(--tc-button-size);
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.tc-button-quiet:hover { background: var(--tc-hover); }
+
+.tc-button-text {
+  padding: 6px 2px;
+  border: 0;
+  background: none;
+  color: var(--tc-accent-text);
+  font-size: var(--tc-body-size);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.tc-button-primary:focus-visible,
+.tc-button-quiet:focus-visible,
+.tc-button-text:focus-visible,
+.tc-rail-btn:focus-visible,
+.tc-row:focus-visible,
+.tc-tab:focus-visible,
+.tc-pill:focus-visible,
+.tc-card:focus-visible,
+.tc-field input:focus-visible,
+.tc-field select:focus-visible,
+.tc-field textarea:focus-visible,
+.tc-menu-item:focus-visible {
+  outline: 2px solid var(--tc-ink);
+  outline-offset: 2px;
+}
+
+/* Banners */
+.tc-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 10px 14px;
+  border-radius: var(--tc-radius-field);
+  background: var(--tc-hover);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.tc-banner-label {
+  color: var(--tc-accent-text);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 12px;
+}
+
+.tc-banner-action {
+  margin-left: auto;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--tc-ink);
+  color: var(--tc-bg);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* Tabs */
+.tc-tabs {
+  display: flex;
+  gap: 20px;
+  border-bottom: 1px solid var(--tc-divider);
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+
+.tc-tab {
+  flex: none;
+  min-height: 44px;
+  padding: 8px 2px;
+  border: 0;
+  border-bottom: 2px solid var(--tc-clear);
+  background: none;
+  color: var(--tc-muted);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tc-tab[aria-selected="true"] {
+  border-bottom-color: var(--tc-ink);
+  color: var(--tc-ink);
+}
+
+/* Pills: buttons only. Static labels use .tc-badge. */
+.tc-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--tc-radius-pill);
+  box-shadow: inset 0 0 0 1px var(--tc-border);
+  background: var(--tc-hover);
+  color: var(--tc-ink);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tc-pill[aria-pressed="true"] {
+  background: var(--tc-ink);
+  color: var(--tc-bg);
+}
+
+.tc-toggle {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: var(--tc-radius-pill);
+  background: var(--tc-surface);
+}
+
+.tc-toggle button {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--tc-radius-pill);
+  background: var(--tc-clear);
+  color: var(--tc-muted);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tc-toggle button[aria-pressed="true"] {
+  background: var(--tc-hover);
+  color: var(--tc-ink);
+}
+
+.tc-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.tc-column-heads {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 120px 140px 160px;
+  gap: 16px;
+  padding: 8px 12px;
+  color: var(--tc-meta);
+  font-size: var(--tc-meta-size);
+  font-weight: 600;
+}
+
+.tc-column-heads span:nth-child(n + 2) { text-align: right; }
+
+/* Divider rows */
+.tc-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 120px 140px 160px;
+  align-items: center;
+  gap: 16px;
+  min-height: var(--tc-row-pitch);
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--tc-divider);
+  text-decoration: none;
+  transition: background var(--tc-motion-fast);
+}
+
+a.tc-row:hover,
+button.tc-row:hover {
+  background: var(--tc-hover);
+  border-radius: var(--tc-radius-row-hover);
+}
+
+.tc-row-identity {
+  display: flex;
+  align-items: center;
+  gap: var(--tc-avatar-gap);
+  min-width: 0;
+}
+
+.tc-avatar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--tc-avatar);
+  height: var(--tc-avatar);
+  border-radius: var(--tc-radius-avatar);
+  background: var(--tc-hover);
+  color: var(--tc-ink);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.tc-row-name {
+  font-size: var(--tc-name-size);
+  font-weight: var(--tc-name-weight);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tc-row-ticker {
+  margin-left: 6px;
+  color: var(--tc-muted);
+  font-size: var(--tc-ticker-size);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.tc-row-creator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 3px;
+  color: var(--tc-meta);
+  font-size: var(--tc-meta-size);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tc-row-value {
+  font-size: var(--tc-value-size);
+  font-weight: var(--tc-value-weight);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.tc-row-meta {
+  color: var(--tc-meta);
+  font-size: var(--tc-meta-size);
+  font-weight: 500;
+  text-align: right;
+}
+
+.tc-pair {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  font-size: var(--tc-ticker-size);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.tc-pair-icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--tc-pair-icon);
+  height: var(--tc-pair-icon);
+  border-radius: 50%;
+  color: var(--tc-surface);
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.tc-pair-icon-eth { background: var(--tc-accent); }
+.tc-pair-icon-usdc { background: var(--tc-ink); }
+.tc-pair-icon-other {
+  background: var(--tc-clear);
+  color: var(--tc-ink);
+  box-shadow: inset 0 0 0 1px var(--tc-divider);
+}
+
+/* Static badge. Not a pill, not a button. Solid fill, single-pixel
+   inner border, no glow, no drop shadow. */
+.tc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 22px;
+  padding: 2px 8px;
+  border: 0;
+  border-radius: var(--tc-radius-badge);
+  box-shadow: inset 0 0 0 1px var(--tc-border);
+  background: var(--tc-surface);
+  color: var(--tc-ink);
+  font-family: var(--tc-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tc-badge-accent {
+  border-color: var(--tc-accent);
+  color: var(--tc-accent-text);
+}
+
+/* Gate progress */
+.tc-gate { min-width: 0; }
+
+.tc-gate-track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--tc-hover);
+  overflow: hidden;
+}
+
+.tc-gate-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: var(--tc-accent);
+  width: var(--tc-gate-pct, 0%);
+}
+
+.tc-gate-label {
+  margin-top: 4px;
+  font-size: var(--tc-meta-size);
+  font-weight: 600;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.tc-gate-fee {
+  margin-top: 2px;
+  color: var(--tc-muted);
+  font-size: var(--tc-meta-size);
+  text-align: right;
+}
+
+/* Grid cards */
+.tc-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--tc-card-gap);
+}
+
+/* Glassmorphic tier containers: 28px radius + 28px backdrop blur over
+   Frosted Glass. */
+.tc-card {
+  background: var(--tc-frost);
+  -webkit-backdrop-filter: blur(28px);
+  backdrop-filter: blur(28px);
+  border: 1px solid var(--tc-border);
+  border-radius: var(--tc-radius-card);
+  box-shadow: var(--tc-shadow-card);
+  padding: 16px;
+  text-decoration: none;
+}
+
+.tc-card-value {
+  font-size: var(--tc-value-size);
+  font-weight: var(--tc-value-weight);
+  text-align: left;
+}
+
+/* States */
+.tc-empty {
+  padding: 32px 12px;
+  border-bottom: 1px solid var(--tc-divider);
+}
+
+.tc-empty-title {
+  margin: 0 0 6px;
+  font-size: var(--tc-name-size);
+  font-weight: 700;
+}
+
+.tc-empty-body {
+  margin: 0 0 16px;
+  color: var(--tc-muted);
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 560px;
+}
+
+.tc-error {
+  padding: 14px;
+  border: 1px solid var(--tc-divider);
+  border-radius: var(--tc-radius-field);
+  background: var(--tc-surface);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.tc-error strong { font-weight: 700; }
+
+.tc-error-action { margin-top: 10px; }
+
+.tc-skeleton-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 120px 140px 160px;
+  gap: 16px;
+  align-items: center;
+  min-height: var(--tc-row-pitch);
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--tc-divider);
+}
+
+.tc-skeleton-bar {
+  height: 12px;
+  border-radius: 6px;
+  background: var(--tc-hover);
+}
+
+.tc-skeleton-bar-narrow { width: 55%; }
+
+.tc-loading-line {
+  margin: 0 0 12px;
+  color: var(--tc-muted);
+  font-size: 14px;
+}
+
+.tc-stale {
+  color: var(--tc-meta);
+  font-size: var(--tc-meta-size);
+  font-weight: 600;
+}
+
+.tc-source-label {
+  color: var(--tc-meta);
+  font-family: var(--tc-mono);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.tc-mono {
+  font-family: var(--tc-mono);
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+}
+
+/* Detail tables */
+.tc-terms {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 32px;
+}
+
+.tc-term {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--tc-divider);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.tc-term dt {
+  flex: none;
+  color: var(--tc-muted);
+  font-weight: 600;
+}
+
+.tc-term dd {
+  margin: 0;
+  text-align: right;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.tc-term dd a { text-decoration: underline; text-underline-offset: 3px; }
+
+/* Forms */
+.tc-form { max-width: 640px; }
+
+.tc-field { margin-bottom: 20px; }
+
+.tc-field label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.tc-field input,
+.tc-field select,
+.tc-field textarea {
+  width: 100%;
+  min-height: var(--tc-button-h);
+  padding: 10px 12px;
+  border: 1px solid var(--tc-divider);
+  border-radius: var(--tc-radius-field);
+  background: var(--tc-surface);
+  color: var(--tc-ink);
+  font-family: inherit;
+  font-size: var(--tc-body-size);
+}
+
+.tc-field textarea { min-height: 88px; resize: vertical; }
+
+.tc-field-help {
+  margin-top: 6px;
+  color: var(--tc-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.tc-field-error {
+  margin-top: 6px;
+  color: var(--tc-accent-text);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.tc-field-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.tc-field-row-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.tc-steps {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 28px;
+  padding: 0;
+  list-style: none;
+}
+
+.tc-step {
+  flex: 1;
+  padding: 10px 12px;
+  border-bottom: 2px solid var(--tc-divider);
+  color: var(--tc-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.tc-step[aria-current="step"] {
+  border-bottom-color: var(--tc-ink);
+  color: var(--tc-ink);
+}
+
+.tc-review {
+  border: 1px solid var(--tc-border);
+  border-radius: var(--tc-radius-card);
+  background: var(--tc-frost);
+  -webkit-backdrop-filter: blur(28px);
+  backdrop-filter: blur(28px);
+  padding: 4px 16px;
+  margin-bottom: 24px;
+}
+
+/* Swap ticket */
+.tc-ticket {
+  max-width: 480px;
+  padding: 20px;
+  border: 1px solid var(--tc-border);
+  border-radius: var(--tc-radius-card);
+  background: var(--tc-frost);
+  -webkit-backdrop-filter: blur(28px);
+  backdrop-filter: blur(28px);
+  box-shadow: var(--tc-shadow-card);
+}
+
+.tc-ticket-amount {
+  width: 100%;
+  min-height: 56px;
+  padding: 10px 12px;
+  border: 1px solid var(--tc-divider);
+  border-radius: var(--tc-radius-field);
+  background: var(--tc-bg);
+  color: var(--tc-ink);
+  font-family: inherit;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.tc-fee-lines { margin: 16px 0; }
+
+.tc-fee-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--tc-divider);
+  font-size: 14px;
+}
+
+.tc-fee-line:last-child { border-bottom: 0; }
+
+.tc-fee-line dt { color: var(--tc-muted); font-weight: 600; }
+.tc-fee-line dd { margin: 0; font-weight: 600; text-align: right; }
+
+/* Account menu */
+.tc-account-wrap { position: relative; }
+
+.tc-menu {
+  position: absolute;
+  left: 52px;
+  bottom: 0;
+  min-width: 240px;
+  padding: 8px;
+  border-radius: var(--tc-radius-field);
+  background: var(--tc-surface);
+  box-shadow: var(--tc-shadow-menu);
+  z-index: 30;
+}
+
+.tc-menu-email {
+  padding: 8px 10px 10px;
+  border-bottom: 1px solid var(--tc-divider);
+  font-size: 13px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.tc-menu-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--tc-ink);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.tc-menu-item:hover { background: var(--tc-hover); }
+
+/* Certificate: PDF palette, record document. */
+.tc-certificate {
+  background: var(--tc-cert-canvas);
+  color: var(--tc-cert-ink);
+  border: 1px solid var(--tc-border);
+  border-radius: var(--tc-radius-card);
+  padding: 28px;
+}
+
+.tc-certificate-inner {
+  background: var(--tc-cert-surface);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.tc-certificate-title {
+  margin: 0 0 4px;
+  font-family: var(--tc-font-display);
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.tc-certificate-sub {
+  margin: 0 0 20px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.tc-certificate-seal {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: var(--tc-radius-pill);
+  box-shadow: inset 0 0 0 1px var(--tc-border);
+  /* Dichroic Spectrum: proof badges only. This seal is the one place. */
+  background: linear-gradient(135deg, var(--tc-dichroic-a), var(--tc-dichroic-b));
+  color: var(--tc-cert-ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* The seal is the cryptographic proof badge: the one place the
+   Dichroic Spectrum gradient appears. Timed locks get no gradient
+   seal: outlined on the certificate surface instead. */
+.tc-certificate-seal-timed {
+  background: var(--tc-cert-surface);
+  border: 1px solid var(--tc-cert-ink);
+}
+
+.tc-certificate .tc-gate-track { background: var(--tc-cert-faint); }
+.tc-certificate .tc-gate-fill { background: var(--tc-accent); }
+
+.tc-certificate-note {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--tc-cert-line);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.tc-certificate .tc-term { border-bottom-color: var(--tc-cert-line-soft); }
+.tc-certificate .tc-term dt { color: var(--tc-cert-ink-soft); }
+
+/* Ops modules */
+.tc-module { margin-bottom: var(--tc-section-gap); }
+
+.tc-module-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.tc-module-title {
+  margin: 0 0 8px;
+  font-size: var(--tc-h2-size);
+  font-weight: 600;
+  line-height: var(--tc-h2-leading);
+  letter-spacing: -0.015em;
+  color: var(--tc-ink);
+}
+
+.tc-module-copy {
+  margin: 8px 0;
+  font-size: var(--tc-body-size);
+  line-height: var(--tc-body-leading);
+  color: var(--tc-body);
+}
+
+.tc-module-note {
+  margin: 8px 0;
+  font-size: var(--tc-note-size);
+  line-height: var(--tc-note-leading);
+  color: var(--tc-text-muted);
+}
+
+/* Plus+ feature screens */
+.tc-tier-glass-field {
+  position: relative;
+  margin-top: 16px;
+  padding: 24px;
+  border-radius: var(--tc-radius-card);
+  background: var(--tc-tier-wash);
+}
+
+/* The tier card is frosted glass over the wash: the wash is what the
+   28px backdrop blur distorts, and the sheen is the top light band
+   only (120px, never over the Subscribe button). No shadow, no glow,
+   no Dichroic Spectrum. */
+.tc-tier-card {
+  position: relative;
+  margin-top: 0;
+  overflow: hidden;
+  background: var(--tc-tier-frost);
+}
+
+.tc-tier-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  border-radius: inherit;
+  background: var(--tc-tier-sheen);
+  pointer-events: none;
+}
+
+.tc-tier-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.tc-feature-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tc-feature {
+  padding: 12px 0;
+  border-bottom: var(--tc-border-w) solid var(--tc-border);
+}
+
+.tc-feature-name {
+  display: block;
+  font-size: var(--tc-body-size);
+  font-weight: 600;
+  line-height: var(--tc-body-leading);
+}
+
+.tc-feature-note {
+  display: block;
+  margin-top: 4px;
+  font-size: var(--tc-note-size);
+  line-height: var(--tc-note-leading);
+  color: var(--tc-text-muted);
+}
+
+/* Responsive: phone layout is a functional collapse; paint check
+   still open. */
+@media (max-width: 900px) {
+  .tc-rail {
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: auto;
+    height: auto;
+    padding: 12px 16px;
+    gap: 4px 2px;
+  }
+  .tc-rail-mark { margin-bottom: 0; }
+  .tc-rail-spacer { flex: 1; }
+  .tc-rail-btn { width: auto; min-width: 60px; max-width: 78px; padding: 6px 6px; }
+  .tc-rail-divider { width: 1px; height: 34px; margin: 0 2px; align-self: center; }
+  .tc-rail-btn[aria-current="page"]::before { display: none; }
+  .tc-rail-btn[data-tip]:hover::after,
+  .tc-rail-btn[data-tip]:focus-visible::after { display: none; }
+  .tc-main { margin-left: 0; padding: 20px 16px 48px; }
+  .tc-column-heads { display: none; }
+  .tc-row,
+  .tc-skeleton-row {
+    grid-template-columns: minmax(0, 1fr) 120px;
+    padding: 12px 8px;
+  }
+  .tc-row .tc-row-hide-phone { display: none; }
+  .tc-terms { grid-template-columns: minmax(0, 1fr); }
+  .tc-grid { grid-template-columns: minmax(0, 1fr); }
+  .tc-field-row,
+  .tc-field-row-2 { grid-template-columns: minmax(0, 1fr); }
+  .tc-header { flex-wrap: wrap; }
+  .tc-menu { left: 0; bottom: 52px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tc-row { transition: none; }
+}

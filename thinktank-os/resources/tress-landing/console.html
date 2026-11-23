@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>Ops Console — Tress Column</title>
+<meta name="description" content="The working side of Tress Column: memberships, campaigns, monitoring, and the public record. Live at ops.dvaughnhouse.com." />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Tress Column" />
+<meta property="og:url" content="https://tc.dvaughnhouse.com/console.html" />
+<meta property="og:title" content="Ops Console — Tress Column" />
+<meta property="og:description" content="The working side of Tress Column: memberships, campaigns, monitoring, and the public record. Live at ops.dvaughnhouse.com." />
+<meta property="og:image" content="https://tc.dvaughnhouse.com/tress-column-assets/og-image.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="628" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Ops Console — Tress Column" />
+<meta name="twitter:description" content="The working side of Tress Column: memberships, campaigns, monitoring, and the public record. Live at ops.dvaughnhouse.com." />
+<meta name="twitter:image" content="https://tc.dvaughnhouse.com/tress-column-assets/og-image.jpg" />
+<meta name="ai-summary" content="The Tress Column Ops Console: memberships, campaigns, monitoring, and the public record. Live at ops.dvaughnhouse.com." />
+<link rel="alternate" type="text/markdown" href="https://tc.dvaughnhouse.com/console.md" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[{"@type":"Organization","name":"Tress Column","url":"https://tc.dvaughnhouse.com","description":"Configure, lock, prove — the fair-launch exchange on Base where every term is set in plain language at inception and never changed after.","email":"hello@tc.dvaughnhouse.com","parentOrganization":{"@type":"Organization","name":"Glenride"}},{"@type":"WebSite","name":"Tress Column","url":"https://tc.dvaughnhouse.com"}]}
+</script>
+<link rel="stylesheet" href="/tress-column-assets/fonts.css" />
+<link rel="stylesheet" href="/tress-column-assets/site.css" />
+</head>
+<body>
+<header class="subnav wrap">
+  <a class="subnav__word" href="/">Tress Column</a>
+  <span class="subnav__links">
+    <a class="nav__item" href="/#waitlist"><span class="nav__dot" aria-hidden="true"></span><span class="nav__label">Join the waitlist</span></a>
+    <a class="nav__item" href="/auth/tress-entry?return=%2F">
+      <span class="nav__label">Sign in</span>
+    </a>
+    <button id="menu-open" class="nav__item" aria-expanded="false" aria-controls="menu">
+      <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6" /><line x1="4" y1="12" x2="20" y2="12" /><line x1="4" y1="18" x2="20" y2="18" /></svg>
+      <span class="nav__label nav__label--menu">Menu</span>
+    </button>
+  </span>
+</header>
+<div class="menu" id="menu">
+  <div class="menu__backdrop" id="menu-backdrop"></div>
+  <div class="menu__panel">
+    <button class="menu__close" id="menu-close">
+      <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M18 6 6 18" /><path d="m6 6 12 12" />
+      </svg>
+      <span>Close</span>
+    </button>
+    <nav class="menu__nav">
+      <a class="menu__link" href="/how-it-works">
+        <span class="menu__linkText">How it works</span>
+        <svg class="menu__arrow icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+      </a>
+      <a class="menu__link" href="/certificate">
+        <span class="menu__linkText">The certificate</span>
+        <svg class="menu__arrow icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+      </a>
+      <a class="menu__link" href="/fees">
+        <span class="menu__linkText">Fees</span>
+        <svg class="menu__arrow icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+      </a>
+      <a class="menu__link" href="/passes">
+        <span class="menu__linkText">Passes</span>
+        <svg class="menu__arrow icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+      </a>
+      <a class="menu__link" href="/terminal">
+        <span class="menu__linkText">Trading Terminal</span>
+        <svg class="menu__arrow icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+      </a>
+      <a class="menu__link" href="/console">
+        <span class="menu__linkText">Ops Console</span>
+        <svg class="menu__arrow icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+      </a>
+      <a class="menu__link" href="/security">
+        <span class="menu__linkText">Security</span>
+        <svg class="menu__arrow icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+      </a>
+      <a class="menu__link" href="mailto:hello@tc.dvaughnhouse.com">
+        <span class="menu__linkText">Contact</span>
+        <svg class="menu__arrow icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+      </a>
+    </nav>
+        <nav class="menu__nav menu__surfaces" aria-label="Surfaces">
+      <span class="menu__footLabel">Surfaces</span>
+      <a class="menu__link" href="/">
+        <span class="menu__linkText">Launchpad</span>
+        <svg class="menu__arrow icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+      </a>
+      <a class="menu__link" href="https://trade.dvaughnhouse.com/">
+        <span class="menu__linkText">Trading Terminal</span>
+        <svg class="menu__arrow icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+      </a>
+      <a class="menu__link" href="https://ops.dvaughnhouse.com/">
+        <span class="menu__linkText">Ops Console</span>
+        <svg class="menu__arrow icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+      </a>
+      <a class="menu__link" href="https://plus.dvaughnhouse.com/">
+        <span class="menu__linkText">Plus+</span>
+        <svg class="menu__arrow icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+      </a>
+    </nav>
+  <div class="menu__foot">
+      <span class="menu__footLabel">Get in touch</span>
+      <a class="menu__mail" href="mailto:hello@tc.dvaughnhouse.com">hello@tc.dvaughnhouse.com</a>
+      <span class="menu__note">The waitlist is open — <a href="/#waitlist">join here</a>, and we&rsquo;ll email you when Tress Column opens.</span>
+    </div>
+  </div>
+</div>
+
+<section class="surfaces"><div class="wrap">
+<div class="sec-head rv">
+<p class="sec-tag">//01 &mdash; The exchange &amp; the back office</p>
+</div>
+<div class="surf-grid">
+      <article class="surf rv rv-d1">
+        <div class="surf-top">
+          <h3>Ops Console</h3>
+          <span class="chip"><i class="dot-built"></i>Live &mdash; <a href="https://ops.dvaughnhouse.com">ops.dvaughnhouse.com</a></span>
+        </div>
+        <p class="route">Staff-facing · the SaaS back office</p>
+        <p>The working side of Tress Column: memberships, campaigns, monitoring, and the public record — run from one console that is deliberately powerless over the contracts.</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="#B85D43" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg><div><b>Memberships &amp; campaigns.</b> <span>Plus+ subscriptions, airdrop campaigns, and launch monitoring in one place.</span></div></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="#B85D43" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg><div><b>Certificates &amp; attestations.</b> <span>Certificate issuance, plus Glenride attestations anchored on-chain as timestamp proofs — hashes only, no content.</span></div></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="#B85D43" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg><div><b>Fees accounted from receipts.</b> <span>Treasury-fee accounting reads on-chain receipts — there is no internal ledger to disagree with the chain.</span></div></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="#B85D43" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg><div><b>Powerless by design.</b> <span>The console holds no customer balances, approves no withdrawals, and freezes no one. A fault here can mislead — it cannot move a launch's locked liquidity.</span></div></li>
+        </ul>
+        <div class="surf-foot"><p>Both surfaces are <b>live</b>: they only have customers once launches exist, so the contract core ships first.</p></div>
+      </article>
+</div>
+</div></section>
+<div class="wrap"><p class="next-step rv">Next: <a href="/security">Security &rarr;</a></p></div>
+<footer>
+  <div class="wrap">
+    <p class="foot-boilerplate" style="flex-basis:100%">Tress Column is a fair-launch exchange on Base where every launch parameter is configured, locked, and printed in plain language at inception. Built around verifiable immutability and transparent fee tiers, Tress Column eliminates post-launch rule changes and issues a permanent on-chain certificate proving exact launch terms from block zero.</p>
+    <p class="foot-tagline" style="flex-basis:100%">Fair launches aren’t promised. They’re locked.</p>
+    <span>Tress Column, a Glenride project.</span>
+    <span class="honest">Tress Column is in build. The contract core is written and tested; nothing is deployed yet.</span>
+    <a href="/index.md">View as Markdown</a>
+  </div>
+</footer>
+<script src="assets/site.js"></script>
+</body>
+</html>

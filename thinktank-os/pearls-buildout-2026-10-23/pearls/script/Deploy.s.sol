@@ -3,15 +3,12 @@ pragma solidity ^0.8.24;
 
 import {Script, console} from "forge-std/Script.sol";
 
-import {DistributionFactory} from "../src/DistributionFactory.sol";
-import {HookCertificateFactory} from "../src/HookCertificateFactory.sol";
+import {LaunchFactory} from "../src/LaunchFactory.sol";
 
 /// @title Deploy
-/// @notice Deploys the two Pearls launch factories (Part 1
-///         DistributionFactory, then Part 2 HookCertificateFactory,
-///         which deploys the LaunchCertificate in its constructor).
-///         That is the whole platform deployment: launches deploy
-///         everything else, in two transactions per launch.
+/// @notice Deploys the Pearls LaunchFactory (which deploys the
+///         LaunchCertificate in its constructor). That is the whole
+///         platform deployment: launches deploy everything else.
 ///
 /// @dev TARGET: Base Sepolia testnet (chain ID 84532) or local Anvil
 ///      (31337) ONLY. The script REVERTS on any other chain id — including
@@ -23,7 +20,7 @@ import {HookCertificateFactory} from "../src/HookCertificateFactory.sol";
 ///        DEPLOYER_KEY  Private key of the deployer (TESTNET key only).
 ///        TREASURY      Address of the platform treasury. On Sepolia this
 ///                      MUST be a throwaway test Safe/EOA, never the real
-///                      treasury — both factories' treasury is immutable.
+///                      treasury — the factory's treasury is immutable.
 ///
 ///      Example (dry run first; add --broadcast only on D'Vaughn's word):
 ///        source .env
@@ -39,19 +36,15 @@ contract Deploy is Script {
         address treasury = vm.envAddress("TREASURY");
 
         vm.startBroadcast(deployerKey);
-        DistributionFactory part1 = new DistributionFactory(treasury);
-        HookCertificateFactory part2 = new HookCertificateFactory(treasury);
+        LaunchFactory factory = new LaunchFactory(treasury);
         vm.stopBroadcast();
 
-        console.log("DistributionFactory (Part 1) deployed at:", address(part1));
-        console.log("HookCertificateFactory (Part 2) deployed at:", address(part2));
-        console.log("LaunchCertificate deployed at:", address(part2.certificate()));
+        console.log("LaunchFactory deployed at:", address(factory));
+        console.log("LaunchCertificate deployed at:", address(factory.certificate()));
         console.log("Treasury (immutable):", treasury);
         console.log("Chain ID:", block.chainid);
         console.log("---");
         console.log("NEXT: dummy launch on Sepolia (spec step 4) is a");
         console.log("separate, gated step. Nothing here launches a token.");
-        console.log("A launch is now TWO transactions: Part 1 deploy,");
-        console.log("then Part 2 launch against the Part 1 address.");
     }
 }

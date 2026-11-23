@@ -5,6 +5,15 @@ use App\Http\Controllers\CreditController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ManuscriptController;
 use App\Http\Controllers\MarkdownController;
+use App\Http\Controllers\OpsConsoleLoggedInController;
+use App\Http\Controllers\PlusPortalController;
+use App\Http\Controllers\PlusApiController;
+use App\Http\Controllers\TressAuthController;
+use App\Http\Controllers\TressColumnLoggedInController;
+use App\Http\Controllers\TressLandingController;
+use App\Http\Controllers\TressRpcController;
+use App\Http\Controllers\TradingTerminalLoggedInController;
+use App\Http\Controllers\WorkosAuthController;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Controllers\PortfolioMatrixController;
 use App\Http\Controllers\ProfileController;
@@ -12,13 +21,19 @@ use App\Http\Controllers\EssayController;
 use App\Http\Controllers\ResearchController;
 use App\Http\Controllers\DrugShortageController;
 use App\Http\Controllers\SopController;
-use App\Http\Controllers\OpsConsoleController;
 use App\Http\Controllers\StandardsController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\TradingTerminalController;
 use App\Http\Controllers\TressColumnController;
 use App\Http\Controllers\VanguardLibraryController;
 use Illuminate\Support\Facades\Route;
+
+// Tress Column landing markdown (tc host only): the landing's own
+// .md files. Registered before the global MarkdownController catch-all
+// below, so /index.md on tc serves the landing markdown, not a 404.
+Route::domain('tc.dvaughnhouse.com')->group(function () {
+    Route::get('/{page}.md', [TressLandingController::class, 'markdown'])->name('tress-landing.md');
+});
 
 // AI-readable surfaces (ScrollLaunch prompt 1): generated from code,
 // never hand-written static files. robots.txt is served by a route so
@@ -58,18 +73,23 @@ Route::get('/library', [VanguardLibraryController::class, 'index'])->name('libra
 Route::get('/briefs/{manuscript}', [VanguardLibraryController::class, 'show'])->name('briefs.show');
 Route::get('/thesis', [VanguardLibraryController::class, 'thesis'])->name('thesis.index');
 
+
 // Glenride Attestations — manual entry + anchor recording (auth, issuers only).
 // The create route MUST register before the public /attestations/{key} route,
 // otherwise "create" is captured as an attestation key.
 Route::middleware('auth')->group(function () {
     Route::get('/attestations/create', [AttestationController::class, 'create'])->name('attestations.create');
     Route::post('/attestations/manual', [AttestationController::class, 'storeManual'])->name('attestations.storeManual');
+    Route::get('/attestations/digest-queue', [AttestationController::class, 'digestQueue'])->name('attestations.digestQueue');
+    Route::post('/attestations/digest-queue/{edition}', [AttestationController::class, 'attestDigest'])->name('attestations.attestDigest');
     Route::post('/attestations/{attestation}/anchor', [AttestationController::class, 'recordAnchor'])->name('attestations.recordAnchor');
+    Route::post('/attestations/{attestation}/correct', [AttestationController::class, 'correct'])->name('attestations.correct');
 });
 
-// Public Glenride Attestations (Witness) — verify must register before show
+// Public Glenride Attestations (Witness) — verify and key-statement must register before show
 Route::get('/attestations', [AttestationController::class, 'index'])->name('attestations.index');
 Route::post('/attestations/verify', [AttestationController::class, 'verify'])->name('attestations.verify');
+Route::get('/attestations/key-statement', [AttestationController::class, 'keyStatement'])->name('attestations.keyStatement');
 Route::get('/attestations/{key}', [AttestationController::class, 'show'])->name('attestations.show');
 
 // Public Glenride standards
@@ -123,22 +143,98 @@ Route::middleware('auth')->group(function () {
     Route::get('/sops/{slug}', [SopController::class, 'show'])->name('sops.show');
 });
 
-// Tress Column Three Interlocking Applications (Subdomain bindings)
+// Tress Column Three Interlocking Applications (Subdomain bindings).
+// Live cutover Nov 20, 2026 (his tap): each domain serves the
+// logged-in build at its root. Staging routes below stay live as the
+// pre-live check. The legacy domain controllers are no longer served.
 Route::domain('tc.dvaughnhouse.com')->group(function () {
-    Route::get('/', [TressColumnController::class, 'index'])->name('tress-column.domain');
+    // tc root: landing page when signed out, Launches when signed in
+    // (PRD §3). The seven landing sub-pages stay public, and the
+    // waitlist form posts here and is proxied to the Pages function.
+    Route::get('/', [TressLandingController::class, 'root'])->name('tress-column.domain');
+    Route::get('/{page}', [TressLandingController::class, 'page'])
+        ->where('page', 'how-it-works|certificate|fees|passes|terminal|console|security')
+        ->name('tress-landing.page');
+    Route::post('/api/waitlist', [TressLandingController::class, 'waitlist'])->name('tress-landing.waitlist');
+    Route::get('/launches/{id}', [TressColumnLoggedInController::class, 'show'])->whereNumber('id')->name('tress-column.domain.show');
+    Route::get('/start', [TressColumnLoggedInController::class, 'create'])->name('tress-column.domain.create');
+    Route::get('/mine', [TressColumnLoggedInController::class, 'mine'])->name('tress-column.domain.mine');
 });
 Route::domain('trade.dvaughnhouse.com')->group(function () {
-    Route::get('/', [TradingTerminalController::class, 'index'])->name('trading-terminal.domain');
+    Route::get('/', [TradingTerminalLoggedInController::class, 'markets'])->name('trading-terminal.domain');
+    Route::get('/token/{address}', [TradingTerminalLoggedInController::class, 'token'])->name('trading-terminal.domain.token');
+    Route::get('/activity', [TradingTerminalLoggedInController::class, 'activity'])->name('trading-terminal.domain.activity');
 });
 Route::domain('ops.dvaughnhouse.com')->group(function () {
-    Route::get('/', [OpsConsoleController::class, 'index'])->name('ops-console.domain');
+    // Gated in the controller: no unauthenticated staff view exists
+    // at any URL; signed-out requests go to the sign-in entry.
+    Route::get('/', [OpsConsoleLoggedInController::class, 'index'])->name('ops-console.domain');
+});
+Route::domain('plus.dvaughnhouse.com')->group(function () {
+    Route::get('/', [PlusPortalController::class, 'index'])->name('plus-portal.domain');
 });
 
-// Staging Preview Routes (Direct URL access across environments)
-Route::prefix('staging')->group(function () {
-    Route::get('/tress-column', [TressColumnController::class, 'index'])->name('tress-column.preview');
-    Route::get('/terminal', [TradingTerminalController::class, 'index'])->name('trading-terminal.preview');
-    Route::get('/ops-console', [OpsConsoleController::class, 'index'])->name('ops-console.preview');
+// Tress Column Plus+ API. Signed-in only; each route enforces its
+// tier in PlusApiController. Subscription state is SaaS state;
+// launch figures are on-chain state, labelled at the source.
+Route::prefix('plus/api')->middleware(['web', 'auth'])->group(function () {
+    Route::get('/subscription', [PlusApiController::class, 'subscription']);
+    Route::post('/subscribe', [PlusApiController::class, 'subscribe']);
+    Route::post('/subscription/cancel', [PlusApiController::class, 'cancelSubscription']);
+    Route::get('/indexer-status', [PlusApiController::class, 'indexerStatus']);
+    Route::get('/feed', [PlusApiController::class, 'feed']);
+    Route::get('/feed/stream', [PlusApiController::class, 'feedStream']);
+    Route::get('/radar', [PlusApiController::class, 'radar']);
+    Route::post('/radar/verify', [PlusApiController::class, 'verifyClaim']);
+    Route::get('/whales', [PlusApiController::class, 'whales']);
+    Route::get('/snapshots', [PlusApiController::class, 'listSnapshots']);
+    Route::post('/snapshots', [PlusApiController::class, 'createSnapshot']);
+    Route::post('/snapshots/{snapshot}/compute', [PlusApiController::class, 'computeSnapshot']);
+    Route::post('/snapshots/{snapshot}/generate-root', [PlusApiController::class, 'generateSnapshotRoot']);
+    Route::get('/snapshots/{snapshot}/proof', [PlusApiController::class, 'snapshotProof']);
+    Route::get('/snapshots/{snapshot}/export', [PlusApiController::class, 'exportSnapshot']);
+    Route::get('/alerts', [PlusApiController::class, 'listAlerts']);
+    Route::post('/alerts', [PlusApiController::class, 'createAlert']);
+    Route::post('/alerts/{alert}/toggle', [PlusApiController::class, 'toggleAlert']);
+    Route::delete('/alerts/{alert}', [PlusApiController::class, 'deleteAlert']);
+    Route::get('/rebates', [PlusApiController::class, 'listRebates']);
+    Route::post('/rebates', [PlusApiController::class, 'claimRebate']);
+    Route::get('/support', [PlusApiController::class, 'listSupport']);
+    Route::post('/support', [PlusApiController::class, 'createSupport']);
 });
+
+// Vanity certificate URL: /p/<tokenId> resolves to the same
+// certificate record, on the launch page. Cosmetic only.
+Route::get('/p/{tokenId}', [PlusPortalController::class, 'vanity'])->whereNumber('tokenId');
+
+// Staging Preview Routes (Direct URL access across environments).
+// The logged-in-state build renders the new pages on the staging
+// routes too, so staging stays a working pre-live check after cutover.
+Route::prefix('staging')->group(function () {
+    Route::get('/tress-column', [TressColumnLoggedInController::class, 'index'])->name('tress-column.preview');
+    Route::get('/tress-column/launches/{id}', [TressColumnLoggedInController::class, 'show'])->whereNumber('id')->name('tress-column.preview.show');
+    Route::get('/tress-column/start', [TressColumnLoggedInController::class, 'create'])->name('tress-column.preview.create');
+    Route::get('/tress-column/mine', [TressColumnLoggedInController::class, 'mine'])->name('tress-column.preview.mine');
+    Route::get('/terminal', [TradingTerminalLoggedInController::class, 'markets'])->name('trading-terminal.preview');
+    Route::get('/terminal/token/{address}', [TradingTerminalLoggedInController::class, 'token'])->name('trading-terminal.preview.token');
+    Route::get('/terminal/activity', [TradingTerminalLoggedInController::class, 'activity'])->name('trading-terminal.preview.activity');
+    Route::get('/ops-console', [OpsConsoleLoggedInController::class, 'index'])->name('ops-console.preview');
+    Route::get('/plus', [PlusPortalController::class, 'index'])->name('plus-portal.preview');
+});
+
+// Tress Column sign-in entry (Albert Pass). The provider under the
+// hood is never named in the UI.
+Route::get('/auth/tress-entry', [TressAuthController::class, 'entry'])->name('tress.auth.entry');
+Route::get('/auth/workos/login', [WorkosAuthController::class, 'login'])->name('workos.login');
+Route::get('/auth/workos/callback', [WorkosAuthController::class, 'callback'])->name('workos.callback');
+// The registered WorkOS redirect wildcard is https://*.dvaughnhouse.com/auth/callback
+// (his words, Nov 20). The old /auth/workos/callback path does not match it, so
+// WorkOS rejected every sign-in with redirect-uri-invalid. This is the live
+// callback route now; login() sends this path. The workos path stays as an alias.
+Route::get('/auth/callback', [WorkosAuthController::class, 'callback'])->name('workos.callback.alt');
+
+// Tress Column read-only chain relay. Read methods only; the
+// controller enforces the allowlist and rejects sends.
+Route::post('/api/tc/rpc', [TressRpcController::class, 'relay'])->name('tc.rpc')->middleware('throttle:120,1');
 
 require __DIR__.'/auth.php';

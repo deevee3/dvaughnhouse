@@ -1,0 +1,8 @@
+[Unit]
+Description=Publish one Glenride attestation issuance-chain anchor to the public repository
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/projects/thinktank-os/scripts/anchor-chain.sh

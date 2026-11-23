@@ -63,7 +63,18 @@ function ManifestRows({ manifest }) {
     );
 }
 
-export default function Show({ attestation = {}, signature_valid = false, canIssue = false, auth }) {
+export default function Show({
+    attestation = {},
+    signature_valid = false,
+    timestamp_valid = false,
+    statement = '',
+    signature_block = null,
+    supersedes_public_id = null,
+    superseded_by_public_id = null,
+    chain_seq = null,
+    canIssue = false,
+    auth,
+}) {
     const status = attestation.status || 'issued';
     const challenges = attestation.challenges || [];
     const isActive = status === 'issued' || status === 'challenged';
@@ -149,10 +160,160 @@ export default function Show({ attestation = {}, signature_valid = false, canIss
                             Entry:{' '}
                             {attestation.entered_via === 'manual'
                                 ? 'Manual entry'
-                                : 'Manuscript pipeline'}
+                                : attestation.entered_via === 'automated'
+                                  ? 'Automated digest attestation'
+                                  : 'Manuscript pipeline'}
                         </span>
                     </div>
                 </div>
+
+                {superseded_by_public_id && (
+                    <div className="mt-8 rounded-2xl border border-sienna-deep bg-paper-deep p-6 dark:border-sienna dark:bg-night-deep">
+                        <div className="font-display text-base font-bold text-ink dark:text-cream">
+                            This record has been superseded
+                        </div>
+                        <p className="mt-1 text-sm leading-relaxed text-ink-soft dark:text-cream-soft">
+                            A correction was issued as{' '}
+                            <Link
+                                href={route('attestations.show', superseded_by_public_id)}
+                                className="font-mono font-semibold text-sienna-deep dark:text-sienna"
+                            >
+                                {superseded_by_public_id}
+                            </Link>
+                            . This original stays readable exactly as issued; nothing was
+                            overwritten or deleted.
+                        </p>
+                    </div>
+                )}
+
+                {supersedes_public_id && (
+                    <div className="mt-8 rounded-2xl border border-line bg-paper-deep p-6 dark:border-line-dark dark:bg-night-deep">
+                        <div className="font-display text-base font-bold text-ink dark:text-cream">
+                            Correction — version {attestation.version || 2}
+                        </div>
+                        <p className="mt-1 text-sm leading-relaxed text-ink-soft dark:text-cream-soft">
+                            This record corrects{' '}
+                            <Link
+                                href={route('attestations.show', supersedes_public_id)}
+                                className="font-mono font-semibold text-sienna-deep dark:text-sienna"
+                            >
+                                {supersedes_public_id}
+                            </Link>
+                            , which remains readable exactly as issued.
+                        </p>
+                    </div>
+                )}
+
+                {/* Attestation statement — above the signature block */}
+                {statement && (
+                    <section className="mt-10">
+                        <h2 className="font-display text-2xl font-bold text-ink dark:text-cream">
+                            Attestation statement
+                        </h2>
+                        <div className="mt-3 space-y-4">
+                            {statement.split('\n\n').map((paragraph, i) => (
+                                <p
+                                    key={i}
+                                    className={
+                                        i === 0
+                                            ? 'font-mono text-xs font-semibold uppercase tracking-wider text-sienna-deep dark:text-sienna'
+                                            : 'break-words leading-relaxed text-ink dark:text-cream'
+                                    }
+                                >
+                                    {paragraph}
+                                </p>
+                            ))}
+                        </div>
+                    </section>
+                )}
+
+                {/* Signature block — below the statement */}
+                {signature_block && (
+                    <section className="mt-10 rounded-2xl border border-line bg-paper-deep p-6 dark:border-line-dark dark:bg-night-deep sm:p-8">
+                        <h2 className="font-display text-2xl font-bold text-ink dark:text-cream">
+                            Signature
+                        </h2>
+                        <dl className="mt-4 space-y-4">
+                            <div>
+                                <dt className="font-mono text-xs uppercase tracking-wider text-ink-soft dark:text-cream-soft">
+                                    Printed name
+                                </dt>
+                                <dd className="mt-1 text-sm text-ink dark:text-cream">
+                                    {signature_block.printed_name}
+                                </dd>
+                            </div>
+                            <div>
+                                <dt className="font-mono text-xs uppercase tracking-wider text-ink-soft dark:text-cream-soft">
+                                    Role
+                                </dt>
+                                <dd className="mt-1 text-sm text-ink dark:text-cream">
+                                    {signature_block.role}
+                                </dd>
+                            </div>
+                            <div>
+                                <dt className="font-mono text-xs uppercase tracking-wider text-ink-soft dark:text-cream-soft">
+                                    Date and time
+                                </dt>
+                                <dd className="mt-1 text-sm text-ink dark:text-cream">
+                                    {signature_block.date_time}
+                                </dd>
+                            </div>
+                            <div>
+                                <dt className="font-mono text-xs uppercase tracking-wider text-ink-soft dark:text-cream-soft">
+                                    Signature value
+                                </dt>
+                                <dd className="mt-1 break-all font-mono text-xs leading-relaxed text-ink dark:text-cream">
+                                    {signature_block.signature_value}
+                                </dd>
+                            </div>
+                            <div>
+                                <dt className="font-mono text-xs uppercase tracking-wider text-ink-soft dark:text-cream-soft">
+                                    Signature method
+                                </dt>
+                                <dd className="mt-1 font-mono text-xs text-ink dark:text-cream">
+                                    {signature_block.signature_method}
+                                    {signature_valid ? ' — signature verified' : ' — signature NOT verified'}
+                                </dd>
+                            </div>
+                            <div>
+                                <dt className="font-mono text-xs uppercase tracking-wider text-ink-soft dark:text-cream-soft">
+                                    Key ID
+                                </dt>
+                                <dd className="mt-1 font-mono text-xs text-ink dark:text-cream">
+                                    {signature_block.key_id}{' '}
+                                    <Link
+                                        href={route('attestations.keyStatement')}
+                                        className="font-semibold text-sienna-deep dark:text-sienna"
+                                    >
+                                        (key statement)
+                                    </Link>
+                                </dd>
+                            </div>
+                            <div>
+                                <dt className="font-mono text-xs uppercase tracking-wider text-ink-soft dark:text-cream-soft">
+                                    Timestamp
+                                </dt>
+                                <dd className="mt-1 text-sm leading-relaxed text-ink dark:text-cream">
+                                    {signature_block.timestamp}
+                                    {attestation.timestamp_token &&
+                                        (timestamp_valid
+                                            ? ' — token verified.'
+                                            : ' — token did NOT verify.')}
+                                </dd>
+                            </div>
+                            {chain_seq !== null && chain_seq !== undefined && (
+                                <div>
+                                    <dt className="font-mono text-xs uppercase tracking-wider text-ink-soft dark:text-cream-soft">
+                                        Issuance log sequence
+                                    </dt>
+                                    <dd className="mt-1 font-mono text-xs text-ink dark:text-cream">
+                                        {chain_seq}
+                                    </dd>
+                                </div>
+                            )}
+                        </dl>
+                    </section>
+                )}
 
                 {status === 'revoked' && (
                     <div className="mt-8 rounded-2xl border border-line bg-paper-deep p-6 dark:border-line-dark dark:bg-night-deep">

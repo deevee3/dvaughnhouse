@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Git pre-commit hook: verify language guidelines before any commit.
+# Repo root IS thinktank-os (split from dvaughnhouse, Nov 2026).
+ROOT_DIR="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+
+if [ -f "$ROOT_DIR/check-language.sh" ]; then
+    echo "Running language check before commit..."
+    bash "$ROOT_DIR/check-language.sh"
+    STATUS=$?
+    if [ $STATUS -ne 0 ]; then
+        echo "❌ Pre-commit hook failed: check-language.sh detected banned language."
+        echo "Please fix the flagged language before committing."
+        exit $STATUS
+    fi
+fi
+exit 0

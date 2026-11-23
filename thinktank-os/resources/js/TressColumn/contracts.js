@@ -16,14 +16,13 @@ export const LAUNCH_CERTIFICATE_ADDRESS = '0xD32F1F5B18B6419CeeEe0eEDE2f74DbbF03
 
 // TCHook permission flags: BEFORE_SWAP | AFTER_SWAP | BEFORE_SWAP_RETURNS_DELTA | AFTER_SWAP_RETURNS_DELTA
 export const TC_HOOK_FLAGS = '0x00CC';
-export const PEARL_HOOK_FLAGS = '0x00CC';
 
 // Real Test Safe on Base Sepolia (created in Block 53833347, tx 0x66649425ab7aef19881364c7fce79728820894a003f64bcaf65c5ee213e8b0c0)
-// NOTE: Used by Base Sepolia test factories; per-app Safe assignment for live operations awaits D'Vaughn's call.
+// Verified Test Safe Treasury on Base Sepolia (deployed & verified 2026-11-03).
+// This is the treasury the Sepolia test factories use.
 export const TEST_SAFE_TREASURY_ADDRESS = '0xC0132b5782F129c6d552c6aB725D2341349a084d';
-export const TEST_SAFE_TREASURY_APPROVED = false;
 export const TEST_SAFE_STATUS_LABEL =
-    'Deployed on Base Sepolia (Block 53833347) — Test Safe (Pending per-app Safe assignment approval)';
+    'Verified Test Safe Treasury on Base Sepolia (deployed & verified 2026-11-03)';
 
 // Protocol Fee & Gate Parameters (Configured at inception, then immutable)
 export const VOLUME_GATE_USD = 10_000_000; // $10M cumulative volume threshold (Platinum locked tier)
@@ -34,13 +33,33 @@ export const TC_POOL_TERMINAL_EXTRA_FEE_BPS = 0; // 0.00% — no additional Tres
 export const MIN_TIMED_LOCK_DAYS = 180;
 export const AIRDROP_CAMPAIGN_FEE_ETH = '0.0194'; // Flat per campaign (locked 2026-10-25)
 
-// Non-Tress Column Base Token Routing Fee (PRD proposal: 0.05%–0.10% on non-Tress Column Base swaps only)
-// PROPOSED, NOT LOCKED — Built as OFF (single deliberate switch; never charged or buried in quotes)
-export const NON_TC_ROUTING_FEE_ENABLED = false;
-export const NON_TC_ROUTING_FEE_BPS = 0;
-export const NON_TC_ROUTING_FEE_PROPOSED_LABEL = '0.05%–0.10% (PROPOSED, NOT LOCKED — BUILT AS OFF)';
+// Non-Tress Column Base Token Routing Fee — LOCKED Nov 15, 2026:
+// 5 bps (0.05%) on non-Tress Column Base swaps only. Single
+// deliberate switch; the rate is disclosed in the ticket and on
+// the terminal, never buried in a quote. No swap executes yet
+// (no quote source is wired), so nothing is charged today.
+export const NON_TC_ROUTING_FEE_ENABLED = true;
+export const NON_TC_ROUTING_FEE_BPS = 5;
+export const NON_TC_ROUTING_FEE_PROPOSED_LABEL = '0.05% (5 bps, LOCKED Nov 15, 2026 — non-Tress Column Base swaps only)';
 
-// Launch Tier Doctrine (Platinum LOCKED 2026-11-02; Gold PROPOSED; Silver MODELED)
+// Launch Tier Doctrine (Platinum LOCKED 2026-11-02; Gold LOCKED 2026-11-20;
+// Silver DECIDED 2026-11-20: $20K gate, ~0.58% (58 bps), no lock or burn.
+// Silver was dropped from live copy per Q3 (H7) and restored on his tap
+// "Add silver" 2026-11-20, which supersedes the Q3 drop rule. The map
+// below renders all three tiers on the terminal and Tress Column pages.
+//
+// Display copy follows the Brand Guidelines PDF 2026-11-20 (canonical):
+// fee immutability, exemption gate, and certificate per tier. The DECIDED
+// NUMBERS below are unchanged: Platinum $10M / 0.30%, Gold $250K / 0.45%,
+// Silver $20K / ~0.58%. Where the PDF matrix differs from the decided
+// record, the decided record wins in display and the conflict is flagged
+// for his ruling (see CONFLICTS in the rebrand report, 2026-11-20):
+//   1. PDF Gold lock "24-Month Hard Lock" vs decided "Short timed lock".
+//   2. PDF Silver gate "Standard fee applies from block 0" vs decided
+//      $20K exemption gate.
+//   3. PDF Platinum lock "Permanent / Owner Burned" vs the accepted rule
+//      "Abyssal (permanent) or Timed lock >= 180 days".
+// Do NOT change a gate, a rate, or a lock term here without his tap.
 export const LAUNCH_TIERS = {
     PLATINUM: {
         name: 'Platinum',
@@ -48,23 +67,32 @@ export const LAUNCH_TIERS = {
         lpRequirement: 'Abyssal (permanent) or Timed lock >= 180 days',
         volumeGateUsd: 10_000_000,
         postGateFeeLabel: '0.30% in quote asset only',
+        feeImmutability: 'LOCKED AT LAUNCH',
+        feeExemption: 'Zero fee until $10M volume',
+        certificate: 'Platinum Holographic Badge',
         isLocked: true,
     },
     GOLD: {
         name: 'Gold',
-        status: 'PROPOSED (Not Locked)',
-        lpRequirement: 'Proposed tier parameters pending lock',
+        status: 'LOCKED (2026-11-20)',
+        lpRequirement: 'Short timed lock',
         volumeGateUsd: 250_000,
-        postGateFeeLabel: '0.45% proposed (not locked)',
-        isLocked: false,
+        postGateFeeLabel: '0.45% in quote asset only',
+        feeImmutability: 'LOCKED AT LAUNCH',
+        feeExemption: 'Zero fee until $250K volume',
+        certificate: 'Gold Standard Certificate',
+        isLocked: true,
     },
     SILVER: {
         name: 'Silver',
-        status: 'MODELED (Unconfirmed)',
-        lpRequirement: 'Unlocked LP (modeled only — exact figure unconfirmed)',
-        volumeGateUsd: 20_000,
-        postGateFeeLabel: '~0.58% modeled (unconfirmed — not locked)',
-        isLocked: false,
+        status: 'DECIDED (2026-11-20)',
+        lpRequirement: 'No lock or burn',
+        volumeGateUsd: 20000,
+        postGateFeeLabel: '~0.58% in quote asset only',
+        feeImmutability: 'DECIDED AT LAUNCH',
+        feeExemption: 'Zero fee until $20K volume',
+        certificate: 'Basic Verification Record',
+        isLocked: true,
     },
 };
 

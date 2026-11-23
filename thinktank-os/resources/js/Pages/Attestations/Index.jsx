@@ -47,6 +47,22 @@ export default function Index({ attestations = [], stats = {}, canIssue = false,
                         record cannot be inspected, it should not be trusted — so every record
                         here can be.
                     </p>
+                    <p className="mt-4 leading-relaxed text-ink-soft dark:text-cream-soft">
+                        What &ldquo;attested&rdquo; means: the attestation certifies the identity,
+                        origin, and integrity of the record, plus the stated claim as published.
+                        It does not certify the truth of third-party data the record reports.
+                        Glenride follows the federal standards named in its attestation protocol
+                        in good faith; Glenride is not a federal agency, this is not a federal
+                        certification, and no federal agency has endorsed it. Signatures verify
+                        from the published public keys on the{' '}
+                        <Link
+                            href={route('attestations.keyStatement')}
+                            className="font-semibold text-sienna-deep dark:text-sienna"
+                        >
+                            signing key statement
+                        </Link>
+                        .
+                    </p>
                     {canIssue && (
                         <Link
                             href={route('attestations.create')}

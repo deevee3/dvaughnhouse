@@ -47,6 +47,14 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
+        // Tress Column sign-out returns to the surface's signed-out
+        // content, not the site homepage. Only a safe local path is
+        // honored; anything else falls back to the homepage.
+        $returnTo = $request->input('return_to');
+        if (is_string($returnTo) && str_starts_with($returnTo, '/') && ! str_starts_with($returnTo, '//')) {
+            return redirect($returnTo);
+        }
+
         return redirect('/');
     }
 }

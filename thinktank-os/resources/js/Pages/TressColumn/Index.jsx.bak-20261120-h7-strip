@@ -240,7 +240,7 @@ export default function TressColumnIndex() {
                                     type="button"
                                     className="w-full py-3 bg-abyssal-gold text-abyssal-black font-semibold text-xs uppercase tracking-wider rounded hover:bg-abyssal-gold/90 transition-colors shadow-lg"
                                 >
-                                    Review & Broadcast Launch (1-Tx Atomic Deploy)
+                                    Review Launch (Two-Step Deploy)
                                 </button>
                                 <p className="text-[10px] text-nacre-cream/50 text-center mt-2">
                                     Simulates via local Foundry rehearsal on Base Sepolia before execution.

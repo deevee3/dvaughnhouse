@@ -1,0 +1,10 @@
+[Unit]
+Description=Weekly Glenride attestation issuance-chain anchor
+
+[Timer]
+OnCalendar=Mon *-*-* 11:00:00
+Persistent=true
+Unit=thinktank-anchor.service
+
+[Install]
+WantedBy=timers.target

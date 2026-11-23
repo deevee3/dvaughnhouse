@@ -1,0 +1,9 @@
+{
+    "seq": 2,
+    "entry_hash": "6fb87767665a18fb67836d05a8ee4a7ad5b082b922cb28ea699cec1b2bf8fd6c",
+    "public_id": "GLR-AT-2026-VFFUBN",
+    "issued_at": "2026-11-17T17:19:42+00:00",
+    "chain_digest": "1202c80bd79267afd2d28547f9e984cf70df041bb6c1ced35011a4a8f39ae1c2",
+    "anchored_at": "2026-11-17T17:21:11+00:00",
+    "source": "thinktank-os attestation issuance log"
+}

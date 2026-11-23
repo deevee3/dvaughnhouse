@@ -9,7 +9,6 @@ import {
     TEST_SAFE_TREASURY_ADDRESS,
     TEST_SAFE_TREASURY_APPROVED,
     TEST_SAFE_STATUS_LABEL,
-    PLUS_TIERS,
     AIRDROP_CAMPAIGN_FEE_ETH,
     VOLUME_GATE_USD,
     POST_GATE_FEE_BPS,
@@ -17,6 +16,7 @@ import {
     LAUNCH_CERTIFICATE_ADDRESS,
     APP_SURFACES,
 } from '@/TressColumn/contracts';
+import { PLUS_TIERS } from '@/TressColumn/tressConfig';
 
 // Clearly labeled test-only SaaS fixtures for Task 2 verification (NEVER blended into live counts)
 const TEST_SAAS_SUBSCRIPTION_FIXTURES = [

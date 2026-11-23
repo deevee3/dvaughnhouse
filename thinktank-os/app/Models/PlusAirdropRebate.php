@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class PlusAirdropRebate extends Model
+{
+    protected $fillable = ['user_id', 'campaign', 'fee_wei', 'rebate_status', 'used_at'];
+
+    protected $casts = ['used_at' => 'datetime'];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+}

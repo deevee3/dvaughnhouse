@@ -160,6 +160,24 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Shared Session Cookie Domain (Tress Column)
+    |--------------------------------------------------------------------------
+    |
+    | The parent domain the session cookie is shared across, set by the
+    | TressSessionDomain middleware — but only when the request host is
+    | actually under this parent. One sign-in then covers
+    | tc/trade/ops/plus.dvaughnhouse.com (Nov 20, 2026: the surfaces
+    | "just loop around" on host-only cookies). Staging on
+    | dvaughnhouse.org and local dev keep host-only cookies, because a
+    | browser rejects a Set-Cookie whose Domain does not match the
+    | origin host. Leave SESSION_DOMAIN unset: an explicit value
+    | there would apply to every host, including staging.
+    */
+
+    'shared_domain' => env('SESSION_SHARED_DOMAIN'),
+
+    /*
+    |--------------------------------------------------------------------------
     | HTTPS Only Cookies
     |--------------------------------------------------------------------------
     |

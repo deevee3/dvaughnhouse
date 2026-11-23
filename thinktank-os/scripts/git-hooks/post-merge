@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Git post-merge hook: rebuild ThinkTank OS frontend assets if needed.
+# Repo root IS thinktank-os (split from dvaughnhouse, Nov 2026).
+ROOT_DIR="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+
+if [ -f "$ROOT_DIR/artisan" ]; then
+    echo "Rebuilding ThinkTank OS frontend assets..."
+    docker run --rm -v "$ROOT_DIR":/app -w /app node:22 sh -c "npm run build" || true
+fi
