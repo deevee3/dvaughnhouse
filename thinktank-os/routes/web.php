@@ -51,6 +51,18 @@ Route::get('/api/md/{path}', [MarkdownController::class, 'showApi'])->where('pat
 // the pattern only matches paths ending in .md).
 Route::get('/{path}.md', [MarkdownController::class, 'showMd'])->where('path', '.*')->name('md.page')->withoutMiddleware(HandleInertiaRequests::class);
 
+// dvaughnhouse.org is retiring: every page on the apex host (and www)
+// serves the transition page, which counts down 10 seconds and sends
+// the visitor to glenride.com. Machine-readable routes above keep
+// working; other hosts (tc, store, thinktank) are untouched. GET only,
+// so POST endpoints (checkout, webhooks) are unaffected.
+foreach (['dvaughnhouse.org', 'www.dvaughnhouse.org'] as $domain) {
+    Route::domain($domain)->group(function () {
+        Route::get('{any?}', fn () => response()->view('transition'))
+            ->where('any', '.*')->withoutMiddleware(HandleInertiaRequests::class);
+    });
+}
+
 // Research (ScrollLaunch prompt 2): original statistics from Glenride's own data.
 Route::get('/research', [ResearchController::class, 'index'])->name('research.index');
 Route::get('/research/attestations', [ResearchController::class, 'attestations'])->name('research.attestations');
