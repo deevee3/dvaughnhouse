@@ -58,8 +58,17 @@ Route::get('/{path}.md', [MarkdownController::class, 'showMd'])->where('path', '
 // so POST endpoints (checkout, webhooks) are unaffected.
 foreach (['dvaughnhouse.org', 'www.dvaughnhouse.org'] as $domain) {
     Route::domain($domain)->group(function () {
-        Route::get('{any?}', fn () => response()->view('transition'))
-            ->where('any', '.*')->withoutMiddleware(HandleInertiaRequests::class);
+        Route::get('{any?}', function () {
+            // Raw HTML on purpose: the app container cannot write compiled
+            // Blade views (storage/framework/views is owned by the host
+            // user, not the PHP user), so response()->view() 500s here.
+            // The file carries no Blade syntax, so it is safe to serve raw.
+            return response(
+                file_get_contents(resource_path('views/transition.blade.php')),
+                200,
+                ['Content-Type' => 'text/html; charset=utf-8'],
+            );
+        })->where('any', '.*')->withoutMiddleware(HandleInertiaRequests::class);
     });
 }
 
