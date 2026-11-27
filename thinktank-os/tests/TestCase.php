@@ -25,6 +25,9 @@ abstract class TestCase extends BaseTestCase
         config([
             'attestation.active_key_id' => 'test-ed25519-1',
             'attestation.signing_key' => base64_encode($secret),
+            // Hermetic: never read the production encrypted key files.
+            'attestation.signing_key_file' => '',
+            'attestation.kek_file' => '',
             'attestation.keys' => [
                 'test-ed25519-1' => [
                     'algorithm' => 'Ed25519',

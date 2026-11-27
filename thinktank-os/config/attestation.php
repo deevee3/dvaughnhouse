@@ -37,6 +37,17 @@ return [
     'signing_key' => env('ATTESTATION_SIGNING_KEY'),
 
     /*
+     * Encrypted-at-rest signing key (custody Option A, decided
+     * 2026-11-26): the Ed25519 secret is stored as a libsodium
+     * secretbox blob in a file delivered as a Docker secret, with the
+     * key-encryption key in a separate secret file. When both paths
+     * are configured, SigningKeyService decrypts at runtime and the
+     * plaintext ATTESTATION_SIGNING_KEY value is not used.
+     */
+    'signing_key_file' => env('ATTESTATION_SIGNING_KEY_FILE'),
+    'kek_file' => env('ATTESTATION_KEK_FILE'),
+
+    /*
      * Published public keys, by key ID. The fingerprint is the SHA-256
      * (hex) of the raw 32-byte public key. The binding below is Glenride's
      * published statement; it is NOT a certificate issued by a

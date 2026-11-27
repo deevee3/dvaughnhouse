@@ -13,11 +13,14 @@ use RuntimeException;
  * November 17, 2026 keep verifying through the legacy path in
  * AttestationService; this service never re-signs them.
  *
- * The private key lives ONLY in the application environment on the
- * issuing host (ATTESTATION_SIGNING_KEY, base64, mode 600). It is
- * never copied, printed, logged, emailed, or committed. This service
- * reads it from config, uses it in memory, and zeroes the buffer
- * after each signing operation.
+ * The private key lives ONLY on the issuing host, encrypted at rest
+ * (custody Option A, 2026-11-26): a libsodium secretbox blob plus a
+ * separate key-encryption-key file, both delivered as Docker secrets
+ * (mode 600 on the host). It is never copied, printed, logged,
+ * emailed, or committed. This service decrypts it in memory per
+ * signing operation and zeroes the buffers after use. The legacy
+ * plaintext ATTESTATION_SIGNING_KEY environment value remains only
+ * as a fallback for tests, which inject an ephemeral keypair.
  *
  * Rotation: records carry the key ID they were signed with, and every
  * public key ever used stays in config/attestation.php, so a rotation
@@ -124,6 +127,13 @@ class SigningKeyService
      */
     private function secretKey(): string
     {
+        $keyFile = (string) config('attestation.signing_key_file', '');
+        $kekFile = (string) config('attestation.kek_file', '');
+
+        if ($keyFile !== '' || $kekFile !== '') {
+            return $this->secretKeyFromEncryptedFile($keyFile, $kekFile);
+        }
+
         $encoded = (string) config('attestation.signing_key', '');
 
         if ($encoded === '') {
@@ -134,6 +144,44 @@ class SigningKeyService
 
         if ($raw === false || strlen($raw) !== SODIUM_CRYPTO_SIGN_SECRETKEYBYTES) {
             throw new RuntimeException('The configured attestation signing key is malformed. Issuance is blocked.');
+        }
+
+        return $raw;
+    }
+
+    /**
+     * Decrypt the Ed25519 secret from its secretbox file (custody
+     * Option A, 2026-11-26). The blob file holds base64(nonce ||
+     * secretbox(secret)); the KEK file holds base64(32-byte key).
+     * Both arrive as Docker secrets; neither value is ever logged.
+     *
+     * @throws RuntimeException when the files are missing or the blob
+     *                          does not decrypt. Fails closed.
+     */
+    private function secretKeyFromEncryptedFile(string $keyFile, string $kekFile): string
+    {
+        if ($keyFile === '' || $kekFile === '' || ! is_readable($keyFile) || ! is_readable($kekFile)) {
+            throw new RuntimeException('Encrypted attestation signing key files are configured but not readable. Issuance is blocked.');
+        }
+
+        $blob = base64_decode(trim((string) file_get_contents($keyFile)), true);
+        $kek = base64_decode(trim((string) file_get_contents($kekFile)), true);
+
+        if ($blob === false || $kek === false
+            || strlen($kek) !== SODIUM_CRYPTO_SECRETBOX_KEYBYTES
+            || strlen($blob) <= SODIUM_CRYPTO_SECRETBOX_NONCEBYTES) {
+            throw new RuntimeException('Encrypted attestation signing key material is malformed. Issuance is blocked.');
+        }
+
+        $raw = sodium_crypto_secretbox_open(
+            substr($blob, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES),
+            substr($blob, 0, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES),
+            $kek
+        );
+        sodium_memzero($kek);
+
+        if ($raw === false || strlen($raw) !== SODIUM_CRYPTO_SIGN_SECRETKEYBYTES) {
+            throw new RuntimeException('Encrypted attestation signing key did not decrypt. Issuance is blocked.');
         }
 
         return $raw;

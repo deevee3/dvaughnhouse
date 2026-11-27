@@ -27,6 +27,9 @@ services:
       - cache
     env_file:
       - .env
+    secrets:
+      - attestation_signing_key_enc
+      - attestation_kek
 
   horizon:
     build: ./docker
@@ -38,6 +41,9 @@ services:
       - app
     env_file:
       - .env
+    secrets:
+      - attestation_signing_key_enc
+      - attestation_kek
 
   web:
     image: nginx:alpine
@@ -83,3 +89,7 @@ secrets:
     file: ./docker/db_password.txt
   tunnel_token:
     file: /home/housedv/.cloudflared/token
+  attestation_signing_key_enc:
+    file: /home/housedv/.config/thinktank-os/secrets/attestation-signing-key.enc
+  attestation_kek:
+    file: /home/housedv/.config/thinktank-os/secrets/attestation-kek.key

@@ -87,6 +87,60 @@ class AttestationVerificationTest extends TestCase
         return $method->invoke($this->service(), $publicId, $type, $id, $hash, $issuedAtIso);
     }
 
+    public function test_signing_key_decrypts_from_encrypted_file(): void
+    {
+        // Custody Option A (2026-11-26): the Ed25519 secret lives in a
+        // secretbox file with a separate KEK file. Prove the decrypt
+        // path signs verifiably and fails closed on a wrong KEK.
+        $keypair = sodium_crypto_sign_keypair();
+        $secret = sodium_crypto_sign_secretkey($keypair);
+        $public = sodium_crypto_sign_publickey($keypair);
+        $kek = random_bytes(SODIUM_CRYPTO_SECRETBOX_KEYBYTES);
+        $nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
+        $blob = base64_encode($nonce . sodium_crypto_secretbox($secret, $nonce, $kek));
+
+        $dir = sys_get_temp_dir() . '/attestation-custody-' . bin2hex(random_bytes(4));
+        mkdir($dir, 0700, true);
+        $keyFile = $dir . '/signing-key.enc';
+        $kekFile = $dir . '/kek.key';
+        file_put_contents($keyFile, $blob . "\n");
+        file_put_contents($kekFile, base64_encode($kek) . "\n");
+
+        try {
+            config([
+                'attestation.active_key_id' => 'test-ed25519-file',
+                'attestation.signing_key' => '',
+                'attestation.signing_key_file' => $keyFile,
+                'attestation.kek_file' => $kekFile,
+                'attestation.keys' => [
+                    'test-ed25519-file' => [
+                        'algorithm' => 'Ed25519',
+                        'public_key' => base64_encode($public),
+                        'fingerprint' => hash('sha256', $public),
+                        'identity' => "D'Vaughn House, principal of Glenride",
+                        'effective_from' => '2026-11-26',
+                        'status' => 'active',
+                    ],
+                ],
+            ]);
+
+            $service = app(\App\Services\Attestation\SigningKeyService::class);
+            $signed = $service->sign('custody-file-test');
+            $this->assertTrue($service->verify('custody-file-test', $signed['signature'], $signed['key_id']));
+
+            // Wrong KEK must fail closed.
+            file_put_contents($kekFile, base64_encode(random_bytes(SODIUM_CRYPTO_SECRETBOX_KEYBYTES)) . "\n");
+            $this->expectException(\RuntimeException::class);
+            $service->sign('custody-file-test');
+        } finally {
+            @unlink($keyFile);
+            @unlink($kekFile);
+            @rmdir($dir);
+            sodium_memzero($secret);
+            sodium_memzero($kek);
+        }
+    }
+
     public function test_sample_attestation_signature_recomputes_exactly(): void
     {
         $author = $this->plainUser();
